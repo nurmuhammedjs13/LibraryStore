@@ -3,10 +3,10 @@ import { FC, ReactNode } from "react";
 import { Provider } from "react-redux";
 
 interface ReduxProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 const ReduxProvider: FC<ReduxProviderProps> = ({ children }) => {
-  return <Provider store={store}>{children}</Provider>;
+    return <Provider store={store}>{children}</Provider>;
 };
 
 export default ReduxProvider;
