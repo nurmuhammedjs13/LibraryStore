@@ -1,0 +1,38 @@
+.Pageund {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3a8a, #93c5fd);
+    color: #ffffff;
+  
+    .content {
+      text-align: center;
+  
+      .title {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+  
+      .subtitle {
+        font-size: 24px;
+        margin-bottom: 30px;
+      }
+  
+      .backButton {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #3b82f6;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #2563eb;
+        }
+      }
+    }
+  }
+  
