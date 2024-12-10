@@ -1,9 +1,12 @@
 import React from "react";
-import Welcome from "./Welcome/Welcome";
+import Welcome from "./homesection/Welcome/Welcome";
 
 const HomePage = () => {
   return (
-    <div>
+    <div style={{
+      color: "black"
+    }}>
+      fjhejsdfojdjgjdhfkojid
       <Welcome />
     </div>
   );
