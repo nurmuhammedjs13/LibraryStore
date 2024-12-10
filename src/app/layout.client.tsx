@@ -17,4 +17,3 @@ const LayoutClient: FC<LayoutClientProps> = ({ children }) => {
 };
 
 export default LayoutClient;
-  
