@@ -3,10 +3,7 @@ import Welcome from "./homesection/Welcome/Welcome";
 
 const HomePage = () => {
   return (
-    <div style={{
-      color: "black"
-    }}>
-      fjhejsdfojdjgjdhfkojid
+    <div>
       <Welcome />
     </div>
   );

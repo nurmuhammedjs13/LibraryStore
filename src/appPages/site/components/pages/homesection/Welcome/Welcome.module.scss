@@ -1,4 +1,95 @@
 .welcome {
-  
-  background: red;
+  padding: 100px 0;
+  background: linear-gradient(182.23deg, #2652b0 7.67%, #ffffff 97.89%),
+    linear-gradient(
+      181.5deg,
+      rgba(149, 172, 223, 0.2) 33.99%,
+      rgba(255, 255, 255, 0.2) 90.06%
+    );
+
+  // background: linear-gradient(
+  //   to bottom,
+  //   rgb(55, 113, 250) 5%,
+  //   rgb(55, 159, 250) 40%,
+  //   #ffffff 60%
+  // );
+  height: 100vh;
+  width: 100%;
+
+  .content {
+    padding: 50px;
+    max-width: 1440px;
+    width: 100%;
+    height: 850px;
+    border-radius: 30px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      align-items: start;
+      flex-direction: column;
+      justify-content: start;
+      gap: 30px;
+      .text {
+        font-family: Nunito;
+        width: 100%;
+        max-width: 400px;
+        font-size: clamp(30px, 4vw, 48px);
+        color: #2652b0;
+        font-weight: 700;
+      }
+      .tools {
+        a {
+          color: #ff7d00;
+          text-decoration: none;
+          padding: 5px 15px;
+          border-radius: 20px;
+          border: 2px solid #2652b0;
+        }
+      }
+      .button {
+        button {
+          padding: 10px 20px;
+          background: #2652b0;
+          color: #ffffff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 16px;
+          &:hover {
+            background: #2652b0;
+            filter: drop-shadow(20px 0px 20px #2652b0);
+            border: 1px solid white;
+          }
+          margin-top: 100px;
+        }
+      }
+    }
+
+    .right {
+      display: flex;
+      gap: 20px;
+      overflow: hidden;
+      transition: transform 1s ease-in-out;
+      .book {
+        opacity: 0.8;
+        transform: scale(0.8);
+        transition: transform 1s ease, opacity 1s ease;
+        &.center {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.5s ease;
+
+        &:hover {
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
 }
