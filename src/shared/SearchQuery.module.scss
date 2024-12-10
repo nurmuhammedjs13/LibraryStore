@@ -1,0 +1,66 @@
+// .SearchQuery {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 100vh;
+//   background: radial-gradient(rgba(2, 255, 255, 0.661), rgb(0, 38, 255));
+//   .content {
+//     padding: 20px;
+//     border-radius: 8px;
+//   }
+
+//   .loadingText {
+//     font-size: 24px;className={scss.loadingText}>
+//     {loadingText.map((letter, index) => (
+//       <span
+//         key={index}
+//         className={scss.jump}
+//         style={{ animationDelay: `${index * 0.1}s` }}
+//       >
+//         {letter}
+//       </span>
+//     ))}
+//     {dots}
+//   </p>
+//     font-weight: bold;
+
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     animation: blink 1.5s infinite;
+//     span {
+//       background: linear-gradient(90deg, #01d0ff, #33ff00);
+//       -webkit-background-clip: text;
+//       -webkit-text-fill-color: transparent !important;
+//       background-clip: text;
+//       color: transparent;
+//     }
+//   }
+
+//   .jump {
+//     display: inline-block;
+//     animation: jump 0.6s infinite;
+//   }
+// }
+
+// @keyframes jump {
+//   0%,
+//   100% {
+//     transform: translateY(0);
+//   }
+//   50% {
+//     transform: translateY(-10px);
+//   }
+// }
+
+// @keyframes blink {
+//   0% {
+//     opacity: 1;
+//   }
+//   50% {
+//     opacity: 0.5;
+//   }
+//   100% {
+//     opacity: 1;
+//   }
+// }
