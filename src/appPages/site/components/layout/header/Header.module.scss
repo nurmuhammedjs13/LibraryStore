@@ -1,10 +1,11 @@
 .header {
-  position: fixed;
+  //   position: fixed;
   position: fixed;
   z-index: 999;
   width: 100%;
   top: 0;
   left: 0;
+  //   background: #2652B0;
   .content {
     display: flex;
     align-items: center;
@@ -26,6 +27,10 @@
           align-items: center;
           justify-content: center;
           gap: 20px;
+          a {
+            color: #ffffff;
+            text-decoration: none;
+          }
         }
         .nav_right {
           display: flex;
