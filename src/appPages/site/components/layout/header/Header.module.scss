@@ -1,0 +1,39 @@
+.header {
+  position: fixed;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  top: 0;
+  left: 0;
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 100px;
+    }
+    .right {
+      .navs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 100px;
+        .nav_left {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+        }
+        .nav_right {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+        }
+      }
+    }
+  }
+}

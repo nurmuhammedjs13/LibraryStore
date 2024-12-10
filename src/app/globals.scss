@@ -6,12 +6,12 @@
 
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin-inline: auto;
   padding-inline: 20px;
 }
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 li {
   list-style: none;
@@ -30,6 +30,6 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom,#9608af, #0765c3, );
+  background: linear-gradient(to bottom, #9608af, #0765c3);
   border-radius: 10px;
 }
