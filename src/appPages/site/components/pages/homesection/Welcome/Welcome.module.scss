@@ -1,5 +1,5 @@
 .welcome {
-  padding: 100px 0;
+  // padding: 70px 0;
   background: linear-gradient(182.23deg, #2652b0 7.67%, #ffffff 97.89%),
     linear-gradient(
       181.5deg,
@@ -21,7 +21,11 @@
     align-items: center;
     justify-content: start;
     gap: 500px;
-    flex-wrap: wrap;
+    @media (max-width: 1400px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 300px;
+    }
     .left {
       display: flex;
       align-items: start;
@@ -60,6 +64,9 @@
             border: 1px solid white;
           }
           margin-top: 100px;
+          @media (max-width: 1400px) {
+            margin-top: 0;
+          }
         }
       }
     }
@@ -69,30 +76,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      // width: 100%;
-      // height: 100%;
+
       gap: 20px;
 
       .book {
         position: absolute;
         opacity: 0;
-        transform: translateX(100%) scale(0.8); 
+        transform: translateX(100%) scale(0.8);
         transition: all 2s ease-in-out;
 
         &.center {
-          transform: translateX(0) scale(1.1); 
+          transform: translateX(0) scale(1.1);
           opacity: 1;
           z-index: 2;
         }
 
         &.left {
-          transform: translateX(-100%) scale(0.8); 
+          transform: translateX(-100%) scale(0.8);
           opacity: 0.7;
           z-index: 1;
         }
 
         &.right {
-          transform: translateX(100%) scale(0.8); 
+          transform: translateX(100%) scale(0.8);
           opacity: 0.7;
           z-index: 1;
         }
@@ -100,6 +106,109 @@
         img {
           border-radius: 12px;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+}
+@media (max-width: 1200px) {
+  .welcome .content {
+    gap: 300px;
+
+    .left {
+      align-items: start;
+      .text {
+        font-size: clamp(24px, 5vw, 36px);
+      }
+      .button {
+        button {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
+      }
+    }
+
+    .right {
+      .book {
+        transform: translateX(50%) scale(0.8); // Позиционирование книг для меньшего экрана
+
+        &.center {
+          transform: translateX(0) scale(1);
+        }
+
+        &.left {
+          transform: translateX(-50%) scale(0.7);
+        }
+
+        &.right {
+          transform: translateX(50%) scale(0.7);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome {
+    // padding: 70px 0;
+
+    .content {
+      gap: 30px;
+      height: auto;
+
+      .left {
+        gap: 20px;
+        .text {
+          font-size: clamp(20px, 5vw, 30px);
+        }
+        .tools {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          a {
+            padding: 5px 10px;
+            font-size: 12px;
+          }
+        }
+        .button button {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+
+      .right {
+        height: 300px;
+
+        .book {
+          img {
+            max-width: 150px;
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome .content {
+    .left {
+      .text {
+        font-size: clamp(18px, 5vw, 24px);
+      }
+      .tools a {
+        font-size: 10px;
+      }
+      .button button {
+        font-size: 10px;
+      }
+    }
+
+    .right {
+      .book {
+        img {
+          max-width: 120px;
+          height: auto;
         }
       }
     }

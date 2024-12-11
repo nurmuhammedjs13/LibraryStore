@@ -7,6 +7,7 @@ import book2 from "@/assets/welcome/image 25.jpg";
 import book3 from "@/assets/welcome/image 23.jpg";
 import book4 from "@/assets/welcome/image 21.jpg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Tools = [
   { name: "КНИГИ" },
@@ -23,22 +24,23 @@ const Banners = [
 ];
 
 const Welcome = () => {
+  const nav = useRouter();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % Banners.length);
-    }, 4000); 
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
 
   const getBookClass = (bookIndex: number) => {
-    if (bookIndex === index) return scss.center; 
-    if (bookIndex === (index + 1) % Banners.length) return scss.right; 
+    if (bookIndex === index) return scss.center;
+    if (bookIndex === (index + 1) % Banners.length) return scss.right;
     if (bookIndex === (index - 1 + Banners.length) % Banners.length)
-      return scss.left; 
-    return ""; 
+      return scss.left;
+    return "";
   };
   return (
     <div className={scss.welcome}>
@@ -54,7 +56,9 @@ const Welcome = () => {
               ))}
             </div>
             <div className={scss.button}>
-              <button>ПОСМОТРЕТЬ ВСЕ КНИГИ</button>
+              <button onClick={() => nav.push("/allbooks")}>
+                ПОСМОТРЕТЬ ВСЕ КНИГИ
+              </button>
             </div>
           </div>
           <div className={scss.right}>
