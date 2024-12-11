@@ -10,55 +10,55 @@ import { FaFirefoxBrowser } from "react-icons/fa";
 import useSearchStore from "@/stores/useSearchStrore";
 
 const SearchProducts = () => {
-  const router = useRouter();
-  const [hasUserInput, setHasUserInput] = useState(false);
-  const { searchQuery, setSearchQuery } = useSearchStore();
+    const router = useRouter();
+    const [hasUserInput, setHasUserInput] = useState(false);
+    const { searchQuery, setSearchQuery } = useSearchStore();
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setHasUserInput(true);
-  };
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+        setHasUserInput(true);
+    };
 
-  useEffect(() => {
-    if (hasUserInput) {
-      if (searchQuery) {
-        router.push(`/search/${searchQuery}`);
-      }
-    }
-  }, [searchQuery, hasUserInput, router]);
+    useEffect(() => {
+        if (hasUserInput) {
+            if (searchQuery) {
+                router.push(`/search/${searchQuery}`);
+            }
+        }
+    }, [searchQuery, hasUserInput, router]);
 
-  return (
-    <div className={scss.LookForTracks}>
-      <div className={scss.content}>
-        <div className={scss.search_icon_block}>
-          <button>
-            <FiSearch />
-          </button>
+    return (
+        <div className={scss.LookForTracks}>
+            <div className={scss.content}>
+                <div className={scss.search_icon_block}>
+                    <button>
+                        <FiSearch />
+                    </button>
+                </div>
+                <div className={scss.search_input_block}>
+                    <DebounceInput
+                        placeholder="Поиск книг..."
+                        minLength={2}
+                        debounceTimeout={300}
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        onFocus={() => router.push(`/search`)}
+                    />
+                </div>
+                <div className={scss.search_reset_block}>
+                    {searchQuery ? (
+                        <button onClick={() => setSearchQuery("")}>
+                            <RxCross1 />
+                        </button>
+                    ) : (
+                        <button>
+                            <FaFirefoxBrowser />
+                        </button>
+                    )}
+                </div>
+            </div>
         </div>
-        <div className={scss.search_input_block}>
-          <DebounceInput
-            placeholder="Поиск книг..."
-            minLength={2}
-            debounceTimeout={300}
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onFocus={() => router.push(`/search`)}
-          />
-        </div>
-        <div className={scss.search_reset_block}>
-          {searchQuery ? (
-            <button onClick={() => setSearchQuery("")}>
-              <RxCross1 />
-            </button>
-          ) : (
-            <button>
-              <FaFirefoxBrowser />
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default SearchProducts;

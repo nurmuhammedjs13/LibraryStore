@@ -1,0 +1,64 @@
+.DiscountSlider {
+    background: #2652b0;
+
+    padding: 0 0 80px 0;
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .title {
+            padding: 40px 0;
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 54.56px;
+            text-align: left;
+            color: white;
+        }
+
+        .slider {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .prevButton,
+            .nextButton {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 40px;
+                cursor: pointer;
+                transition: opacity 0.3s ease;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+
+            .sliderWrapper {
+                overflow: hidden;
+                width: 100%;
+            }
+
+            .slides {
+                display: flex;
+                transition: transform 1s ease;
+
+                .slide {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex: 0 0 33.33%;
+
+                    .sliderImg {
+                        width: 310px;
+                        height: 450px;
+                    }
+                }
+            }
+        }
+    }
+}
