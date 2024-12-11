@@ -1,5 +1,5 @@
 .welcome {
-  // padding: 70px 0;
+  margin-bottom: 100px;
   background: linear-gradient(182.23deg, #2652b0 7.67%, #ffffff 97.89%),
     linear-gradient(
       181.5deg,
@@ -130,7 +130,7 @@
 
     .right {
       .book {
-        transform: translateX(50%) scale(0.8); 
+        transform: translateX(50%) scale(0.8);
 
         &.center {
           transform: translateX(0) scale(1);
@@ -151,6 +151,7 @@
 @media (max-width: 768px) {
   .welcome {
     // padding: 70px 0;
+    margin-bottom: 0;
 
     .content {
       gap: 30px;
@@ -192,6 +193,8 @@
 
 @media (max-width: 480px) {
   .welcome .content {
+    margin-bottom: 0;
+
     .left {
       .text {
         font-size: clamp(18px, 5vw, 24px);

@@ -1,13 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import scss from "./Welcome.module.scss";
-import book from "@/assets/welcome/image 18.jpg";
-import book1 from "@/assets/welcome/image 20.jpg";
-import book2 from "@/assets/welcome/image 25.jpg";
-import book3 from "@/assets/welcome/image 23.jpg";
-import book4 from "@/assets/welcome/image 21.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useGetOpeningQuery } from "@/redux/api/opening";
 
 const Tools = [
   { name: "КНИГИ" },
@@ -15,33 +11,53 @@ const Tools = [
   { name: "КОНЦЕЛЯРСКИЕ ТОВАРЫ" },
 ];
 
-const Banners = [
-  { img: book, alt: "book1" },
-  { img: book1, alt: "book2" },
-  { img: book2, alt: "book3" },
-  { img: book3, alt: "book4" },
-  { img: book4, alt: "book5" },
-];
-
 const Welcome = () => {
   const nav = useRouter();
   const [index, setIndex] = useState(0);
 
+  const { data, isLoading, isError } = useGetOpeningQuery();
+  const Banners = data?.flatMap((el) => el.opening_images) || [];
+
   useEffect(() => {
+    if (Banners.length === 0) return;
+
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % Banners.length);
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [Banners.length]);
 
   const getBookClass = (bookIndex: number) => {
+    if (Banners.length === 0) return "";
     if (bookIndex === index) return scss.center;
     if (bookIndex === (index + 1) % Banners.length) return scss.right;
     if (bookIndex === (index - 1 + Banners.length) % Banners.length)
       return scss.left;
     return "";
   };
+
+  if (isLoading)
+    return (
+      <p
+        style={{
+          textAlign: "center",
+        }}
+      >
+        Loading...
+      </p>
+    );
+  if (isError)
+    return (
+      <p
+        style={{
+          textAlign: "center",
+        }}
+      >
+        Error loading banners!
+      </p>
+    );
+
   return (
     <div className={scss.welcome}>
       <div className="container">
@@ -61,15 +77,19 @@ const Welcome = () => {
               </button>
             </div>
           </div>
+
           <div className={scss.right}>
             {Banners.map((banner, idx) => (
               <div key={idx} className={`${scss.book} ${getBookClass(idx)}`}>
-                <Image
-                  src={banner.img}
-                  alt={banner.alt}
-                  width={280}
-                  height={450}
-                />
+                {banner?.opening_images && (
+                  <Image
+                    src={banner.opening_images}
+                    alt={`book-${idx}`}
+                    width={280}
+                    height={450}
+                    priority
+                  />
+                )}
               </div>
             ))}
           </div>
