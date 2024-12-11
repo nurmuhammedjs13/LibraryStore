@@ -1,7 +1,7 @@
 import { api as index } from "..";
 const api = index.injectEndpoints({
   endpoints: (build) => ({
-    getOpening: build.query({
+    getOpening: build.query<OPENING.GetOpeningReaponse,OPENING.GetOpeningRequest>({
       query: () => ({
         url: `opening`,
         method: "GET",
