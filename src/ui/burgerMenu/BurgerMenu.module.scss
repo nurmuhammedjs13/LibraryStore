@@ -1,0 +1,83 @@
+$spotify-green: #1db954;
+$spotify-black: #191414;
+$bg: #05bcf8;
+$white-color: #ffffff;
+$black-color: $spotify-black;
+$lightest-slate: #d9dadc;
+$navy-shadow: rgba(255, 255, 255, 0.7);
+$black: $spotify-black;
+$border-radius: 8px;
+$transition: 0.3s ease;
+.BurgerMenu {
+  position: absolute;
+  top: 65px;
+  right: 0px;
+  opacity: 0;
+  visibility: hidden;
+  transition: $transition;
+  padding: 15px;
+  background: $bg;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: $border-radius;
+  max-width: 320px;
+  width: 100%;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    .logo {
+      text-align: center;
+      color: #01d0ff;
+      font-size: 14px;
+    }
+
+    .nav {
+      ul {
+        li {
+          .link {
+            padding: 7px 14px;
+            display: block;
+            border-radius: $border-radius;
+            color: $black;
+            transition: $transition;
+
+            &:hover {
+              background-color: $lightest-slate;
+            }
+
+            &.active {
+              background-color: $black;
+              color: $white-color;
+            }
+          }
+        }
+      }
+      .nav_right {
+        display: flex;
+        align-items: center;
+
+        .link {
+          padding: 7px 14px;
+          display: block;
+          border-radius: $border-radius;
+          color: $black;
+          transition: $transition;
+
+          &:hover {
+            background-color: $lightest-slate;
+          }
+
+          &.active {
+            background-color: $black;
+            color: $white-color;
+          }
+        }
+      }
+    }
+  }
+}

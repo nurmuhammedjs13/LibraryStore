@@ -1,19 +1,16 @@
 import React from "react";
 import Welcome from "./homesection/Welcome/Welcome";
+import AboutUs from "./aboutUs/AboutUs";
 import HomeCards from "./homesection/HomeCards/HomeCards";
 import DiscountSlider from "./homesection/DiscountSlider/DiscountSlider";
 
 const HomePage = () => {
     return (
-        <div
-            style={{
-                color: "black",
-            }}
-        >
-            fjhejsdfojdjgjdhfkojid
+        <div>
             <Welcome />
             <HomeCards />
             <DiscountSlider />
+            <AboutUs />
         </div>
     );
 };

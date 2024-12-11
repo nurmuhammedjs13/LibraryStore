@@ -30,11 +30,11 @@ const SearchProducts = () => {
     return (
         <div className={scss.LookForTracks}>
             <div className={scss.content}>
-                <div className={scss.search_icon_block}>
-                    <button>
-                        <FiSearch />
-                    </button>
-                </div>
+                {/* <div className={scss.search_icon_block}>
+          <button>
+            <FiSearch />
+          </button>
+        </div> */}
                 <div className={scss.search_input_block}>
                     <DebounceInput
                         placeholder="Поиск книг..."
@@ -48,11 +48,13 @@ const SearchProducts = () => {
                 <div className={scss.search_reset_block}>
                     {searchQuery ? (
                         <button onClick={() => setSearchQuery("")}>
-                            <RxCross1 />
+                            <FiSearch />
+                            {/* <RxCross1 /> */}
                         </button>
                     ) : (
                         <button>
-                            <FaFirefoxBrowser />
+                            <FiSearch />
+                            {/* <FaFirefoxBrowser /> */}
                         </button>
                     )}
                 </div>

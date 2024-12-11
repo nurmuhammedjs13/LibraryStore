@@ -5,47 +5,63 @@ $input-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px; 
+  padding: 16px;
 
   .content {
     display: flex;
     position: relative;
     align-items: center;
-    width: 420px; 
+    width: 420px;
     background: $blue-gradient;
     border-radius: 50px;
     box-shadow: $input-shadow;
-
-    .search_icon_block {
-      position: absolute;
-      left: 12px; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      button {
-        background: none;
-        border: none;
-
-        svg {
-          width: 20px;
-          height: 20px;
-          color: #ffffff;
-        }
-      }
+    @media (max-width: 767px) {
+      max-width: 420px;
+      width: 100%;
     }
+    @media (max-width: 440px) {
+      max-width: 150px;
+      width: 100%;
+    }
+    @media (max-width: 360px) {
+      max-width: 120px;
+      width: 100%;
+    }
+    // .search_icon_block {
+    //   position: absolute;
+    //   left: 12px;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+
+    //   button {
+    //     background: none;
+    //     border: none;
+
+    //     svg {
+    //       width: 20px;
+    //       height: 20px;
+    //       color: #ffffff;
+    //     }
+    //   }
+    // }
 
     .search_input_block {
       input {
         width: 100%;
-        padding: 12px 40px; 
+        padding: 12px 40px;
         background: transparent;
         border: none;
         outline: none;
         color: white;
-        font-size: 14px; 
+        font-size: clamp(8px, 4vw, 14px);
         border-radius: 50px;
-
+        @media (max-width: 500px) {
+          padding: 12px 30px;
+        }
+        @media (max-width: 445px) {
+          padding: 12px 20px;
+        }
         &::placeholder {
           color: #e5e5e5;
         }
@@ -54,7 +70,7 @@ $input-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
     .search_reset_block {
       position: absolute;
-      right: 12px; 
+      right: 12px;
       display: flex;
       align-items: center;
 

@@ -1,4 +1,219 @@
 .welcome {
-  
-  background: red;
+  margin-bottom: 100px;
+  background: linear-gradient(182.23deg, #2652b0 7.67%, #ffffff 97.89%),
+    linear-gradient(
+      181.5deg,
+      rgba(149, 172, 223, 0.2) 33.99%,
+      rgba(255, 255, 255, 0.2) 90.06%
+    );
+
+  height: 100vh;
+  width: 100%;
+
+  .content {
+    padding: 50px;
+    max-width: 1440px;
+    width: 100%;
+    height: 850px;
+    border-radius: 30px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 500px;
+    @media (max-width: 1400px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 300px;
+    }
+    .left {
+      display: flex;
+      align-items: start;
+      flex-direction: column;
+      justify-content: start;
+      gap: 30px;
+      .text {
+        font-family: Nunito;
+        width: 100%;
+        max-width: 400px;
+        font-size: clamp(30px, 4vw, 48px);
+        color: #2652b0;
+        font-weight: 700;
+      }
+      .tools {
+        a {
+          color: #ff7d00;
+          text-decoration: none;
+          padding: 5px 15px;
+          border-radius: 20px;
+          border: 2px solid #2652b0;
+        }
+      }
+      .button {
+        button {
+          padding: 10px 20px;
+          background: #2652b0;
+          color: #ffffff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 16px;
+          &:hover {
+            background: #2652b0;
+            filter: drop-shadow(20px 0px 20px #2652b0);
+            border: 1px solid white;
+          }
+          margin-top: 100px;
+          @media (max-width: 1400px) {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
+    .right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      gap: 20px;
+
+      .book {
+        position: absolute;
+        opacity: 0;
+        transform: translateX(100%) scale(0.8);
+        transition: all 2s ease-in-out;
+
+        &.center {
+          transform: translateX(0) scale(1.1);
+          opacity: 1;
+          z-index: 2;
+        }
+
+        &.left {
+          transform: translateX(-100%) scale(0.8);
+          opacity: 0.7;
+          z-index: 1;
+        }
+
+        &.right {
+          transform: translateX(100%) scale(0.8);
+          opacity: 0.7;
+          z-index: 1;
+        }
+
+        img {
+          border-radius: 12px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+}
+@media (max-width: 1200px) {
+  .welcome .content {
+    gap: 300px;
+
+    .left {
+      align-items: start;
+      .text {
+        font-size: clamp(24px, 5vw, 36px);
+      }
+      .button {
+        button {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
+      }
+    }
+
+    .right {
+      .book {
+        transform: translateX(50%) scale(0.8);
+
+        &.center {
+          transform: translateX(0) scale(1);
+        }
+
+        &.left {
+          transform: translateX(-50%) scale(0.7);
+        }
+
+        &.right {
+          transform: translateX(50%) scale(0.7);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome {
+    // padding: 70px 0;
+    margin-bottom: 0;
+
+    .content {
+      gap: 30px;
+      height: auto;
+
+      .left {
+        gap: 20px;
+        .text {
+          font-size: clamp(20px, 5vw, 30px);
+        }
+        .tools {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          a {
+            padding: 5px 10px;
+            font-size: 12px;
+          }
+        }
+        .button button {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+
+      .right {
+        height: 300px;
+
+        .book {
+          img {
+            max-width: 150px;
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome .content {
+    margin-bottom: 0;
+
+    .left {
+      .text {
+        font-size: clamp(18px, 5vw, 24px);
+      }
+      .tools a {
+        font-size: 10px;
+      }
+      .button button {
+        font-size: 10px;
+      }
+    }
+
+    .right {
+      .book {
+        img {
+          max-width: 120px;
+          height: auto;
+        }
+      }
+    }
+  }
 }
