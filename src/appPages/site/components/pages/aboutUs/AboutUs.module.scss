@@ -1,0 +1,93 @@
+.aboutUs {
+    margin-bottom: 70px;
+  .aboutUsBlock {
+    h1 {
+      color: rgb(38, 82, 176);
+      font-family: Nunito;
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 55px;
+      letter-spacing: 0%;
+      text-align: left;
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 70px;
+    }
+    .info {
+      .aboutUsImg {
+        position: relative;
+        .image {
+          width: 100%;
+          height: 90%;
+        }
+        .text {
+          width: 100%;
+          height: 100%;
+          justify-content: center;
+          display: flex;
+          flex-direction: row;
+          gap: 50px;
+          align-items: center;
+          position: absolute;
+          top: 0;
+          .cardText {
+            width: 539px;
+            height: 600px;
+            border-radius: 24px;
+            backdrop-filter: blur(7px);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 58px 94px;
+
+            h1 {
+              color: rgb(255, 255, 255);
+              font-family: Nunito;
+              font-size: 40px;
+              font-weight: 800;
+              line-height: 55px;
+              text-align: center;
+              margin-top: -10px;
+            }
+            p {
+              width: 100%;
+              color: rgb(255, 255, 255);
+              font-family: Nunito;
+              font-size: 18px;
+              font-weight: 500;
+              line-height: 25px;
+              letter-spacing: 0%;
+              text-align: left;
+            }
+          }
+          .AboutUsBox {
+            display: flex;
+            height: 68%;
+            align-items: flex-end;
+            justify-content: flex-end;
+
+            gap: 30px;
+            .box {
+              padding: 10px 20px;
+              border-radius: 10px;
+              background: rgb(255, 192, 3);
+              h4 {
+                color: rgb(38, 82, 176);
+                font-family: Nunito;
+                font-size: 16px;
+                text-align: center;
+                font-weight: 500;
+              }
+            }
+          }
+          .bookShop {
+            display: flex;
+            height: 68%;
+            width: 30%;
+            align-items: flex-start;
+            justify-content: flex-end;
+          
+          }
+        }
+      }
+    }
+  }
+}
