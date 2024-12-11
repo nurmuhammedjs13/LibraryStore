@@ -23,28 +23,23 @@ const Banners = [
 ];
 
 const Welcome = () => {
-  const [visibleBooks, setVisibleBooks] = useState(Banners.slice(0, 3));
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Переход к следующему индексу
       setIndex((prevIndex) => (prevIndex + 1) % Banners.length);
-    }, 3000);
+    }, 4000); 
 
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    // Обновление видимых книг
-    const newBooks = [
-      Banners[index],
-      Banners[(index + 1) % Banners.length],
-      Banners[(index + 2) % Banners.length],
-    ];
-    setVisibleBooks(newBooks);
-  }, [index]);
-
+  const getBookClass = (bookIndex: number) => {
+    if (bookIndex === index) return scss.center; 
+    if (bookIndex === (index + 1) % Banners.length) return scss.right; 
+    if (bookIndex === (index - 1 + Banners.length) % Banners.length)
+      return scss.left; 
+    return ""; 
+  };
   return (
     <div className={scss.welcome}>
       <div className="container">
@@ -63,15 +58,15 @@ const Welcome = () => {
             </div>
           </div>
           <div className={scss.right}>
-            {visibleBooks.map((banner, idx) => (
-              <Image
-                key={idx}
-                className={`${scss.book} ${idx === 1 ? scss.center : ""}`}
-                src={banner.img}
-                alt={banner.alt}
-                width={280}
-                height={490}
-              />
+            {Banners.map((banner, idx) => (
+              <div key={idx} className={`${scss.book} ${getBookClass(idx)}`}>
+                <Image
+                  src={banner.img}
+                  alt={banner.alt}
+                  width={280}
+                  height={450}
+                />
+              </div>
             ))}
           </div>
         </div>
