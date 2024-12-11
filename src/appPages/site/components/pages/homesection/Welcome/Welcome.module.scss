@@ -130,7 +130,7 @@
 
     .right {
       .book {
-        transform: translateX(50%) scale(0.8); // Позиционирование книг для меньшего экрана
+        transform: translateX(50%) scale(0.8); 
 
         &.center {
           transform: translateX(0) scale(1);
