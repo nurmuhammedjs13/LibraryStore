@@ -3,21 +3,188 @@ import React, { useEffect, useState } from "react";
 import scss from "./DiscountSlider.module.scss";
 import img from "../../../../../../assets/bookIMG.jpg";
 import Image from "next/image";
+import price from "../../../../../../assets/Icons/HomePrice.png";
 import next from "../../../../../../assets/Icons/arrowButtonRight.png";
 import preview from "../../../../../../assets/Icons/arrowButtonLeft.png";
 
 interface Slide {
-    id: number;
-    image: typeof img;
+    books: {
+        book_images: [
+            {
+                book_images: string;
+            }
+        ];
+        book_name: string;
+        price: number;
+        author: string;
+
+        average_rating: number;
+        total_ratings: number;
+        janre: [
+            {
+                janre_name: string;
+            },
+            {
+                janre_name: string;
+            }
+        ];
+    };
+    discount: "50%";
+    discount_book: 850.0;
 }
 
 const DiscountSlider = () => {
     const slides: Slide[] = [
-        { id: 1, image: img },
-        { id: 2, image: img },
-        { id: 3, image: img },
-        { id: 4, image: img },
-        { id: 5, image: img },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
+        {
+            books: {
+                book_images: [
+                    {
+                        book_images:
+                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
+                    },
+                ],
+                book_name: "Гордость и предубеждение",
+                price: 1700,
+                author: "Абдуллах Накышчы",
+                average_rating: 4.0,
+                total_ratings: 1,
+                janre: [
+                    {
+                        janre_name: "Романтика",
+                    },
+                    {
+                        janre_name: "Драма",
+                    },
+                ],
+            },
+            discount: "50%",
+            discount_book: 850.0,
+        },
     ];
 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -82,14 +249,58 @@ const DiscountSlider = () => {
                                     }%)`,
                                 }}
                             >
-                                {slides.map((slide: Slide) => (
-                                    <div key={slide.id} className={scss.slide}>
+                                {slides.map((slide, index) => (
+                                    <div key={index} className={scss.slide}>
                                         <Image
-                                            width={100}
-                                            height={180}
+                                            className={scss.bookImg}
+                                            width={220}
+                                            height={300}
                                             src={img}
-                                            alt={`Slide ${slide.id}`}
+                                            alt=""
                                         />
+                                        <div className={scss.info}>
+                                            <div className={scss.infoBlock}>
+                                                <div
+                                                    className={
+                                                        scss.nameAndAuthor
+                                                    }
+                                                >
+                                                    <h1 className={scss.name}>
+                                                        {slide.books.book_name}
+                                                    </h1>
+                                                    <h1 className={scss.author}>
+                                                        {slide.books.author}
+                                                    </h1>
+                                                </div>
+                                                <div className={scss.prices}>
+                                                    <h1
+                                                        className={
+                                                            scss.discountPrice
+                                                        }
+                                                    >
+                                                        <Image
+                                                            width={20}
+                                                            height={20}
+                                                            src={price}
+                                                            alt="discount icon"
+                                                        />
+                                                        {slide.discount_book}
+                                                    </h1>
+                                                    <h1
+                                                        className={
+                                                            scss.previewPrice
+                                                        }
+                                                    >
+                                                        {slide.books.price}
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                            <div className={scss.action}>
+                                                <button className={scss.button}>
+                                                    В корзину
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

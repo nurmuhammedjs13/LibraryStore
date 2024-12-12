@@ -45,21 +45,73 @@
 
             .slides {
                 display: flex;
-                gap: 20px;
+                gap: 60px;
                 transition: transform 1s ease;
 
                 .slide {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    padding: 30px 0 0 0;
                     flex-direction: column;
+                    gap: 30px;
                     border-radius: 25px;
-                    flex: 0 0 33.33%;
-                    background: rgb(213, 213, 213);
-
-                    .sliderImg {
-                        width: 310px;
-                        height: 450px;
+                    flex: 0 0 29.33%;
+                    background: rgb(177, 177, 177);
+                    .bookImg {
+                        border-radius: 10px;
+                    }
+                    .info {
+                        background: white;
+                        width: 100%;
+                        height: 100%;
+                        padding: 20px;
+                        border-radius: 25px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 20px;
+                        .infoBlock {
+                            display: flex;
+                            width: 100%;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            .nameAndAuthor {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: flex-start;
+                                gap: 5px;
+                                .name {
+                                    color: black;
+                                    font-size: 16px;
+                                    font-weight: 600;
+                                    line-height: 19.1px;
+                                    text-align: left;
+                                }
+                                .author {
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    line-height: 16.37px;
+                                    text-align: left;
+                                    color: #00000099;
+                                }
+                            }
+                            .prices {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 5px;
+                                .discountPrice {
+                                    display: flex;
+                                    flex-direction: row;
+                                    gap: 5px;
+                                    font-size: 17px;
+                                    font-weight: 500;
+                                    line-height: 20.46px;
+                                    text-align: left;
+                                    color: #2652b0;
+                                }
+                            }
+                        }
                     }
                 }
             }
