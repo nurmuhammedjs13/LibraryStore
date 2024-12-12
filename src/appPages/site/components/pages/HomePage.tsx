@@ -1,6 +1,6 @@
 import React from "react";
 import Welcome from "./homesection/Welcome/Welcome";
-import AboutUs from "./aboutUs/AboutUs";
+import AboutUs from "./homesection/aboutUs/AboutUs";
 
 const HomePage = () => {
   return (
