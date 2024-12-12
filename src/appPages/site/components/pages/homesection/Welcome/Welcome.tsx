@@ -59,7 +59,7 @@ const Welcome = () => {
         );
 
     return (
-        <div className={scss.welcome}>
+        <section className={scss.welcome}>
             <div className="container">
                 <div className={scss.content}>
                     <div className={scss.left}>
@@ -98,7 +98,7 @@ const Welcome = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

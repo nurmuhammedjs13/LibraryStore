@@ -40,7 +40,7 @@ const Header = () => {
     };
   }, []);
   return (
-    <div className={scss.header}>
+    <header className={scss.header}>
       <div className="container">
         <div className={scss.content}>
           <div className={scss.left}>
@@ -85,7 +85,7 @@ const Header = () => {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
