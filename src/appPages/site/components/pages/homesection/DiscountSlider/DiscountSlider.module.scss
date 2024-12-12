@@ -45,13 +45,17 @@
 
             .slides {
                 display: flex;
+                gap: 20px;
                 transition: transform 1s ease;
 
                 .slide {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    flex-direction: column;
+                    border-radius: 25px;
                     flex: 0 0 33.33%;
+                    background: rgb(213, 213, 213);
 
                     .sliderImg {
                         width: 310px;

@@ -85,9 +85,10 @@ const DiscountSlider = () => {
                                 {slides.map((slide: Slide) => (
                                     <div key={slide.id} className={scss.slide}>
                                         <Image
-                                            src={slide.image}
+                                            width={100}
+                                            height={180}
+                                            src={img}
                                             alt={`Slide ${slide.id}`}
-                                            className={scss.sliderImg}
                                         />
                                     </div>
                                 ))}
