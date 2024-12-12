@@ -76,17 +76,18 @@
                     }
                     .confirm {
                         display: flex;
-                        gap: 10px;
+                        gap: 7px;
                         flex-direction: column;
                         height: 100%;
                         padding: 0 0 10px 0;
-                        align-items: flex-end;
+                        align-items: flex-start;
                         justify-content: flex-end;
                         .price {
                             display: flex;
                             flex-direction: row;
                             align-items: center;
                             gap: 5px;
+                            padding: 5px 0 0 0;
                             font-size: 18px;
                             font-weight: 500;
                             line-height: 20.46px;
@@ -102,9 +103,9 @@
                                 font-size: 16px;
                                 padding: 8px 10px;
                                 color: white;
-                                font-weight: 700;
+                                font-weight: 500;
                                 border: none;
-                                border-radius: 20px;
+                                border-radius: 5px;
                                 line-height: 21.82px;
                                 text-align: left;
                                 transition: 0.3s;

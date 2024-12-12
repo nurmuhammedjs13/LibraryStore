@@ -2,6 +2,7 @@
     background: #2652b0;
 
     padding: 0 0 80px 0;
+
     .content {
         display: flex;
         flex-direction: column;
@@ -24,17 +25,49 @@
             justify-content: center;
             align-items: center;
 
-            .prevButton,
-            .nextButton {
+            .prevButton {
+                border: none;
                 background: transparent;
                 border: none;
-                color: white;
-                font-size: 40px;
+                width: 55px;
+                height: 55px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: 0.3s;
+
+                img {
+                    width: 90px;
+                    height: 90px;
+                    transition: opacity 0.3s ease;
+                }
+
+                &:hover img {
+                    content: url("../../../../../../assets//Icons//activeArrowLeft.png");
+                }
+            }
+
+            .nextButton {
+                border-radius: 100%;
+                background: transparent;
+                border: none;
+                width: 55px;
+                height: 55px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 cursor: pointer;
                 transition: opacity 0.3s ease;
 
-                &:hover {
-                    opacity: 0.7;
+                img {
+                    width: 90px;
+                    height: 90px;
+                    transition: opacity 0.3s ease;
+                }
+
+                &:hover img {
+                    content: url("../../../../../../assets//Icons/activeArrowRight.png");
                 }
             }
 
@@ -58,6 +91,8 @@
                     border-radius: 25px;
                     flex: 0 0 29.33%;
                     background: rgb(177, 177, 177);
+                    transition: 0.3s;
+
                     .bookImg {
                         border-radius: 10px;
                     }
@@ -99,7 +134,8 @@
                             .prices {
                                 display: flex;
                                 flex-direction: column;
-                                gap: 5px;
+                                gap: 1px;
+                                align-items: flex-end;
                                 .discountPrice {
                                     display: flex;
                                     flex-direction: row;
@@ -109,6 +145,44 @@
                                     line-height: 20.46px;
                                     text-align: left;
                                     color: #2652b0;
+                                }
+                                .previewPrice {
+                                    position: relative;
+                                    font-size: 17px;
+                                    text-decoration-color: red;
+                                    font-weight: 500;
+                                    line-height: 20.46px;
+                                    text-align: left;
+                                    color: #2652b0;
+                                }
+
+                                .previewPrice:after {
+                                    content: "";
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 2px;
+                                    background-color: red;
+                                    transform: rotate(-15deg);
+                                    transform-origin: center;
+                                }
+                            }
+                        }
+                        .action {
+                            .button {
+                                padding: 10px;
+                                border-radius: 5px;
+                                border: none;
+                                color: white;
+                                font-size: 17px;
+                                font-weight: 500;
+                                line-height: 21.82px;
+                                text-align: left;
+                                background: #2652b0;
+                                transition: 0.3s;
+                                &:hover {
+                                    transform: translateY(-3px);
                                 }
                             }
                         }

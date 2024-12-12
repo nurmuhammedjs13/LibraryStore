@@ -4,8 +4,10 @@ import scss from "./DiscountSlider.module.scss";
 import img from "../../../../../../assets/bookIMG.jpg";
 import Image from "next/image";
 import price from "../../../../../../assets/Icons/HomePrice.png";
-import next from "../../../../../../assets/Icons/arrowButtonRight.png";
-import preview from "../../../../../../assets/Icons/arrowButtonLeft.png";
+import next from "../../../../../../assets/Icons/arrowRight.png";
+import nextActive from "../../../../../../assets/Icons/activeArrowRight.png";
+import preview from "../../../../../../assets/Icons/arrowLeft.png";
+import previewActive from "../../../../../../assets/Icons/activeArrowLeft.png";
 
 interface Slide {
     books: {
@@ -284,14 +286,14 @@ const DiscountSlider = () => {
                                                             src={price}
                                                             alt="discount icon"
                                                         />
-                                                        {slide.discount_book}
+                                                        {slide.discount_book} c
                                                     </h1>
                                                     <h1
                                                         className={
                                                             scss.previewPrice
                                                         }
                                                     >
-                                                        {slide.books.price}
+                                                        {slide.books.price} c
                                                     </h1>
                                                 </div>
                                             </div>

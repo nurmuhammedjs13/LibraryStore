@@ -229,7 +229,7 @@ const HomeCards = () => {
                                         </h1>
                                         <div className={scss.actions}>
                                             <button className={scss.button}>
-                                                КУПИТЬ
+                                                В корзину
                                             </button>
                                         </div>
                                     </div>
