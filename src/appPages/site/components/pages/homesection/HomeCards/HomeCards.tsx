@@ -1,16 +1,23 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import scss from "./HomeCards.module.scss";
 import Image from "next/image";
+
 import star0 from "../../../../../../assets/Icons/star0.png";
 import star1 from "../../../../../../assets/Icons/star1.png";
 import star2 from "../../../../../../assets/Icons/star2.png";
-import star3 from "../../../../../../assets/Icons/star3.jpg";
+import star3 from "../../../../../../assets/Icons/star3.png";
 import star4 from "../../../../../../assets/Icons/star4.png";
-import star5 from "../../../../../../assets/Icons/star5.jpg";
+import star5 from "../../../../../../assets/Icons/star5.png";
 import price from "../../../../../../assets/Icons/HomePrice.png";
+import like from "../../../../../../assets/Icons/like.png";
+import likeActive from "../../../../../../assets/Icons/likeActive.png";
 import img from "../../../../../../assets/bookIMG.jpg";
 
 const HomeCards = () => {
+    const [likedItems, setLikedItems] = useState<number[]>([]);
+
     const data = [
         {
             id: 1,
@@ -41,7 +48,7 @@ const HomeCards = () => {
             janre: [{ janre_name: "Романтика" }, { janre_name: "Драма" }],
         },
         {
-            id: 1,
+            id: 3,
             book_images: [
                 {
                     book_images: "",
@@ -50,7 +57,7 @@ const HomeCards = () => {
             book_name: "Гордость",
             author: "Рашид Хайламаз",
             price: 1700,
-            average_rating: 4.0,
+            average_rating: 3,
             total_ratings: 1,
             janre: [
                 { janre_name: "Романтика" },
@@ -60,7 +67,7 @@ const HomeCards = () => {
             ],
         },
         {
-            id: 1,
+            id: 4,
             book_images: [
                 {
                     book_images: "",
@@ -74,7 +81,7 @@ const HomeCards = () => {
             janre: [{ janre_name: "Романтика" }, { janre_name: "Драма" }],
         },
         {
-            id: 1,
+            id: 5,
             book_images: [
                 {
                     book_images: "",
@@ -88,7 +95,7 @@ const HomeCards = () => {
             janre: [{ janre_name: "Романтика" }, { janre_name: "Драма" }],
         },
         {
-            id: 2,
+            id: 6,
             book_images: [
                 {
                     book_images: "",
@@ -102,7 +109,7 @@ const HomeCards = () => {
             janre: [{ janre_name: "Романтика" }, { janre_name: "Драма" }],
         },
         {
-            id: 1,
+            id: 7,
             book_images: [
                 {
                     book_images: "",
@@ -121,7 +128,7 @@ const HomeCards = () => {
             ],
         },
         {
-            id: 1,
+            id: 8,
             book_images: [
                 {
                     book_images: "",
@@ -130,11 +137,18 @@ const HomeCards = () => {
             book_name: "Гордость",
             author: "Рашид Хайламаз",
             price: 1700,
-            average_rating: 4.0,
+            average_rating: 5,
             total_ratings: 1,
             janre: [{ janre_name: "Романтика" }, { janre_name: "Драма" }],
         },
     ];
+    const toggleLike = (id: number) => {
+        setLikedItems((prevLikedItems) =>
+            prevLikedItems.includes(id)
+                ? prevLikedItems.filter((itemId) => itemId !== id)
+                : [...prevLikedItems, id]
+        );
+    };
 
     return (
         <section className={scss.HomeCards}>
@@ -230,6 +244,25 @@ const HomeCards = () => {
                                         <div className={scss.actions}>
                                             <button className={scss.button}>
                                                 В корзину
+                                            </button>
+                                            <button
+                                                className={scss.buttonLike}
+                                                onClick={() =>
+                                                    toggleLike(item.id)
+                                                }
+                                            >
+                                                <Image
+                                                    width={24}
+                                                    height={24}
+                                                    src={
+                                                        likedItems.includes(
+                                                            item.id
+                                                        )
+                                                            ? likeActive
+                                                            : like
+                                                    }
+                                                    alt="add to like"
+                                                />
                                             </button>
                                         </div>
                                     </div>

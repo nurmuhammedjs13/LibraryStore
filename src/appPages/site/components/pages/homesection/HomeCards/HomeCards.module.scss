@@ -5,13 +5,13 @@
         justify-content: center;
         gap: 50px;
         padding: 100px 0;
+
         .title {
             font-size: 42px;
             font-weight: 800;
             line-height: 54.56px;
             text-align: left;
             color: #2652b0;
-
             text-decoration-skip-ink: none;
         }
 
@@ -20,9 +20,12 @@
             grid-template-columns: 1fr 1fr 1fr 1fr;
             column-gap: 10px;
             row-gap: 60px;
+            padding: 10px 0 0 0;
+            overflow-y: auto;
+
             .card {
                 display: flex;
-                gap: 20px;
+                gap: 10px;
                 flex-direction: row;
 
                 .bookImage {
@@ -31,25 +34,28 @@
                     height: 180px;
                     border-radius: 4px;
                     position: relative;
-                    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+                    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
                     transition: 0.3s;
+
                     &:hover {
                         transform: translateY(-5px);
                     }
                 }
+
                 .cardInfo {
                     flex: 1;
-
                     display: flex;
                     gap: 4px;
                     align-items: flex-start;
                     flex-direction: column;
+
                     .name {
                         font-size: 16px;
                         font-weight: 600;
                         line-height: 19.1px;
                         text-align: left;
                     }
+
                     .author {
                         font-size: 14px;
                         color: #00000099;
@@ -57,6 +63,7 @@
                         line-height: 16.37px;
                         text-align: left;
                     }
+
                     .genre {
                         display: flex;
                         flex-wrap: wrap;
@@ -66,6 +73,7 @@
                         line-height: 16.37px;
                         text-align: left;
                         color: #2652b0cc;
+
                         .janre {
                             font-size: 14px;
                             font-weight: 500;
@@ -74,6 +82,7 @@
                             color: #2652b0cc;
                         }
                     }
+
                     .confirm {
                         display: flex;
                         gap: 7px;
@@ -82,6 +91,7 @@
                         padding: 0 0 10px 0;
                         align-items: flex-start;
                         justify-content: flex-end;
+
                         .price {
                             display: flex;
                             flex-direction: row;
@@ -94,10 +104,12 @@
                             text-align: left;
                             color: #2652b0;
                         }
+
                         .actions {
                             display: flex;
                             flex-direction: row;
                             gap: 10px;
+
                             .button {
                                 background: #2652b0;
                                 font-size: 16px;
@@ -109,9 +121,15 @@
                                 line-height: 21.82px;
                                 text-align: left;
                                 transition: 0.3s;
+
                                 &:hover {
                                     transform: translateY(-2px);
                                 }
+                            }
+
+                            .buttonLike {
+                                border: none;
+                                background: transparent;
                             }
                         }
                     }

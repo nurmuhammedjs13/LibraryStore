@@ -5,9 +5,7 @@ import img from "../../../../../../assets/bookIMG.jpg";
 import Image from "next/image";
 import price from "../../../../../../assets/Icons/HomePrice.png";
 import next from "../../../../../../assets/Icons/arrowRight.png";
-import nextActive from "../../../../../../assets/Icons/activeArrowRight.png";
 import preview from "../../../../../../assets/Icons/arrowLeft.png";
-import previewActive from "../../../../../../assets/Icons/activeArrowLeft.png";
 
 interface Slide {
     books: {
