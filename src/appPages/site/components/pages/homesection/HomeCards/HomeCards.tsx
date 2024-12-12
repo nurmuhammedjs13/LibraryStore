@@ -14,9 +14,11 @@ import price from "../../../../../../assets/Icons/HomePrice.png";
 import like from "../../../../../../assets/Icons/like.png";
 import likeActive from "../../../../../../assets/Icons/likeActive.png";
 import img from "../../../../../../assets/bookIMG.jpg";
+import { useGetBooksQuery } from "@/redux/api/books";
 
 const HomeCards = () => {
     const [likedItems, setLikedItems] = useState<number[]>([]);
+    // const { data, isLoading, isError } = useGetBooksQuery();
 
     const data = [
         {

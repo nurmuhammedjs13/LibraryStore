@@ -5,8 +5,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
-
+    baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
 });
 
 const baseQueryExtended: BaseQueryFn = async (args, api, extraOptions) => {
@@ -19,6 +18,6 @@ export const api = createApi({
     baseQuery: baseQueryExtended,
     refetchOnFocus: true,
     refetchOnReconnect: true,
-    tagTypes: ["opening","footer"],
+    tagTypes: ["opening", "footer", "books"],
     endpoints: () => ({}),
 });
