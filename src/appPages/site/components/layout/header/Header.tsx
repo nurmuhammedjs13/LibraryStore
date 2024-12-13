@@ -5,6 +5,7 @@ import Image from "next/image";
 import SearchProducts from "@/shared/SearchProduct";
 import Basket from "@/assets/Icons/clarity_shopping-bag-line.svg";
 import profile from "@/assets/Icons/proicons_person.svg";
+import like from "@/assets/Icons/like_icon.svg";
 import Link from "next/link";
 import BurgerButton from "@/ui/burgerButton/BurgerButton";
 import BurgerMenu from "@/ui/burgerMenu/BurgerMenu";
@@ -19,6 +20,10 @@ const Links = [
   },
 ];
 const LinkIcons = [
+  {
+    icon: like,
+    href: "/favorite",
+  },
   {
     icon: Basket,
     href: "/basket",
