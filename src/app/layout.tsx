@@ -5,7 +5,7 @@ import LayoutClient from "./layout.client";
 
 const nunito = Nunito({ subsets: ["latin", "cyrillic"] });
 export const metadata: Metadata = {
-    title: "Oku.kg | Сиз суйгон китептер ",
+    title: "Oku.kg ",
     description: `Китеп дүкөнү| книги|books|Бишкек📚с 2019г|\n
     Пополни свою книжную полку новыми книгами`,
 };
