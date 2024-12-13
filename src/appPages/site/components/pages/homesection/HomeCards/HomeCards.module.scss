@@ -4,7 +4,7 @@
         flex-direction: column;
         justify-content: center;
         gap: 50px;
-        padding: 100px 0;
+        padding: 0 0 50px 0;
 
         .title {
             font-size: 42px;
@@ -20,7 +20,7 @@
             grid-template-columns: 1fr 1fr 1fr 1fr;
             column-gap: 10px;
             row-gap: 60px;
-            padding: 10px 0 0 0;
+            padding: 10px 0 50px 0;
             overflow-y: auto;
 
             .card {

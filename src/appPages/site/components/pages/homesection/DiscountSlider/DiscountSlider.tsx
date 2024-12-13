@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
+import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import img from "../../../../../../assets/bookIMG.jpg";
 import Image from "next/image";
@@ -7,189 +9,13 @@ import price from "../../../../../../assets/Icons/HomePrice.png";
 import next from "../../../../../../assets/Icons/arrowRight.png";
 import preview from "../../../../../../assets/Icons/arrowLeft.png";
 
-interface Slide {
-    books: {
-        book_images: [
-            {
-                book_images: string;
-            }
-        ];
-        book_name: string;
-        price: number;
-        author: string;
-
-        average_rating: number;
-        total_ratings: number;
-        janre: [
-            {
-                janre_name: string;
-            },
-            {
-                janre_name: string;
-            }
-        ];
-    };
-    discount: "50%";
-    discount_book: 850.0;
-}
-
 const DiscountSlider = () => {
-    const slides: Slide[] = [
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-        {
-            books: {
-                book_images: [
-                    {
-                        book_images:
-                            "http://127.0.0.1:8000/media/book_images/photo_2024-11-24_16-56-47.jpg",
-                    },
-                ],
-                book_name: "Гордость и предубеждение",
-                price: 1700,
-                author: "Абдуллах Накышчы",
-                average_rating: 4.0,
-                total_ratings: 1,
-                janre: [
-                    {
-                        janre_name: "Романтика",
-                    },
-                    {
-                        janre_name: "Драма",
-                    },
-                ],
-            },
-            discount: "50%",
-            discount_book: 850.0,
-        },
-    ];
-
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
+    const { data, isLoading, isError } = useGetDiscountQuery();
+
+    const slides = data || [];
     const nextSlide = (): void => {
         if (!isAnimating) {
             setIsAnimating(true);
@@ -198,7 +24,6 @@ const DiscountSlider = () => {
             });
         }
     };
-
     const prevSlide = (): void => {
         if (!isAnimating) {
             setIsAnimating(true);
@@ -215,7 +40,6 @@ const DiscountSlider = () => {
 
         return () => clearInterval(autoSlide);
     }, []);
-
     useEffect(() => {
         const timer: NodeJS.Timeout = setTimeout(() => {
             setIsAnimating(false);
@@ -223,6 +47,9 @@ const DiscountSlider = () => {
 
         return () => clearTimeout(timer);
     }, [currentIndex]);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Ошибка загрузки данных. Попробуйте позже.</div>;
 
     return (
         <section className={scss.DiscountSlider}>
@@ -251,11 +78,17 @@ const DiscountSlider = () => {
                             >
                                 {slides.map((slide, index) => (
                                     <div key={index} className={scss.slide}>
+                                        <h1 className={scss.discount_bage}>
+                                            {slide.discount}
+                                        </h1>
                                         <Image
                                             className={scss.bookImg}
                                             width={220}
                                             height={300}
-                                            src={img}
+                                            src={
+                                                slide.books.book_images[0]
+                                                    .book_images
+                                            }
                                             alt=""
                                         />
                                         <div className={scss.info}>

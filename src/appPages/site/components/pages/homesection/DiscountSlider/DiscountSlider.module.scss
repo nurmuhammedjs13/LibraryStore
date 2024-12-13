@@ -86,13 +86,30 @@
                     justify-content: center;
                     align-items: center;
                     padding: 30px 0 0 0;
+                    position: relative;
                     flex-direction: column;
                     gap: 30px;
                     border-radius: 25px;
                     flex: 0 0 29.33%;
                     background: rgb(177, 177, 177);
                     transition: 0.3s;
-
+                    .discount_bage {
+                        font-size: 16px;
+                        color: white;
+                        font-weight: 700;
+                        line-height: 21.82px;
+                        text-align: left;
+                        position: absolute;
+                        top: 10px;
+                        left: 10px;
+                        background: #ff3d00;
+                        color: #fff;
+                        font-weight: bold;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        transform: rotate(-20deg);
+                        z-index: 2;
+                    }
                     .bookImg {
                         border-radius: 10px;
                     }
