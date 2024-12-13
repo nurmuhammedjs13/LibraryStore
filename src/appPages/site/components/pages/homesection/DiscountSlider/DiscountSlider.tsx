@@ -251,6 +251,9 @@ const DiscountSlider = () => {
                             >
                                 {slides.map((slide, index) => (
                                     <div key={index} className={scss.slide}>
+                                        <div
+                                            className={scss.discount_bage}
+                                        ></div>
                                         <Image
                                             className={scss.bookImg}
                                             width={220}
