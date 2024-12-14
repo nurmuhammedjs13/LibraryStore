@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import scss from "./Footer.module.scss";
-import book from "@/assets/image 33.png";
+import book from "@/assets/logoFooter copy.png";
+import oku from "@/assets/footerOku.png";
 import Image from "next/image";
 import { useGetFooterQuery } from "@/redux/api/futer";
 import Link from "next/link";
-const links = [
+
+const shop = [
   {
     name: "Главная",
     href: "/",
@@ -15,20 +17,26 @@ const links = [
     href: "/catalog",
   },
   {
-    name: "Как заказать",
-    href: "how-deliver",
+    name: "Корзина",
+    href: "/basket",
   },
+  {
+    name: "Избранное",
+    href: "/favorite",
+  },
+];
+const info = [
   {
     name: "Доставка",
-    href: "/deliver",
+    href: "deliver",
   },
   {
-    name: "О нас",
+    name: "О нас ",
     href: "about-us",
   },
   {
     name: "Скидки",
-    href: "cash-back",
+    href: "sell",
   },
 ];
 const Footer = () => {
@@ -36,58 +44,73 @@ const Footer = () => {
   const socialSite = data?.flatMap((el) => el.social_set.map((el) => el));
   return (
     <footer className={scss.footer}>
-      <div className={scss.book}>
-        <Image src={book} alt="book" width={280} height={220} />
-      </div>
       <div className="container">
+        <div className={scss.logo}>
+          <Image src={book} alt="book" width={160} height={160} />
+        </div>
         <div className={scss.content}>
-          <div className={scss.text_cont}>
-            {data?.flatMap((el, idx) => (
-              <div key={idx} className={scss.logo_Social}>
-                <Image src={el.logo} alt="logo" width={150} height={30} />
-                <div className={scss.soc_icons}>
-                  {socialSite?.map((el, idx) => (
-                    <Link href={el.social_set} key={idx}>
-                      <Image
-                        src={el.social_logo}
-                        alt="logo"
-                        width={48}
-                        height={48}
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-            <div className={scss.links}>
-              {data?.flatMap((el, idx) => (
-                <div className={scss.backLinks}>
-                  <a key={idx}>{el.futer_address.map((el) => el.address)}</a>
-                  <a key={idx}>
-                    {el.contact_info.map((el) => el.contact_info)}
-                  </a>
-                  <a key={idx}>{el.futer_email.map((el) => el.email_futer)}</a>
-                </div>
+          <div className={scss.top}>
+            <div className={scss.shop}>
+              <h1>Магазин</h1>
+              {shop.map((el, idx) => (
+                <Link key={idx} href={el.href}>
+                  {el.name}
+                </Link>
               ))}
-              <div className={scss.left_links}>
-                {links.slice(0, 3).map((el, idx) => (
-                  <Link key={idx} href={el.href}>
-                    {el.name}
-                  </Link>
+            </div>
+            <div className={scss.info}>
+              <h1>Информация</h1>
+              {info.map((el, idx) => (
+                <Link key={idx} href={el.href}>
+                  {el.name}
+                </Link>
+              ))}
+            </div>
+            <div className={scss.contact}>
+              <h1>Контакты</h1>
+              {data?.flatMap((el, idx) => (
+                <React.Fragment key={idx}>
+                  <a href="">{el.contact_info.map((el) => el.contact_info)}</a>
+                  <a href="">{el.futer_email.map((el) => el.email_futer)}</a>
+                </React.Fragment>
+              ))}
+            </div>
+            <div className={scss.social}>
+              <h1>Социальные сети</h1>
+              <div className={scss.sites}>
+                {socialSite?.map((el, idx) => (
+                  <a key={idx} href={el.social_set}>
+                    <Image
+                      src={el.social_logo}
+                      alt="lol"
+                      width={48}
+                      height={48}
+                    />
+                  </a>
                 ))}
               </div>
-              <div className={scss.right_links}>
-                {links.slice(3, 6).map((el, idx) => (
-                  <Link key={idx} href={el.href}>
-                    {el.name}
-                  </Link>
+              <div className={scss.adress}>
+                {data?.flatMap((el, idx) => (
+                  <a href="" key={idx}>
+                    <span>Адрес</span>
+                    <br />
+                    <br />
+                    {el.futer_address.map((el) => el.address)}
+                  </a>
                 ))}
               </div>
             </div>
           </div>
-          <div className={scss.map}>
-            <div className={scss.map_box}></div>
-            <iframe src="/map.html" frameBorder="0"></iframe>
+          <div className={scss.bottom}>
+            <div className={scss.map}>
+              <iframe src="/map.html" frameBorder="0"></iframe>
+            </div>
+            <div className={scss.footOku}>
+              <Image src={oku} alt="oku" width={920} height={190} />
+            </div>
+          </div>
+          <div className={scss.copyright}>
+            <p>Политика конфиденциальности</p>
           </div>
         </div>
       </div>
