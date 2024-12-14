@@ -15,5 +15,9 @@ namespace Books {
             }>;
         }
     ];
+    type GetBooksResponse = GetBooksReaponse[];
     type GetBooksRequest = void;
+
+    type GetBooksDetailResponse = GetBooksReaponse[];
+    type GetBooksDetailRequest = void | string | number;
 }

@@ -8,7 +8,16 @@ const api = index.injectEndpoints({
             }),
             providesTags: ["books"],
         }),
+        getBooksDetail: build.query<
+            Books.GetBooksDetailResponse,
+            Books.GetBooksDetailRequest
+        >({
+            query: (id) => ({
+                url: `books/${id}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
-export const { useGetBooksQuery } = api;
+export const { useGetBooksQuery, useGetBooksDetailQuery } = api;

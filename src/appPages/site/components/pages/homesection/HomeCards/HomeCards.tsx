@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import scss from "./HomeCards.module.scss";
 import Image from "next/image";
+import { useGetBooksQuery } from "@/redux/api/books";
+import { useRouter } from "next/navigation";
+
 import star0 from "../../../../../../assets/Icons/star0.png";
 import star1 from "../../../../../../assets/Icons/star1.png";
 import star2 from "../../../../../../assets/Icons/star2.png";
@@ -11,10 +14,22 @@ import star5 from "../../../../../../assets/Icons/star5.png";
 import price from "../../../../../../assets/Icons/HomePrice.png";
 import like from "../../../../../../assets/Icons/like.png";
 import likeActive from "../../../../../../assets/Icons/likeActive.png";
-import { useGetBooksQuery } from "@/redux/api/books";
 
-const HomeCards = () => {
+interface Book {
+    id: number;
+    book_name: string;
+    author: string;
+    price: number;
+    average_rating: number;
+    book_images: { book_images: string }[];
+    janre: { janre_name: string }[];
+}
+
+const HomeCards: React.FC = () => {
+    const router = useRouter();
+
     const [likedItems, setLikedItems] = useState<number[]>([]);
+
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
     if (isLoading) return <div>Loading...</div>;
@@ -35,7 +50,7 @@ const HomeCards = () => {
         });
     };
 
-    const latestBooks = data.slice(-12);
+    const latestBooks: Book[] = data.slice(-12);
 
     return (
         <section className={scss.HomeCards}>
@@ -43,9 +58,12 @@ const HomeCards = () => {
                 <div className={scss.content}>
                     <h1 className={scss.title}>КАТАЛОГ</h1>
                     <div className={scss.cards}>
-                        {latestBooks.map((item, index) => (
+                        {latestBooks.map((item) => (
                             <div key={item.id} className={scss.card}>
                                 <Image
+                                    onClick={() =>
+                                        router.push(`books/${item.id}`)
+                                    }
                                     width={150}
                                     height={200}
                                     quality={80}

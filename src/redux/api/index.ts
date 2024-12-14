@@ -18,6 +18,6 @@ export const api = createApi({
     baseQuery: baseQueryExtended,
     refetchOnFocus: true,
     refetchOnReconnect: true,
-    tagTypes: ["opening", "footer", "books", "aksia"],
+    tagTypes: ["opening", "footer", "books", "aksia", "booksDetail"],
     endpoints: () => ({}),
 });
