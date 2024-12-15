@@ -32,9 +32,18 @@ const HomeCards: React.FC = () => {
 
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Ошибка загрузки данных. Попробуйте позже.</div>;
-
+    if (isLoading)
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
+    if (isError)
+        return (
+            <div className={scss.loaderBlock}>
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+            </div>
+        );
     const stars = [star0, star1, star2, star3, star4, star5];
 
     const toggleLike = (id: number) => {

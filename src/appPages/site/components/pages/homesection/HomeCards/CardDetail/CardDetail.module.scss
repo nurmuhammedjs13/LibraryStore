@@ -1,0 +1,53 @@
+.CardDetail {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    background-image: var(--book-image);
+    transition: background-image 1s ease-in-out;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+.bookInfo {
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+.bookInfo img {
+    width: 100%;
+    height: auto;
+}
+
+.button {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}

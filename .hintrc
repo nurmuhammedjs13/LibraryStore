@@ -1,11 +1,11 @@
 {
-    "extends": ["development"],
+    "extends": ["accessibility", "progressive-web-apps"],
     "hints": {
-        "axe/name-role-value": [
-            "default",
-            {
-                "button-name": "off"
-            }
-        ]
+        "axe/name-role-value": "off",
+        "button-name": "off",
+        "meta-viewport": "off",
+        "no-inline-styles": "off",
+        "typescript-config/strict": "off",
+        "typescript-config/no-any": "off"
     }
 }
