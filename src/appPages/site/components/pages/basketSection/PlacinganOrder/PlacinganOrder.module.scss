@@ -1,0 +1,65 @@
+.mainBlock {
+  .block {
+    .landmark {
+      .cardBlock {
+        .ImgBlock {
+            display: flex;
+          .img {
+            img {
+                width: 90px;
+                height: 120px;
+            }
+          }
+          .ImgText {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            h2 {
+              color: rgb(0, 0, 0);
+              font-family: Nunito;
+              font-size: 14px;
+              font-weight: 600;
+              line-height: 19px;
+              margin-top: 2px;
+            }
+            h3 {
+              color: rgba(0, 0, 0, 0.6);
+              font-family: Nunito;
+              font-size: 12px;
+              font-weight: 500;
+              line-height: 16px;
+            }
+            h4 {
+              color: rgba(0, 0, 0, 0.5);
+              font-family: Nunito;
+              font-size: 12px;
+              font-weight: 500;
+              line-height: 16px;
+            }
+          }
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          h1 {
+            color: rgb(0, 0, 0);
+            font-family: Nunito;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 27px;
+          }
+        }
+        .price {
+          h5 {
+            color: rgb(38, 82, 176);
+            font-family: Nunito;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+          }
+        }
+      }
+    }
+  }
+}

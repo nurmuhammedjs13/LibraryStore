@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
