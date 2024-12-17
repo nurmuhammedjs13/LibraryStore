@@ -16,6 +16,36 @@ const PlacinganOrder = () => {
       date: "30.11.2024",
       price: 400,
     },
+    {
+      img: img,
+      name: "К себе нежно",
+      author: "Ольга Примаченко",
+      date: "30.11.2024",
+      price: 400,
+    },
+    {
+      img: img,
+      name: "К себе нежно",
+      author: "Ольга Примаченко",
+      date: "30.11.2024",
+      price: 400,
+    },
+    {
+      img: img,
+      name: "К себе нежно",
+      author: "Ольга Примаченко",
+      date: "30.11.2024",
+      price: 400,
+    },
+    {
+      img: img,
+      name: "К себе нежно",
+      author: "Ольга Примаченко",
+      date: "30.11.2024",
+      price: 400,
+    },
+  
+  
   ];
   return (
     <div className={styles.mainBlock}>
@@ -46,7 +76,8 @@ const PlacinganOrder = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </div>  
+          
         </div>
       </div>
     </div>

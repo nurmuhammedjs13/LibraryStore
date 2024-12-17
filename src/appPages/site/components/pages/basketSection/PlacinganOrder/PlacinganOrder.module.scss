@@ -1,13 +1,41 @@
 .mainBlock {
+  margin-bottom: 10%;
   .block {
     .landmark {
+      width: 40.9%;
+      height: 767px;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 20px 15px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: #ffffff transparent;
       .cardBlock {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 500px;
+        padding-top: 25px;
+        margin-left: 20px;
+        height: 140px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 37px;
+        margin: 10px 20px;
+        border-radius: 20px;
+        background: rgb(255, 255, 255);
         .ImgBlock {
-            display: flex;
+          display: flex;
           .img {
             img {
-                width: 90px;
-                height: 120px;
+              width: 90px;
+              height: 120px;
             }
           }
           .ImgText {
@@ -39,9 +67,9 @@
           }
         }
         .quantity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
           h1 {
             color: rgb(0, 0, 0);
             font-family: Nunito;
@@ -51,6 +79,9 @@
           }
         }
         .price {
+          display: flex;
+          align-items: center;
+          gap: 10px;
           h5 {
             color: rgb(38, 82, 176);
             font-family: Nunito;
