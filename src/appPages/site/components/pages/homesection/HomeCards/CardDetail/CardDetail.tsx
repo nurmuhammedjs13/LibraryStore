@@ -14,6 +14,7 @@ import img from "../../../../../../../assets/image 19.png";
 import back from "../../../../../../../assets/Icons/Back.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 
 const CardDetail = () => {
     const router = useRouter();
@@ -61,83 +62,94 @@ const CardDetail = () => {
     };
 
     return (
-        <section className={scss.CardDetail}>
-            <div className="container">
-                <div className={scss.content}>
-                    <Image
-                        onClick={() => router.push(`/`)}
-                        width={100}
-                        height={100}
-                        className={scss.backButton}
-                        src={back}
-                        alt="button of back"
-                    />
-                    <div className={scss.detailContent}>
-                        <div className={scss.bookContent}>
-                            <Image
-                                width={1000}
-                                height={1200}
-                                src={data.books.book_images[0].book_images}
-                                alt="img of book"
-                                className={scss.cardImg}
-                            />
-                            <div className={scss.cardInfo}>
-                                <div className={scss.bookNameBlock}>
-                                    <h1 className={scss.bookName}>
-                                        {data.books.book_name}
-                                    </h1>
-                                    <h1 className={scss.authorName}>
-                                        {data.books.author}
-                                    </h1>
-                                </div>
-                                <div className={scss.bookGenreBlock}>
-                                    {data.books.janre.map((genre, index) => (
-                                        <h1
-                                            key={index}
-                                            className={scss.genreBlock}
-                                        >
-                                            Жанр: {genre.janre_name}
+        <>
+            <section className={scss.CardDetail}>
+                <div className="container">
+                    <div className={scss.content}>
+                        <Image
+                            onClick={() => router.push(`/`)}
+                            width={100}
+                            height={100}
+                            className={scss.backButton}
+                            src={back}
+                            alt="button of back"
+                        />
+                        <div className={scss.detailContent}>
+                            <div className={scss.bookContent}>
+                                <Image
+                                    width={1000}
+                                    height={1200}
+                                    src={data.books.book_images[0].book_images}
+                                    alt="img of book"
+                                    className={scss.cardImg}
+                                />
+                                <div className={scss.cardInfo}>
+                                    <div className={scss.bookNameBlock}>
+                                        <h1 className={scss.bookName}>
+                                            {data.books.book_name}
                                         </h1>
-                                    ))}
-                                </div>
-                                <button className={scss.bookPriceBlock}>
-                                    <Image
-                                        className={scss.priceIcon}
-                                        width={100}
-                                        height={100}
-                                        src={priceIcon}
-                                        alt="icon of price"
-                                    />
-                                    {data.books.price} сом
-                                </button>
-                                <div className={scss.bookActAndDesBlock}>
-                                    <h1 className={scss.description}>
-                                        {data.books.description}
-                                    </h1>
-                                    <button className={scss.cardButton}>
-                                        В корзину
+                                        <h1 className={scss.authorName}>
+                                            {data.books.author}
+                                        </h1>
+                                    </div>
+                                    <div className={scss.bookGenreBlock}>
+                                        {data.books.janre.map(
+                                            (genre, index) => (
+                                                <h1
+                                                    key={index}
+                                                    className={scss.genreBlock}
+                                                >
+                                                    Жанр: {genre.janre_name}
+                                                </h1>
+                                            )
+                                        )}
+                                    </div>
+                                    <button className={scss.bookPriceBlock}>
+                                        <Image
+                                            className={scss.priceIcon}
+                                            width={100}
+                                            height={100}
+                                            src={priceIcon}
+                                            alt="icon of price"
+                                        />
+                                        {data.books.price} сом
                                     </button>
+                                    <div className={scss.bookActAndDesBlock}>
+                                        <h1 className={scss.description}>
+                                            {data.books.description}
+                                        </h1>
+                                        <button className={scss.cardButton}>
+                                            В корзину
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={scss.rating}>
-                        <div className={scss.hr} />
-                        <div className={scss.ratingContent}>
-                            <h1 className={scss.ratingText}>Рейтинг книги</h1>{" "}
-                            <Image
-                                width={110}
-                                src={stars[data.books.total_ratings] || star0}
-                                alt={`${data.books.total_ratings || 0} rating`}
-                            />
-                            <h1 className={scss.ratingUsers}>
-                                Оценок: {data.books.average_rating}
-                            </h1>{" "}
+                        <div className={scss.rating}>
+                            <div className={scss.hr} />
+                            <div className={scss.ratingContent}>
+                                <h1 className={scss.ratingText}>
+                                    Рейтинг книги
+                                </h1>{" "}
+                                <Image
+                                    width={110}
+                                    src={
+                                        stars[data.books.total_ratings] || star0
+                                    }
+                                    alt={`${
+                                        data.books.total_ratings || 0
+                                    } rating`}
+                                />
+                                <h1 className={scss.ratingUsers}>
+                                    Оценок: {data.books.average_rating}
+                                </h1>{" "}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            <DetailCards />
+        </>
     );
 };
 
