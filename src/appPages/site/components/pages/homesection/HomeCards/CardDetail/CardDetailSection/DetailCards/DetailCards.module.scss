@@ -1,0 +1,125 @@
+.DetailCards {
+    padding: 100px 0;
+    margin-top: -200px;
+    .content {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 60px;
+        padding: 10px 0 50px 0;
+        overflow-y: auto;
+
+        .card {
+            display: flex;
+            gap: 10px;
+            flex-direction: row;
+
+            .bookImage {
+                flex: 1;
+                width: 130px;
+                height: 180px;
+                border-radius: 4px;
+                position: relative;
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+                transition: 0.3s;
+
+                &:hover {
+                    transform: translateY(-5px);
+                }
+            }
+
+            .cardInfo {
+                flex: 1;
+                display: flex;
+                gap: 4px;
+                align-items: flex-start;
+                flex-direction: column;
+
+                .name {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19.1px;
+                    text-align: left;
+                }
+
+                .author {
+                    font-size: 14px;
+                    color: #00000099;
+                    font-weight: 500;
+                    line-height: 16.37px;
+                    text-align: left;
+                }
+
+                .genre {
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: 200px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: 16.37px;
+                    text-align: left;
+                    color: #2652b0cc;
+
+                    .janre {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 16.37px;
+                        text-align: left;
+                        color: #2652b0cc;
+                    }
+                }
+
+                .confirm {
+                    display: flex;
+                    gap: 7px;
+                    flex-direction: column;
+                    height: 100%;
+                    padding: 0 0 10px 0;
+                    align-items: flex-start;
+                    justify-content: flex-end;
+
+                    .price {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 5px 0 0 0;
+                        font-size: 18px;
+                        font-weight: 500;
+                        line-height: 20.46px;
+                        text-align: left;
+                        color: #2652b0;
+                    }
+
+                    .actions {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 10px;
+
+                        .button {
+                            background: #2652b0;
+                            font-size: 16px;
+                            padding: 8px 10px;
+                            color: white;
+                            font-weight: 500;
+                            border: none;
+                            border-radius: 5px;
+                            line-height: 21.82px;
+                            text-align: left;
+                            transition: 0.3s;
+
+                            &:hover {
+                                transform: translateY(-2px);
+                            }
+                        }
+
+                        .buttonLike {
+                            border: none;
+                            background: transparent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

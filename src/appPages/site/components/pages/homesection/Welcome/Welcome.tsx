@@ -39,23 +39,15 @@ const Welcome = () => {
 
     if (isLoading)
         return (
-            <p
-                style={{
-                    textAlign: "center",
-                }}
-            >
-                Loading...
-            </p>
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
         );
     if (isError)
         return (
-            <p
-                style={{
-                    textAlign: "center",
-                }}
-            >
-                Error loading banners!
-            </p>
+            <div className={scss.loaderBlock}>
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+            </div>
         );
 
     return (

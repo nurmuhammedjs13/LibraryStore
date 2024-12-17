@@ -8,6 +8,7 @@ namespace Discount {
                 }>;
                 book_name: string;
                 price: number;
+                author: string;
                 average_rating: number;
                 total_ratings: number;
                 janre: Array<{

@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import Image from "next/image";
@@ -7,19 +8,28 @@ import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
 
+type BookType = {
+    book_name: string;
+    author: string;
+    price: number | string;
+    book_images?: { book_images: string }[];
+    average_rating?: number;
+    total_ratings?: number;
+    janre?: { janre_name: string }[];
+};
+
 type SlideType = {
     id: number;
     discount: string;
-    discount_book: string;
-    books: {
-        book_name: string;
-        author: string;
-        price: string;
-        book_images: { book_images: string }[];
-    };
+    discount_book: number | string;
+    books: BookType;
 };
 
-const Slide = ({ slide }: { slide: SlideType }) => {
+interface SlideComponentProps {
+    slide: SlideType;
+}
+
+const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
     const imageUrl =
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
@@ -31,7 +41,7 @@ const Slide = ({ slide }: { slide: SlideType }) => {
                 width={220}
                 height={300}
                 src={imageUrl}
-                alt="Book Image"
+                alt={`Book: ${slide.books.book_name}`}
             />
             <div className={scss.info}>
                 <div className={scss.infoBlock}>
@@ -47,10 +57,10 @@ const Slide = ({ slide }: { slide: SlideType }) => {
                                 src={priceIcon}
                                 alt="Discount Icon"
                             />
-                            {Math.round(parseFloat(slide.discount_book))} c
+                            {Math.round(Number(slide.discount_book))} c
                         </h1>
                         <h1 className={scss.previewPrice}>
-                            {Math.round(parseFloat(slide.books.price))} c
+                            {Math.round(Number(slide.books.price))} c
                         </h1>
                     </div>
                 </div>
@@ -62,35 +72,42 @@ const Slide = ({ slide }: { slide: SlideType }) => {
     );
 };
 
-const DiscountSlider = () => {
+const DiscountSlider: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
-    const { data, isLoading, isError } = useGetDiscountQuery();
-    const slides: SlideType[] = data || [];
 
-    const nextSlide = () => {
+    const {
+        data: slides = [],
+        isLoading,
+        isError,
+    } = useGetDiscountQuery(undefined, {
+        selectFromResult: ({ data, isLoading, isError }) => ({
+            data: data || [],
+            isLoading,
+            isError,
+        }),
+    });
+
+    const nextSlide = useCallback(() => {
         if (!isAnimating && slides.length > 0) {
             setIsAnimating(true);
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }
-    };
+    }, [isAnimating, slides.length]);
 
-    const prevSlide = () => {
+    const prevSlide = useCallback(() => {
         if (!isAnimating && slides.length > 0) {
             setIsAnimating(true);
             setCurrentIndex(
                 (prevIndex) => (prevIndex - 1 + slides.length) % slides.length
             );
         }
-    };
+    }, [isAnimating, slides.length]);
 
     useEffect(() => {
-        const autoSlide = setInterval(() => {
-            nextSlide();
-        }, 3000);
-
+        const autoSlide = setInterval(nextSlide, 3000);
         return () => clearInterval(autoSlide);
-    }, [slides.length]);
+    }, [nextSlide]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -100,21 +117,34 @@ const DiscountSlider = () => {
         return () => clearTimeout(timer);
     }, [currentIndex]);
 
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Ошибка загрузки данных. Попробуйте позже.</div>;
-
+    if (isLoading)
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
+    if (isError)
+        return (
+            <div className={scss.loaderBlock}>
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+            </div>
+        );
     return (
         <section className={scss.DiscountSlider}>
             <div className="container">
                 <div className={scss.content}>
                     <h1 className={scss.title}>НАШИ СКИДКИ</h1>
                     <div className={scss.slider}>
-                        <button className={scss.prevButton} onClick={prevSlide}>
+                        <button
+                            className={scss.prevButton}
+                            onClick={prevSlide}
+                            type="button"
+                        >
                             <Image
                                 width={90}
                                 height={90}
                                 src={prevIcon}
-                                alt="Prev Arrow"
+                                alt="Previous slide"
                             />
                         </button>
                         <div className={scss.sliderWrapper}>
@@ -133,12 +163,16 @@ const DiscountSlider = () => {
                                 ))}
                             </div>
                         </div>
-                        <button className={scss.nextButton} onClick={nextSlide}>
+                        <button
+                            className={scss.nextButton}
+                            onClick={nextSlide}
+                            type="button"
+                        >
                             <Image
                                 width={90}
                                 height={90}
                                 src={nextIcon}
-                                alt="Next Arrow"
+                                alt="Next slide"
                             />
                         </button>
                     </div>

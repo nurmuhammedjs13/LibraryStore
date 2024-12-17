@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import scss from "./HomeCards.module.scss";
 import Image from "next/image";
+import img from "@/assets/image 33.png";
 import { useGetBooksQuery } from "@/redux/api/books";
 import { useRouter } from "next/navigation";
 
@@ -27,15 +28,24 @@ interface Book {
 
 const HomeCards: React.FC = () => {
     const router = useRouter();
+    const stars = [star0, star1, star2, star3, star4, star5];
 
     const [likedItems, setLikedItems] = useState<number[]>([]);
 
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Ошибка загрузки данных. Попробуйте позже.</div>;
-
-    const stars = [star0, star1, star2, star3, star4, star5];
+    if (isLoading)
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
+    if (isError)
+        return (
+            <div className={scss.loaderBlock}>
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+            </div>
+        );
 
     const toggleLike = (id: number) => {
         setLikedItems((prevLikedItems) => {
