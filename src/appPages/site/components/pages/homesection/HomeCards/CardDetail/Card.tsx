@@ -15,6 +15,7 @@ import back from "../../../../../../../assets/Icons/Back.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
+import CardComments from "./CardDetailSection/CardComments/CardComments";
 
 const CardDetail = () => {
     const router = useRouter();
@@ -149,6 +150,7 @@ const CardDetail = () => {
                 </div>
             </section>
             <DetailCards />
+            <CardComments />
         </>
     );
 };
