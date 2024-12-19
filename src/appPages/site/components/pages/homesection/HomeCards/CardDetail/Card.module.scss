@@ -36,7 +36,7 @@
                     flex-direction: column;
 
                     align-items: flex-start;
-                    gap: 15px;
+                    gap: 10px;
                     justify-content: center;
                     .bookNameBlock {
                         .bookName {
@@ -94,6 +94,16 @@
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
+                    .actions {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 10px;
+                        align-items: center;
+                        .buttonLike {
+                            border: none;
+                            background: transparent;
+                        }
+                    }
                     .description {
                         font-size: 18px;
                         color: white;
@@ -136,15 +146,27 @@
             padding: 10px 0;
             flex-direction: column;
             gap: 5px;
-            .ratingText {
-                color: white;
-                font-size: 24px;
-                font-weight: 700;
-                line-height: 32.74px;
-                text-align: left;
+            .toRating {
+                display: flex;
+                gap: 10px;
+                flex-direction: row;
+                .toRatingText {
+                    font-size: 20px;
+                    font-weight: 600;
+                    line-height: 27.28px;
+                    text-align: left;
+                    color: black;
+                }
+                .stars {
+                    display: flex;
+                    gap: 5px;
+                    flex-direction: row;
+                    align-items: center;
+                }
             }
+
             .ratingUsers {
-                color: white;
+                color: rgb(0, 0, 0);
                 font-size: 16px;
                 font-weight: 400;
                 line-height: 21.82px;
