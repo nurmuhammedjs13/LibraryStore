@@ -1,6 +1,8 @@
 .mainBlock {
   margin-bottom: 10%;
   .block {
+    display: flex;
+    justify-content: space-around;
     .landmark {
       width: 40.9%;
       height: 767px;
@@ -88,6 +90,189 @@
             font-size: 15px;
             font-weight: 500;
             line-height: 20px;
+          }
+        }
+      }
+    }
+
+    .mainInput {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      width: 522px;
+      h1 {
+        color: rgb(38, 82, 176);
+        font-family: Nunito;
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 44px;
+      }
+      .InputBlock {
+        .BlockBtn {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          height: 61px;
+          gap: 10;
+          padding: 10px 13px 10px 13px;
+          box-sizing: border-box;
+          border: 1px solid rgb(38, 82, 176);
+          border-radius: 10px;
+          background: rgb(255, 255, 255);
+          .delivery {
+            width: 184px;
+            height: 41px;
+            display: flex;
+            justify-content: center;
+            padding: 7px 10px 7px 10px;
+            border-radius: 10px;
+            background: rgb(38, 82, 176);
+            border: 0;
+            color: rgb(255, 255, 255);
+            font-family: Nunito;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 27px;
+          }
+          .pickup {
+            width: 184px;
+            height: 41px;
+            display: flex;
+            justify-content: center;
+            padding: 7px 10px 7px 10px;
+            border-radius: 10px;
+            background: rgb(255, 255, 255);
+            border: 0;
+            color: rgb(38, 82, 176);
+            font-family: Nunito;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 27px;
+          }
+        }
+        .Inputs {
+          margin: 10% 0;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          gap: 12px;
+          .Input {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            h6 {
+              color: rgba(0, 0, 0, 0.5);
+              font-family: Nunito;
+              font-size: 14px;
+              font-weight: 600;
+            }
+            hr {
+              margin-top: -15px;
+            }
+
+            input {
+              border: 1px solid rgba(0, 0, 0, 0.7);
+              width: 100%;
+              padding: 20px;
+              margin-top: 10px;
+              border: 0;
+              outline: none;
+            }
+          }
+        }
+        .uploadFile {
+          .text1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            h4 {
+              color: rgba(0, 0, 0, 0.7);
+              font-family: Nunito;
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 22px;
+            }
+          }
+          .text2 {
+            h4 {
+              color: rgba(0, 0, 0, 0.7);
+              font-family: Nunito;
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 22px;
+            }
+          }
+          .text3 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2% 0;
+            h3 {
+              color: rgb(0, 0, 0);
+              font-family: Nunito;
+              font-size: 18px;
+              font-weight: 600;
+              line-height: 25px;
+            }
+          }
+          .text4 {
+            h2 {
+              color: rgb(0, 0, 0);
+              font-family: Nunito;
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 22px;
+            }
+          }
+          .text5 {
+            display: flex;
+            gap: 15px;
+            p {
+              color: rgba(0, 0, 0, 0.5);
+              font-family: Nunito;
+              font-size: 14px;
+              font-weight: 600;
+              line-height: 19px;
+            }
+          }
+          .upload {
+            .selectFile {
+              width: 100%;
+              height: 90px;
+              box-sizing: border-box;
+              border: 1px dashed rgb(38, 82, 176);
+              border-radius: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-top: 20px;
+              input {
+                width: 63%;
+                height: 42px;
+                border-radius: 10px;
+                background: rgb(38, 82, 176);
+
+                border-radius: 10px;
+                padding: 10px 15px;
+                cursor: pointer;
+                color: white;
+              }
+            }
+            button {
+              border-radius: 10px;
+              background: rgb(38, 82, 176);
+              width: 100%;
+              height: 42px;
+              color: rgb(255, 255, 255);
+              font-family: Nunito;
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 22px;
+              border: none;
+              margin: 10px 0;
+            }
           }
         }
       }
