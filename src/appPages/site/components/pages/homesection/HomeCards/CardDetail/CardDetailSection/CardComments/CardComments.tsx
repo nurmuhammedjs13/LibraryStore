@@ -47,6 +47,9 @@ const CardComments = () => {
                             placeholder="Оставить отзыв"
                             className={scss.commentInput}
                         />
+                        <button className={scss.publicButton}>
+                            Опубликовать
+                        </button>
                         {commentsList.map((comment) => (
                             <div key={comment.id} className={scss.comment}>
                                 <div className={scss.commenLeft}>

@@ -16,15 +16,21 @@ import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import imgs from "@/assets/image 19.png";
 import back from "@/assets/Icons/Back.png";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import CardComments from "./CardDetailSection/CardComments/CardComments";
+import { useGetBooksQuery } from "@/redux/api/books";
 
 const CardDetail = () => {
+    const searchParams = useSearchParams();
+    const bookId = Number(searchParams.get("id"));
+
     const router = useRouter();
     const stars = [star0, star1, star2, star3, star4, star5];
     const [likedItems, setLikedItems] = useState<number[]>([]);
     const [userRating, setUserRating] = useState<number>(0);
+    const { data = [], isLoading, isError } = useGetBooksQuery();
+
     const toggleLike = (id: number) => {
         setLikedItems((prevLikedItems) => {
             const index = prevLikedItems.indexOf(id);
@@ -42,45 +48,14 @@ const CardDetail = () => {
         setUserRating(rating);
     };
 
-    const data = {
-        id: 1,
-        books: {
-            id: 1,
-            book_images: [
-                {
-                    book_images: imgs,
-                },
-            ],
-            book_name: "Гордость . . .",
-            author: "Джейн Остин",
-            price: 1700,
-            average_rating: 3.5,
-            total_ratings: 5,
-            janre: [
-                {
-                    janre_name: "Романтика",
-                },
-            ],
-            description:
-                "История о любви и социальных барьерах в Англии XIX века. Главная героиня, Элизабет Беннет, преодолевает свои предвзятые суждения о мистере Дарси, чтобы найти настоящую любовь.",
-            ratings: [
-                {
-                    id: 8,
-                    user_rating: {
-                        first_name: "",
-                        last_name: "",
-                    },
-                    book: 1,
-                    aksia_books: null,
-                    katalog_books: null,
-                    katalog_aksia_books: null,
-                    stars: 1,
-                    comment: "kmmo",
-                    created_date: "15-12-2024-16:04",
-                },
-            ],
-        },
-    };
+    const selectedBook = data.find((book) => book.id === bookId);
+
+    if (!selectedBook)
+        return (
+            <div className={scss.loaderBlock}>
+                <div>Книга с ID {bookId} не найдена.</div>
+            </div>
+        );
 
     return (
         <>
@@ -98,7 +73,9 @@ const CardDetail = () => {
                         <div className={scss.detailContent}>
                             <div className={scss.bookContent}>
                                 <Image
-                                    src={data.books.book_images[0].book_images}
+                                    src={
+                                        selectedBook.book_images[0].book_images
+                                    }
                                     alt="img of book"
                                     className={scss.cardImg}
                                     width={1000}
@@ -107,14 +84,14 @@ const CardDetail = () => {
                                 <div className={scss.cardInfo}>
                                     <div className={scss.bookNameBlock}>
                                         <h1 className={scss.bookName}>
-                                            {data.books.book_name}
+                                            {selectedBook.book_name}
                                         </h1>
                                         <h1 className={scss.authorName}>
-                                            {data.books.author}
+                                            {selectedBook.author}
                                         </h1>
                                     </div>
                                     <div className={scss.bookGenreBlock}>
-                                        {data.books.janre.map(
+                                        {selectedBook.janre.map(
                                             (genre, index) => (
                                                 <h1
                                                     key={index}
@@ -131,11 +108,11 @@ const CardDetail = () => {
                                         src={
                                             stars[
                                                 Math.floor(
-                                                    data.books.average_rating
+                                                    selectedBook.average_rating
                                                 )
                                             ]
                                         }
-                                        alt={`Рейтинг ${data.books.average_rating}`}
+                                        alt={`Рейтинг ${selectedBook.average_rating}`}
                                     />
                                     <button className={scss.bookPriceBlock}>
                                         <Image
@@ -145,11 +122,11 @@ const CardDetail = () => {
                                             width={100}
                                             height={100}
                                         />
-                                        {data.books.price} сом
+                                        {selectedBook.price} сом
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
                                         <h1 className={scss.description}>
-                                            {data.books.description}
+                                            {/* {selectedBook.description} описание */}
                                         </h1>
                                         <div className={scss.actions}>
                                             <button className={scss.cardButton}>
@@ -158,7 +135,7 @@ const CardDetail = () => {
                                             <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>
-                                                    toggleLike(data.id)
+                                                    toggleLike(selectedBook.id)
                                                 }
                                             >
                                                 <Image
@@ -166,7 +143,7 @@ const CardDetail = () => {
                                                     height={24}
                                                     src={
                                                         likedItems.includes(
-                                                            data.id
+                                                            selectedBook.id
                                                         )
                                                             ? likeActive
                                                             : like
@@ -220,7 +197,7 @@ const CardDetail = () => {
                                     </h1>
                                 </div>
                                 <h1 className={scss.ratingUsers}>
-                                    Оценок: {data.books.total_ratings}
+                                    Оценок: {selectedBook.total_ratings}
                                 </h1>
                             </div>
                         </div>

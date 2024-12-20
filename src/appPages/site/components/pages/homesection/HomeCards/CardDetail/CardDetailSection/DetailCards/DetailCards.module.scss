@@ -1,121 +1,158 @@
+.loaderBlock {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .loader {
+        width: 35px;
+        aspect-ratio: 1;
+        --_g: no-repeat radial-gradient(farthest-side, #3d57a4 94%, #0000);
+        background: var(--_g) 0 0, var(--_g) 100% 0, var(--_g) 100% 100%,
+            var(--_g) 0 100%;
+        background-size: 40% 40%;
+        animation: l38 0.5s infinite;
+    }
+    @keyframes l38 {
+        100% {
+            background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+        }
+    }
+}
+
 .DetailCards {
     padding: 100px 0;
     margin-top: -205px;
     .content {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 10px;
-        row-gap: 60px;
-        padding: 10px 0 50px 0;
-        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        .cardsTitle {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2652b0;
 
-        .card {
-            display: flex;
-            gap: 10px;
-            flex-direction: row;
+            line-height: 32.74px;
+            text-align: left;
+        }
 
-            .bookImage {
-                flex: 1;
-                width: 130px;
-                height: 180px;
-                border-radius: 4px;
-                position: relative;
-                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-                transition: 0.3s;
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            column-gap: 10px;
+            row-gap: 60px;
+            padding: 10px 0 50px 0;
+            overflow-y: auto;
 
-                &:hover {
-                    transform: translateY(-5px);
-                }
-            }
-
-            .cardInfo {
-                flex: 1;
+            .card {
                 display: flex;
-                gap: 4px;
-                align-items: flex-start;
-                flex-direction: column;
+                gap: 10px;
+                flex-direction: row;
 
-                .name {
-                    font-size: 16px;
-                    font-weight: 600;
-                    line-height: 19.1px;
-                    text-align: left;
+                .bookImage {
+                    flex: 1;
+                    width: 130px;
+                    height: 180px;
+                    border-radius: 4px;
+                    position: relative;
+                    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+                    transition: 0.3s;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                    }
                 }
 
-                .author {
-                    font-size: 14px;
-                    color: #00000099;
-                    font-weight: 500;
-                    line-height: 16.37px;
-                    text-align: left;
-                }
-
-                .genre {
+                .cardInfo {
+                    flex: 1;
                     display: flex;
-                    flex-wrap: wrap;
-                    width: 200px;
-                    font-size: 14px;
-                    font-weight: 500;
-                    line-height: 16.37px;
-                    text-align: left;
-                    color: #2652b0cc;
+                    gap: 4px;
+                    align-items: flex-start;
+                    flex-direction: column;
 
-                    .janre {
+                    .name {
+                        font-size: 16px;
+                        font-weight: 600;
+                        line-height: 19.1px;
+                        text-align: left;
+                    }
+
+                    .author {
+                        font-size: 14px;
+                        color: #00000099;
+                        font-weight: 500;
+                        line-height: 16.37px;
+                        text-align: left;
+                    }
+
+                    .genre {
+                        display: flex;
+                        flex-wrap: wrap;
+                        width: 200px;
                         font-size: 14px;
                         font-weight: 500;
                         line-height: 16.37px;
                         text-align: left;
                         color: #2652b0cc;
-                    }
-                }
 
-                .confirm {
-                    display: flex;
-                    gap: 7px;
-                    flex-direction: column;
-                    height: 100%;
-                    padding: 0 0 10px 0;
-                    align-items: flex-start;
-                    justify-content: flex-end;
-
-                    .price {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        gap: 5px;
-                        padding: 5px 0 0 0;
-                        font-size: 18px;
-                        font-weight: 500;
-                        line-height: 20.46px;
-                        text-align: left;
-                        color: #2652b0;
-                    }
-
-                    .actions {
-                        display: flex;
-                        flex-direction: row;
-                        gap: 10px;
-
-                        .button {
-                            background: #2652b0;
-                            font-size: 16px;
-                            padding: 8px 10px;
-                            color: white;
+                        .janre {
+                            font-size: 14px;
                             font-weight: 500;
-                            border: none;
-                            border-radius: 5px;
-                            line-height: 21.82px;
+                            line-height: 16.37px;
                             text-align: left;
-                            transition: 0.3s;
+                            color: #2652b0cc;
+                        }
+                    }
 
-                            &:hover {
-                                transform: translateY(-2px);
-                            }
+                    .confirm {
+                        display: flex;
+                        gap: 7px;
+                        flex-direction: column;
+                        height: 100%;
+                        padding: 0 0 10px 0;
+                        align-items: flex-start;
+                        justify-content: flex-end;
+
+                        .price {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            gap: 5px;
+                            padding: 5px 0 0 0;
+                            font-size: 18px;
+                            font-weight: 500;
+                            line-height: 20.46px;
+                            text-align: left;
+                            color: #2652b0;
                         }
 
-                        .buttonLike {
-                            border: none;
-                            background: transparent;
+                        .actions {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 10px;
+
+                            .button {
+                                background: #2652b0;
+                                font-size: 16px;
+                                padding: 8px 10px;
+                                color: white;
+                                font-weight: 500;
+                                border: none;
+                                border-radius: 5px;
+                                line-height: 21.82px;
+                                text-align: left;
+                                transition: 0.3s;
+
+                                &:hover {
+                                    transform: translateY(-2px);
+                                }
+                            }
+
+                            .buttonLike {
+                                border: none;
+                                background: transparent;
+                            }
                         }
                     }
                 }

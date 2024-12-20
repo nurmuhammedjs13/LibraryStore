@@ -178,6 +178,9 @@
                     .starButton {
                         border: none;
                         background: none;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
                         .starIcon {
                             width: 20px;
                             height: 20px;
