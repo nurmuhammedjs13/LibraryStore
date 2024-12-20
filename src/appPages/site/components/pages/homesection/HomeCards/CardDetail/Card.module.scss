@@ -152,16 +152,37 @@
                 flex-direction: row;
                 .toRatingText {
                     font-size: 20px;
+                    gap: 10px;
+                    display: flex;
+                    flex-direction: row;
                     font-weight: 600;
                     line-height: 27.28px;
                     text-align: left;
                     color: black;
+                    .zeroStars {
+                        display: flex;
+                        gap: 5px;
+                        flex-direction: row;
+                        align-items: center;
+                        .star {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
                 }
                 .stars {
                     display: flex;
                     gap: 5px;
                     flex-direction: row;
                     align-items: center;
+                    .starButton {
+                        border: none;
+                        background: none;
+                        .starIcon {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
                 }
             }
 
