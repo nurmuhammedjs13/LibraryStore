@@ -7,6 +7,7 @@ import Image from "next/image";
 import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
+import { useRouter } from "next/navigation";
 
 type BookType = {
     book_name: string;
@@ -30,11 +31,16 @@ interface SlideComponentProps {
 }
 
 const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
+    const router = useRouter();
     const imageUrl =
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
+    const handleClick = () => {
+        router.push(`/books/${slide.id}`);
+    };
+
     return (
-        <div className={scss.slide}>
+        <div className={scss.slide} onClick={handleClick}>
             <h1 className={scss.discount_bage}>{slide.discount}</h1>
             <Image
                 className={scss.bookImg}
@@ -73,6 +79,8 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
 };
 
 const DiscountSlider: React.FC = () => {
+    const router = useRouter();
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
 

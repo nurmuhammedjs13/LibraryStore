@@ -3,6 +3,9 @@
 import scss from "./Card.module.scss";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useGetBooksDetailQuery } from "@/redux/api/books";
+
 import star from "@/assets/Icons/star.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import star0 from "@/assets/Icons/star0.png";
@@ -14,72 +17,61 @@ import star4 from "@/assets/Icons/star4.png";
 import star5 from "@/assets/Icons/star5.png";
 import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
-import imgs from "@/assets/image 19.png";
 import back from "@/assets/Icons/Back.png";
-import { useRouter } from "next/navigation";
+
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import CardComments from "./CardDetailSection/CardComments/CardComments";
 
+const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
+
+interface BookDetail {
+    id: number;
+    book_name: string;
+    author: string;
+    price: number;
+    average_rating: number;
+    total_ratings: number;
+    book_images: Array<{ book_images: string }>;
+    janre: Array<{ janre_name: string }>;
+    description?: string;
+}
+
 const CardDetail = () => {
     const router = useRouter();
-    const stars = [star0, star1, star2, star3, star4, star5];
+    const { id } = useParams();
+    const bookId = typeof id === "string" ? parseInt(id, 10) : undefined;
+
     const [likedItems, setLikedItems] = useState<number[]>([]);
     const [userRating, setUserRating] = useState<number>(0);
+
+    const { data, isLoading, isError } = useGetBooksDetailQuery(bookId ?? -1);
+
+    if (isLoading) {
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
+    }
+
+    if (!data) {
+        return <div>No data available.</div>;
+    }
+    console.log(data);
+    if (isError) {
+        return (
+            <div className={scss.loaderBlock}>
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>
+            </div>
+        );
+    }
+
     const toggleLike = (id: number) => {
-        setLikedItems((prevLikedItems) => {
-            const index = prevLikedItems.indexOf(id);
-            if (index === -1) {
-                return [...prevLikedItems, id];
-            } else {
-                const newLikedItems = [...prevLikedItems];
-                newLikedItems.splice(index, 1);
-                return newLikedItems;
-            }
-        });
-    };
-
-    const handleStarClick = (rating: number) => {
-        setUserRating(rating);
-    };
-
-    const data = {
-        id: 1,
-        books: {
-            id: 1,
-            book_images: [
-                {
-                    book_images: imgs,
-                },
-            ],
-            book_name: "Гордость . . .",
-            author: "Джейн Остин",
-            price: 1700,
-            average_rating: 3.5,
-            total_ratings: 5,
-            janre: [
-                {
-                    janre_name: "Романтика",
-                },
-            ],
-            description:
-                "История о любви и социальных барьерах в Англии XIX века. Главная героиня, Элизабет Беннет, преодолевает свои предвзятые суждения о мистере Дарси, чтобы найти настоящую любовь.",
-            ratings: [
-                {
-                    id: 8,
-                    user_rating: {
-                        first_name: "",
-                        last_name: "",
-                    },
-                    book: 1,
-                    aksia_books: null,
-                    katalog_books: null,
-                    katalog_aksia_books: null,
-                    stars: 1,
-                    comment: "kmmo",
-                    created_date: "15-12-2024-16:04",
-                },
-            ],
-        },
+        setLikedItems((prev) =>
+            prev.includes(id)
+                ? prev.filter((item) => item !== id)
+                : [...prev, id]
+        );
     };
 
     return (
@@ -91,74 +83,80 @@ const CardDetail = () => {
                             onClick={() => router.push(`/`)}
                             className={scss.backButton}
                             src={back}
-                            alt="button of back"
+                            alt="Back to home"
                             width={100}
                             height={100}
+                            priority
                         />
                         <div className={scss.detailContent}>
                             <div className={scss.bookContent}>
                                 <Image
-                                    src={data.books.book_images[0].book_images}
-                                    alt="img of book"
+                                    src={
+                                        data.book_images?.[0]?.book_images ||
+                                        "/placeholder.png"
+                                    }
+                                    alt={`Book cover for ${data.book_name}`}
                                     className={scss.cardImg}
                                     width={1000}
                                     height={1200}
+                                    priority
                                 />
                                 <div className={scss.cardInfo}>
                                     <div className={scss.bookNameBlock}>
                                         <h1 className={scss.bookName}>
-                                            {data.books.book_name}
+                                            {data.book_name}
                                         </h1>
-                                        <h1 className={scss.authorName}>
-                                            {data.books.author}
-                                        </h1>
+                                        <h2 className={scss.authorName}>
+                                            {data.author}
+                                        </h2>
                                     </div>
                                     <div className={scss.bookGenreBlock}>
-                                        {data.books.janre.map(
-                                            (genre, index) => (
-                                                <h1
-                                                    key={index}
-                                                    className={scss.genreBlock}
-                                                >
-                                                    Жанр: {genre.janre_name}
-                                                </h1>
-                                            )
-                                        )}
+                                        {data.janre?.map((genre, index) => (
+                                            <p
+                                                key={`${genre.janre_name}-${index}`}
+                                                className={scss.genreBlock}
+                                            >
+                                                Жанр: {genre.janre_name}
+                                            </p>
+                                        ))}
                                     </div>
                                     <Image
                                         width={150}
                                         height={30}
                                         src={
-                                            stars[
-                                                Math.floor(
-                                                    data.books.average_rating
-                                                )
-                                            ]
+                                            STAR_RATINGS[
+                                                Math.floor(data.average_rating)
+                                            ] || star0
                                         }
-                                        alt={`Рейтинг ${data.books.average_rating}`}
+                                        alt={`Rating: ${data.average_rating} stars`}
                                     />
                                     <button className={scss.bookPriceBlock}>
                                         <Image
                                             className={scss.priceIcon}
                                             src={priceIcon}
-                                            alt="icon of price"
+                                            alt="Price icon"
                                             width={100}
                                             height={100}
                                         />
-                                        {data.books.price} сом
+                                        {data.price} сом
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
-                                        <h1 className={scss.description}>
-                                            {data.books.description}
-                                        </h1>
                                         <div className={scss.actions}>
-                                            <button className={scss.cardButton}>
+                                            <button
+                                                className={scss.cardButton}
+                                                aria-label="Add to cart"
+                                            >
                                                 В корзину
                                             </button>
                                             <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>
                                                     toggleLike(data.id)
+                                                }
+                                                aria-label={
+                                                    likedItems.includes(data.id)
+                                                        ? "Remove from favorites"
+                                                        : "Add to favorites"
                                                 }
                                             >
                                                 <Image
@@ -171,7 +169,7 @@ const CardDetail = () => {
                                                             ? likeActive
                                                             : like
                                                     }
-                                                    alt="add to like"
+                                                    alt="Toggle favorite"
                                                 />
                                             </button>
                                         </div>
@@ -183,7 +181,7 @@ const CardDetail = () => {
                             <div className={scss.hr} />
                             <div className={scss.ratingContent}>
                                 <div className={scss.toRating}>
-                                    <h1 className={scss.toRatingText}>
+                                    <h2 className={scss.toRatingText}>
                                         Оценить:
                                         <div className={scss.stars}>
                                             {[1, 2, 3, 4, 5].map(
@@ -194,10 +192,11 @@ const CardDetail = () => {
                                                             scss.starButton
                                                         }
                                                         onClick={() =>
-                                                            handleStarClick(
+                                                            setUserRating(
                                                                 starNumber
                                                             )
                                                         }
+                                                        aria-label={`Rate ${starNumber} stars`}
                                                     >
                                                         <Image
                                                             width={100}
@@ -211,17 +210,17 @@ const CardDetail = () => {
                                                                     ? activeStar
                                                                     : star
                                                             }
-                                                            alt={`Оценить на ${starNumber}`}
+                                                            alt={`${starNumber} stars`}
                                                         />
                                                     </button>
                                                 )
                                             )}
                                         </div>
-                                    </h1>
+                                    </h2>
                                 </div>
-                                <h1 className={scss.ratingUsers}>
-                                    Оценок: {data.books.total_ratings}
-                                </h1>
+                                <p className={scss.ratingUsers}>
+                                    Оценок: {data.total_ratings}
+                                </p>
                             </div>
                         </div>
                     </div>
