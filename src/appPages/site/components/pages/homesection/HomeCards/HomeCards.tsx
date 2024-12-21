@@ -15,6 +15,7 @@ import star5 from "@/assets/Icons/star5.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
+import Link from "next/link";
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 const BOOKS_TO_DISPLAY = 12;
@@ -167,6 +168,9 @@ const HomeCards: React.FC = () => {
                             />
                         ))}
                     </div>
+                    <Link href={"/catalog"} className={scss.buttonToCatalog}>
+                        Смотреть еще
+                    </Link>
                 </div>
             </div>
         </section>

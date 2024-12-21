@@ -7,6 +7,7 @@ namespace Books {
         book_name: string;
         author: string;
         price: number;
+        description: string;
         average_rating: number;
         total_ratings: number;
         janre: Array<{

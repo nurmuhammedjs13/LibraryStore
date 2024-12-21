@@ -141,6 +141,9 @@ const CardDetail = () => {
                                         {data.price} сом
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
+                                        <div className={scss.description}>
+                                            {data.description}
+                                        </div>
                                         <div className={scss.actions}>
                                             <button
                                                 className={scss.cardButton}
