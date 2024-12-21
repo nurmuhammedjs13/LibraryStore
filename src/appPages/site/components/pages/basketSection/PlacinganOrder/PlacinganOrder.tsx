@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import styles from "./PlacinganOrder.module.scss";
 import img from "@/assets/welcome/landMark1.png";
 import Image from "next/image";
@@ -6,6 +7,7 @@ import DeleteIcon from "@/assets/Icons/DeleteIcon";
 import Minus from "@/assets/Icons/Minus";
 import Plus from "@/assets/Icons/Plus";
 import Price from "@/assets/Icons/Price";
+import ImgStop from "@/assets/Icons/imgStop";
 
 const PlacinganOrder = () => {
   const landmarkCard = [
@@ -44,9 +46,15 @@ const PlacinganOrder = () => {
       date: "30.11.2024",
       price: 400,
     },
-  
-  
   ];
+
+  const [fileName, setFileName] = useState("Выберите файл");
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setFileName(file ? file.name : "Выберите файл");
+  };
+
   return (
     <div className={styles.mainBlock}>
       <div className="container">
@@ -71,13 +79,80 @@ const PlacinganOrder = () => {
                   <Plus />
                 </div>
                 <div className={styles.price}>
-                  <Price/>
+                  <Price />
                   <h5>{el.price} сом</h5>
                 </div>
               </div>
             ))}
-          </div>  
-          
+          </div>
+          <div className={styles.mainInput}>
+            <h1>Оформление заказа</h1>
+            <div className={styles.InputBlock}>
+              <div className={styles.BlockBtn}>
+                <button className={styles.delivery}>Доставка</button>
+                <button className={styles.pickup}>Самовывоз</button>
+              </div>
+              <div className={styles.Inputs}>
+                <div className={styles.Input}>
+                  <h6>Имя</h6>
+                  <input type="text" />
+                  <hr />
+                </div>
+                <div className={styles.Input}>
+                  <h6>Фамилия</h6>
+                  <input type="text" />
+                  <hr />
+                </div>
+                <div className={styles.Input}>
+                  <h6>gmail</h6>
+                  <input type="text" />
+                  <hr />
+                </div>
+                <div className={styles.Input}>
+                  <h6>Добавьте номер телефона</h6>
+                  <input type="number" />
+                  <hr />
+                </div>
+                <div className={styles.Input}>
+                  <h6>Укажите адрес доставки</h6>
+                  <input type="text" />
+                  <hr />
+                </div>
+                <div className={styles.Input}>
+                  <h6>Комментарии к заказу</h6>
+                  <input type="text" />
+                  <hr />
+                </div>
+              </div>
+              <div className={styles.uploadFile}>
+                <div className={styles.text1}>
+                  <h4>Товары: 4шт</h4>
+                  <h4>2800 сом</h4>
+                </div>
+                <div className={styles.text2}>
+                  <h4>Цену за доставку обговаривается с продавцом</h4>
+                </div>
+                <div className={styles.text3}>
+                  <h3>Итого</h3>
+                  <h3>2800 сом</h3>
+                </div>
+                <div className={styles.text4}>
+                  <h2>Загрузите чек оплаты</h2>
+                  <div className={styles.text5}>
+                    <p>Реквизиты в шапке страницы</p>
+                    <ImgStop />
+                  </div>
+                </div>
+                <div className={styles.upload}>
+                  <div className={styles.selectFile}>
+                    <input type="file"/>  
+                  
+                  </div>
+                  <button>Оформить заказ</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
