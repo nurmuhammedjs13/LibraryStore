@@ -27,7 +27,24 @@
         justify-content: center;
         gap: 50px;
         padding: 0 0 50px 0;
-
+        .buttonToCatalog {
+            color: black;
+            font-size: 20px;
+            display: flex;
+            align-self: center;
+            font-weight: 600;
+            cursor: pointer;
+            line-height: 27.28px;
+            text-align: left;
+            border: none;
+            border-radius: 10px;
+            background: #0000001a;
+            padding: 10px 150px;
+            transition: 0.3s;
+            &:hover {
+                transform: translateY(-3px);
+            }
+        }
         .title {
             font-size: 42px;
             font-weight: 800;
