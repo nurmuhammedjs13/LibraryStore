@@ -25,8 +25,6 @@ interface Book {
     janre: { janre_name: string }[];
 }
 const DetailCards = () => {
-    const searchParams = useSearchParams();
-
     const router = useRouter();
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
@@ -70,9 +68,7 @@ const DetailCards = () => {
                         {latestBooks.map((item) => (
                             <div key={item.id} className={scss.card}>
                                 <Image
-                                    onClick={() =>
-                                        router.push(`books/${item.id}`)
-                                    }
+                                    onClick={() => router.push(`${item.id}`)}
                                     width={150}
                                     height={200}
                                     quality={80}
