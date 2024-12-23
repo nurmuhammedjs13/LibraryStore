@@ -17,12 +17,35 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+type GetBooksResponse = {
+    id: number;
+    book_images: Array<{
+        book_images: string;
+    }>;
+    book_name: string;
+    author: string;
+    price: number;
+    discount: number;
+    description: string;
+    average_rating: number;
+    total_ratings: number;
+    janre: Array<{
+        janre_name: string;
+    }>;
+};
+
 const MainCatalog = () => {
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
+    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+    const [minPrice, setMinPrice] = useState<number | "">("");
+    const [maxPrice, setMaxPrice] = useState<number | "">("");
+    const [isRatingChecked, setIsRatingChecked] = useState(false);
+    const [isDiscountChecked, setIsDiscountChecked] = useState(false);
+    const [likedItems, setLikedItems] = useState<number[]>([]);
 
     const {
-        data: books = [],
+        data: books = [] as GetBooksResponse[],
         isLoading: isBooksLoading,
         isError: isBooksError,
     } = useGetBooksQuery();
@@ -33,11 +56,21 @@ const MainCatalog = () => {
         isError: isGenresError,
     } = useGetGenreQuery();
 
-    const [isRatingChecked, setIsRatingChecked] = useState(false);
-    const [isDiscountChecked, setIsDiscountChecked] = useState(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
-
     const stars = [star0, star1, star2, star3, star4, star5];
+
+    const handleGenreClick = (genreName: string) => {
+        setSelectedGenre(selectedGenre === genreName ? null : genreName);
+    };
+
+    const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value === "" ? "" : Number(e.target.value);
+        setMinPrice(value);
+    };
+
+    const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value === "" ? "" : Number(e.target.value);
+        setMaxPrice(value);
+    };
 
     const handleRatingChange = () => {
         setIsRatingChecked(!isRatingChecked);
@@ -55,12 +88,36 @@ const MainCatalog = () => {
         );
     };
 
-    // Set isClient to true after the component mounts (client-side only)
+    const filteredBooks = books.filter((book) => {
+        // Фильтр по жанру
+        const matchesGenre =
+            !selectedGenre ||
+            book.janre.some((genre) => genre.janre_name === selectedGenre);
+
+        // Фильтр по цене
+        const matchesMinPrice = minPrice === "" || book.price >= minPrice;
+        const matchesMaxPrice = maxPrice === "" || book.price <= maxPrice;
+
+        // Фильтр по рейтингу (высокий рейтинг >= 4)
+        const matchesRating = !isRatingChecked || book.average_rating >= 4;
+
+        // Фильтр по скидкам
+        const matchesDiscount = !isDiscountChecked || book.discount > 0;
+
+        return (
+            matchesGenre &&
+            matchesMinPrice &&
+            matchesMaxPrice &&
+            matchesRating &&
+            matchesDiscount
+        );
+    });
+
     useEffect(() => {
         setIsClient(true);
     }, []);
 
-    if (!isClient) return null; // Avoid rendering before the component is mounted
+    if (!isClient) return null;
 
     if (isBooksError || isGenresError) {
         return (
@@ -85,7 +142,14 @@ const MainCatalog = () => {
                                 {genres?.map((genre) => (
                                     <h1
                                         key={genre.janre_name}
-                                        className={scss.genre}
+                                        className={`${scss.genre} ${
+                                            selectedGenre === genre.janre_name
+                                                ? scss.selectedGenre
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            handleGenreClick(genre.janre_name)
+                                        }
                                     >
                                         {genre.janre_name}
                                     </h1>
@@ -99,11 +163,17 @@ const MainCatalog = () => {
                                     type="number"
                                     placeholder="от"
                                     className={scss.priceInput}
+                                    value={minPrice}
+                                    onChange={handleMinPriceChange}
+                                    min="0"
                                 />
                                 <input
                                     type="number"
                                     placeholder="до"
                                     className={scss.priceInput}
+                                    value={maxPrice}
+                                    onChange={handleMaxPriceChange}
+                                    min="0"
                                 />
                             </div>
                         </div>
@@ -139,11 +209,12 @@ const MainCatalog = () => {
                             </Link>
                             <Link href={"/catalog"} className={scss.nav2}>
                                 Каталог
+                                {selectedGenre && ` › ${selectedGenre}`}
                             </Link>
                         </div>
                         <div className={scss.hr}></div>
                         <div className={scss.cards}>
-                            {books.map((item) => (
+                            {filteredBooks.map((item) => (
                                 <div key={item.id} className={scss.card}>
                                     <Image
                                         onClick={() =>
