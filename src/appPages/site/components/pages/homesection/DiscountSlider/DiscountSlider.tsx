@@ -28,10 +28,12 @@ type SlideType = {
 
 interface SlideComponentProps {
     slide: SlideType;
+    onAddToCart: () => void;
 }
 
-const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
+const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
     const router = useRouter();
+
     const imageUrl =
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
@@ -40,9 +42,10 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
     };
 
     return (
-        <div className={scss.slide} onClick={handleClick}>
+        <div className={scss.slide}>
             <h1 className={scss.discount_bage}>{slide.discount}</h1>
             <Image
+                onClick={handleClick}
                 className={scss.bookImg}
                 width={220}
                 height={300}
@@ -71,7 +74,9 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
                     </div>
                 </div>
                 <div className={scss.action}>
-                    <button className={scss.button}>В корзину</button>
+                    <button onClick={onAddToCart} className={scss.button}>
+                        В корзину
+                    </button>
                 </div>
             </div>
         </div>
@@ -83,6 +88,7 @@ const DiscountSlider: React.FC = () => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const {
         data: slides = [],
@@ -111,6 +117,13 @@ const DiscountSlider: React.FC = () => {
             );
         }
     }, [isAnimating, slides.length]);
+
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
 
     useEffect(() => {
         const autoSlide = setInterval(nextSlide, 3000);
@@ -142,6 +155,11 @@ const DiscountSlider: React.FC = () => {
             <div className="container">
                 <div className={scss.content}>
                     <h1 className={scss.title}>НАШИ СКИДКИ</h1>
+                    {showModal && (
+                        <div className={scss.modal}>
+                            <p>Товар добавлен в корзину✓</p>
+                        </div>
+                    )}
                     <div className={scss.slider}>
                         <button
                             className={scss.prevButton}
@@ -167,7 +185,11 @@ const DiscountSlider: React.FC = () => {
                                 }}
                             >
                                 {slides.map((slide) => (
-                                    <Slide key={slide.id} slide={slide} />
+                                    <Slide
+                                        key={slide.id}
+                                        slide={slide}
+                                        onAddToCart={handleAddToCart}
+                                    />
                                 ))}
                             </div>
                         </div>

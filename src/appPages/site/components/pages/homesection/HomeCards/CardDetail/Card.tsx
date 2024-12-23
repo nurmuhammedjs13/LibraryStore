@@ -38,6 +38,14 @@ interface BookDetail {
 
 const CardDetail = () => {
     const router = useRouter();
+    const [showModal, setShowModal] = useState(false);
+
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
     const { id } = useParams();
     const bookId = typeof id === "string" ? parseInt(id, 10) : undefined;
 
@@ -146,11 +154,20 @@ const CardDetail = () => {
                                         </div>
                                         <div className={scss.actions}>
                                             <button
+                                                onClick={handleAddToCart}
                                                 className={scss.cardButton}
                                                 aria-label="Add to cart"
                                             >
                                                 В корзину
                                             </button>
+                                            {showModal && (
+                                                <div className={scss.modal}>
+                                                    <p>
+                                                        Товар добавлен в
+                                                        корзину✓
+                                                    </p>
+                                                </div>
+                                            )}
                                             <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>

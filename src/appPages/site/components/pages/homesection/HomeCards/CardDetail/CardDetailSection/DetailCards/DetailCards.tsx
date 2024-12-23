@@ -26,6 +26,15 @@ interface Book {
 }
 const DetailCards = () => {
     const router = useRouter();
+    const [showModal, setShowModal] = useState(false);
+
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
+
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
     const [likedItems, setLikedItems] = useState<number[]>([]);
@@ -119,9 +128,20 @@ const DetailCards = () => {
                                             {item.price} c
                                         </h1>
                                         <div className={scss.actions}>
-                                            <button className={scss.button}>
+                                            <button
+                                                onClick={handleAddToCart}
+                                                className={scss.button}
+                                            >
                                                 В корзину
                                             </button>
+                                            {showModal && (
+                                                <div className={scss.modal}>
+                                                    <p>
+                                                        Товар добавлен в
+                                                        корзину✓
+                                                    </p>
+                                                </div>
+                                            )}
                                             <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>

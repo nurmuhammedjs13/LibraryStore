@@ -42,77 +42,99 @@ const BookCard: React.FC<BookCardProps> = ({
     isLiked,
     onLikeToggle,
     onNavigate,
-}) => (
-    <div className={scss.card}>
-        <Image
-            onClick={() => onNavigate(book.id)}
-            width={150}
-            height={200}
-            quality={80}
-            className={scss.bookImage}
-            src={book.book_images[0]?.book_images || "/placeholder.png"}
-            alt={`Cover of ${book.book_name}`}
-            priority
-        />
-        <div className={scss.cardInfo}>
-            <div className={scss.rating}>
-                <Image
-                    width={110}
-                    height={20}
-                    src={STAR_RATINGS[book.average_rating] || star0}
-                    alt={`Rating: ${book.average_rating || 0} stars`}
-                />
-            </div>
-            <h2 className={scss.name}>{book.book_name}</h2>
-            <h3 className={scss.author}>{book.author}</h3>
-            <p className={scss.genre}>
-                Жанр:
-                {book.janre.map((genre, i) => (
-                    <span key={genre.janre_name} className={scss.janre}>
-                        {genre.janre_name}
-                        {i < book.janre.length - 1 && ", "}
-                    </span>
-                ))}
-            </p>
-            <div className={scss.confirm}>
-                <div className={scss.price}>
+}) => {
+    const [showModal, setShowModal] = useState(false);
+
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
+
+    return (
+        <div className={scss.card}>
+            <Image
+                onClick={() => onNavigate(book.id)}
+                width={150}
+                height={200}
+                quality={80}
+                className={scss.bookImage}
+                src={book.book_images[0]?.book_images || "/placeholder.png"}
+                alt={`Cover of ${book.book_name}`}
+                priority
+            />
+            <div className={scss.cardInfo}>
+                <div className={scss.rating}>
                     <Image
-                        width={20}
+                        width={110}
                         height={20}
-                        src={priceIcon}
-                        alt="Price icon"
+                        className={scss.ratingImage}
+                        src={STAR_RATINGS[book.average_rating] || star0}
+                        alt={`Rating: ${book.average_rating || 0} stars`}
                     />
-                    {book.price} c
                 </div>
-                <div className={scss.actions}>
-                    <button className={scss.button} aria-label="Add to cart">
-                        В корзину
-                    </button>
-                    <button
-                        className={scss.buttonLike}
-                        onClick={() => onLikeToggle(book.id)}
-                        aria-label={
-                            isLiked
-                                ? "Remove from favorites"
-                                : "Add to favorites"
-                        }
-                    >
+                <h2 className={scss.name}>{book.book_name}</h2>
+                <h3 className={scss.author}>{book.author}</h3>
+                <p className={scss.genre}>
+                    Жанр:
+                    {book.janre.map((genre, i) => (
+                        <span key={genre.janre_name} className={scss.janre}>
+                            {genre.janre_name}
+                            {i < book.janre.length - 1 && ", "}
+                        </span>
+                    ))}
+                </p>
+                <div className={scss.confirm}>
+                    <div className={scss.price}>
                         <Image
-                            width={24}
-                            height={24}
-                            src={isLiked ? likeActive : like}
-                            alt={
+                            width={20}
+                            className={scss.priceIcon}
+                            height={20}
+                            src={priceIcon}
+                            alt="Price icon"
+                        />
+                        {book.price} c
+                    </div>
+                    <div className={scss.actions}>
+                        <button
+                            onClick={handleAddToCart}
+                            className={scss.button}
+                            aria-label="Add to cart"
+                        >
+                            В корзину
+                        </button>
+                        {showModal && (
+                            <div className={scss.modal}>
+                                <p>Товар добавлен в корзину✓</p>
+                            </div>
+                        )}
+                        <button
+                            className={scss.buttonLike}
+                            onClick={() => onLikeToggle(book.id)}
+                            aria-label={
                                 isLiked
                                     ? "Remove from favorites"
                                     : "Add to favorites"
                             }
-                        />
-                    </button>
+                        >
+                            <Image
+                                width={24}
+                                height={24}
+                                src={isLiked ? likeActive : like}
+                                alt={
+                                    isLiked
+                                        ? "Remove from favorites"
+                                        : "Add to favorites"
+                                }
+                            />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 const LoadingState = () => (
     <div className={scss.loaderBlock}>
