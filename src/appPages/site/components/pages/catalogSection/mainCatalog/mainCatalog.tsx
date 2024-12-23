@@ -89,19 +89,15 @@ const MainCatalog = () => {
     };
 
     const filteredBooks = books.filter((book) => {
-        // Фильтр по жанру
         const matchesGenre =
             !selectedGenre ||
             book.janre.some((genre) => genre.janre_name === selectedGenre);
 
-        // Фильтр по цене
         const matchesMinPrice = minPrice === "" || book.price >= minPrice;
         const matchesMaxPrice = maxPrice === "" || book.price <= maxPrice;
 
-        // Фильтр по рейтингу (высокий рейтинг >= 4)
         const matchesRating = !isRatingChecked || book.average_rating >= 4;
 
-        // Фильтр по скидкам
         const matchesDiscount = !isDiscountChecked || book.discount > 0;
 
         return (
