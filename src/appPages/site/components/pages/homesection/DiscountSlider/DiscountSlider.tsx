@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import Image from "next/image";
+import like from "@/assets/Icons/like.png";
+import likeActive from "@/assets/Icons/likeActive.png";
 import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
@@ -29,11 +31,17 @@ type SlideType = {
 interface SlideComponentProps {
     slide: SlideType;
     onAddToCart: () => void;
+    isLiked: boolean;
+    onLikeToggle: (id: number) => void;
 }
 
-const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
+const Slide: React.FC<SlideComponentProps> = ({
+    slide,
+    onAddToCart,
+    isLiked,
+    onLikeToggle,
+}) => {
     const router = useRouter();
-
     const imageUrl =
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
@@ -77,6 +85,27 @@ const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
                     <button onClick={onAddToCart} className={scss.button}>
                         В корзину
                     </button>
+                    <button
+                        className={scss.buttonLike}
+                        onClick={() => onLikeToggle(slide.id)}
+                        aria-label={
+                            isLiked
+                                ? "Remove from favorites"
+                                : "Add to favorites"
+                        }
+                    >
+                        <Image
+                            width={24}
+                            className={scss.buttonLikeImg}
+                            height={24}
+                            src={isLiked ? likeActive : like}
+                            alt={
+                                isLiked
+                                    ? "Remove from favorites"
+                                    : "Add to favorites"
+                            }
+                        />
+                    </button>
                 </div>
             </div>
         </div>
@@ -85,10 +114,10 @@ const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
 
 const DiscountSlider: React.FC = () => {
     const router = useRouter();
-
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [likedItems, setLikedItems] = useState<number[]>([]);
 
     const {
         data: slides = [],
@@ -101,6 +130,14 @@ const DiscountSlider: React.FC = () => {
             isError,
         }),
     });
+
+    const handleLikeToggle = useCallback((id: number) => {
+        setLikedItems((prevLikedItems) =>
+            prevLikedItems.includes(id)
+                ? prevLikedItems.filter((itemId) => itemId !== id)
+                : [...prevLikedItems, id]
+        );
+    }, []);
 
     const nextSlide = useCallback(() => {
         if (!isAnimating && slides.length > 0) {
@@ -134,7 +171,6 @@ const DiscountSlider: React.FC = () => {
         const timer = setTimeout(() => {
             setIsAnimating(false);
         }, 500);
-
         return () => clearTimeout(timer);
     }, [currentIndex]);
 
@@ -147,9 +183,10 @@ const DiscountSlider: React.FC = () => {
     if (isError)
         return (
             <div className={scss.loaderBlock}>
-                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>
             </div>
         );
+
     return (
         <section className={scss.DiscountSlider}>
             <div className="container">
@@ -189,6 +226,8 @@ const DiscountSlider: React.FC = () => {
                                         key={slide.id}
                                         slide={slide}
                                         onAddToCart={handleAddToCart}
+                                        isLiked={likedItems.includes(slide.id)}
+                                        onLikeToggle={handleLikeToggle}
                                     />
                                 ))}
                             </div>
