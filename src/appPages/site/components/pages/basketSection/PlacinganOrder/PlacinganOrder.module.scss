@@ -121,35 +121,41 @@
           border: 1px solid rgb(38, 82, 176);
           border-radius: 10px;
           background: rgb(255, 255, 255);
-          .delivery {
-            width: 184px;
-            height: 41px;
-            display: flex;
-            justify-content: center;
-            padding: 7px 10px 7px 10px;
-            border-radius: 10px;
-            background: rgb(38, 82, 176);
-            border: 0;
-            color: rgb(255, 255, 255);
-            font-family: Nunito;
-            font-size: 20px;
-            font-weight: 600;
-            line-height: 27px;
-          }
+          .delivery,
           .pickup {
             width: 184px;
             height: 41px;
             display: flex;
             justify-content: center;
-            padding: 7px 10px 7px 10px;
+            padding: 7px 10px;
             border-radius: 10px;
-            background: rgb(255, 255, 255);
             border: 0;
-            color: rgb(38, 82, 176);
             font-family: Nunito;
             font-size: 20px;
             font-weight: 600;
             line-height: 27px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+          }
+
+          .delivery {
+            background: rgb(255, 255, 255);
+            color: rgb(38, 82, 176);
+          }
+          
+          .pickup {
+            background: rgb(255, 255, 255);
+            color: rgb(38, 82, 176);
+          }
+          
+          .activeDelivery {
+            background: rgb(38, 82, 176);
+            color: rgb(255, 255, 255);
+          }
+          
+          .activePickup {
+            background: rgb(38, 82, 176);
+            color: rgb(255, 255, 255);
           }
         }
         .Inputs {
@@ -272,6 +278,7 @@
               line-height: 22px;
               border: none;
               margin: 10px 0;
+              cursor: pointer;
             }
           }
         }
