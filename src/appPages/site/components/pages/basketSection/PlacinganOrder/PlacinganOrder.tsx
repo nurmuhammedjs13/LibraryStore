@@ -18,42 +18,11 @@ const PlacinganOrder = () => {
       date: "30.11.2024",
       price: 400,
     },
-    {
-      img: img,
-      name: "К себе нежно",
-      author: "Ольга Примаченко",
-      date: "30.11.2024",
-      price: 400,
-    },
-    {
-      img: img,
-      name: "К себе нежно",
-      author: "Ольга Примаченко",
-      date: "30.11.2024",
-      price: 400,
-    },
-    {
-      img: img,
-      name: "К себе нежно",
-      author: "Ольга Примаченко",
-      date: "30.11.2024",
-      price: 400,
-    },
-    {
-      img: img,
-      name: "К себе нежно",
-      author: "Ольга Примаченко",
-      date: "30.11.2024",
-      price: 400,
-    },
   ];
 
-  const [fileName, setFileName] = useState("Выберите файл");
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    setFileName(file ? file.name : "Выберите файл");
-  };
+  const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
+    "delivery"
+  );
 
   return (
     <div className={styles.mainBlock}>
@@ -89,8 +58,22 @@ const PlacinganOrder = () => {
             <h1>Оформление заказа</h1>
             <div className={styles.InputBlock}>
               <div className={styles.BlockBtn}>
-                <button className={styles.delivery}>Доставка</button>
-                <button className={styles.pickup}>Самовывоз</button>
+                <button
+                  className={`${styles.delivery} ${
+                    activeButton === "delivery" ? styles.activeDelivery : ""
+                  }`}
+                  onClick={() => setActiveButton("delivery")}
+                >
+                  Доставка
+                </button>
+                <button
+                  className={`${styles.pickup} ${
+                    activeButton === "pickup" ? styles.activePickup : ""
+                  }`}
+                  onClick={() => setActiveButton("pickup")}
+                >
+                  Самовывоз
+                </button>
               </div>
               <div className={styles.Inputs}>
                 <div className={styles.Input}>
@@ -113,11 +96,13 @@ const PlacinganOrder = () => {
                   <input type="number" />
                   <hr />
                 </div>
-                <div className={styles.Input}>
-                  <h6>Укажите адрес доставки</h6>
-                  <input type="text" />
-                  <hr />
-                </div>
+                {activeButton === "delivery" && (
+                  <div className={styles.Input}>
+                    <h6>Укажите адрес доставки</h6>
+                    <input type="text" />
+                    <hr />
+                  </div>
+                )}
                 <div className={styles.Input}>
                   <h6>Комментарии к заказу</h6>
                   <input type="text" />
@@ -145,8 +130,7 @@ const PlacinganOrder = () => {
                 </div>
                 <div className={styles.upload}>
                   <div className={styles.selectFile}>
-                    <input type="file"/>  
-                  
+                    <input type="file" />
                   </div>
                   <button>Оформить заказ</button>
                 </div>
