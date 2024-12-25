@@ -118,6 +118,7 @@ const DiscountSlider: React.FC = () => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [likedItems, setLikedItems] = useState<number[]>([]);
+    const [slideWidth, setSlideWidth] = useState(29.33);
 
     const {
         data: slides = [],
@@ -130,6 +131,22 @@ const DiscountSlider: React.FC = () => {
             isError,
         }),
     });
+
+    const updateSlideWidth = useCallback(() => {
+        if (window.innerWidth <= 480) {
+            setSlideWidth(98);
+        } else if (window.innerWidth <= 740) {
+            setSlideWidth(50);
+        } else {
+            setSlideWidth(33.33);
+        }
+    }, []);
+
+    useEffect(() => {
+        updateSlideWidth();
+        window.addEventListener("resize", updateSlideWidth);
+        return () => window.removeEventListener("resize", updateSlideWidth);
+    }, [updateSlideWidth]);
 
     const handleLikeToggle = useCallback((id: number) => {
         setLikedItems((prevLikedItems) =>
@@ -217,7 +234,8 @@ const DiscountSlider: React.FC = () => {
                                 }`}
                                 style={{
                                     transform: `translateX(-${
-                                        (currentIndex % slides.length) * 33.33
+                                        (currentIndex % slides.length) *
+                                        slideWidth
                                     }%)`,
                                 }}
                             >
