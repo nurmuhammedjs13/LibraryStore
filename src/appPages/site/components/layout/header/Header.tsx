@@ -9,6 +9,11 @@ import like from "@/assets/Icons/like_icon.svg";
 import Link from "next/link";
 import BurgerButton from "@/ui/burgerButton/BurgerButton";
 import BurgerMenu from "@/ui/burgerMenu/BurgerMenu";
+// import { useGetUserQuery } from "@/redux/api/auth";
+import ProfileButton from "@/ui/profileButton/ProfileButton";
+import ProfileMenu from "@/ui/profileMenu/ProfileMenu";
+import { useHeaderStore } from "@/stores/useHeaderStore";
+import { useGetMeQuery } from "@/redux/api/auth";
 const Links = [
   {
     name: "Главная",
@@ -34,6 +39,7 @@ const LinkIcons = [
   },
 ];
 const Header = () => {
+  const { login } = useHeaderStore();
   const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {

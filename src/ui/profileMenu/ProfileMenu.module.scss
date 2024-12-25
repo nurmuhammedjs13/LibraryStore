@@ -1,0 +1,46 @@
+.ProfileMenu {
+  position: absolute;
+  top: 70px;
+  right: 0px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.4s;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  .content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #ffffff;
+    border: 1px solid #353535;
+    .user {
+      .user_cont {
+        h1 {
+          //   color: white;
+        }
+        h2 {
+          //   color: white;
+        }
+        h3 {
+          //   color: white;
+        }
+      }
+    }
+    .logout {
+      padding: 7px 10px;
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+      background: #323232;
+      border-radius: 7px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
