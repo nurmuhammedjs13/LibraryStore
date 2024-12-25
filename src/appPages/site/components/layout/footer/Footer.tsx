@@ -8,6 +8,7 @@ import { useGetFooterQuery } from "@/redux/api/futer";
 import Link from "next/link";
 import { Link as ScrollLink } from "react-scroll";
 
+
 const shop = [
   {
     name: "Главная",

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
@@ -39,6 +38,8 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
         router.push(`/books/${slide.id}`);
     };
 
+
+
     return (
         <div className={scss.slide} onClick={handleClick}>
             <h1 className={scss.discount_bage}>{slide.discount}</h1>
@@ -71,7 +72,7 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
                     </div>
                 </div>
                 <div className={scss.action}>
-                    <button className={scss.button}>В корзину</button>
+                    <button  className={scss.button}>В корзину</button>
                 </div>
             </div>
         </div>
