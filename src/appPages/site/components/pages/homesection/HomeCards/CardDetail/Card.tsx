@@ -1,11 +1,9 @@
 "use client";
-
 import scss from "./Card.module.scss";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useGetBooksDetailQuery } from "@/redux/api/books";
-
 import star from "@/assets/Icons/star.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import star0 from "@/assets/Icons/star0.png";
