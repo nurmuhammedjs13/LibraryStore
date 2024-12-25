@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import Image from "next/image";
@@ -46,7 +46,7 @@ const Slide: React.FC<SlideComponentProps> = ({
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
     const handleClick = () => {
-        router.push(`/books/${slide.id}`);
+        router.push(`/aksia/${slide.id}`);
     };
 
     return (
@@ -191,6 +191,20 @@ const DiscountSlider: React.FC = () => {
         return () => clearTimeout(timer);
     }, [currentIndex]);
 
+    const memoizedSlides = useMemo(
+        () =>
+            slides.map((slide) => (
+                <Slide
+                    key={slide.id}
+                    slide={slide}
+                    onAddToCart={handleAddToCart}
+                    isLiked={likedItems.includes(slide.id)}
+                    onLikeToggle={handleLikeToggle}
+                />
+            )),
+        [slides, likedItems, handleLikeToggle]
+    );
+
     if (isLoading)
         return (
             <div className={scss.loaderBlock}>
@@ -239,15 +253,7 @@ const DiscountSlider: React.FC = () => {
                                     }%)`,
                                 }}
                             >
-                                {slides.map((slide) => (
-                                    <Slide
-                                        key={slide.id}
-                                        slide={slide}
-                                        onAddToCart={handleAddToCart}
-                                        isLiked={likedItems.includes(slide.id)}
-                                        onLikeToggle={handleLikeToggle}
-                                    />
-                                ))}
+                                {memoizedSlides}
                             </div>
                         </div>
                         <button

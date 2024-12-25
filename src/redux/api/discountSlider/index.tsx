@@ -2,7 +2,7 @@ import { api as index } from "..";
 const api = index.injectEndpoints({
     endpoints: (build) => ({
         getDiscount: build.query<
-            Discount.GetDiscountReaponse,
+            Discount.GetDiscountResponse,
             Discount.GetDiscountRequest
         >({
             query: () => ({
@@ -11,7 +11,16 @@ const api = index.injectEndpoints({
             }),
             providesTags: ["aksia"],
         }),
+        getDiscountDetail: build.query<
+            Discount.GetDiscountResponse,
+            Discount.GetDiscountRequest
+        >({
+            query: (id) => ({
+                url: `aksia/${id}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
-export const { useGetDiscountQuery } = api;
+export const { useGetDiscountQuery, useGetDiscountDetailQuery } = api;

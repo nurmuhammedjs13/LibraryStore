@@ -16,7 +16,7 @@ namespace Books {
         }>;
     };
 
-    type GetBooksListResponse = GetBooksResponse[];
+    type GetBooksResponse = GetBooksResponse[];
 
     type GetBooksRequest = void;
 
