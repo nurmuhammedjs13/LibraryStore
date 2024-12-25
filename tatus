@@ -1,0 +1,151 @@
+[1mdiff --git a/src/appPages/site/components/pages/catalogSection/MainCatalog/MainCatalog.tsx b/src/appPages/site/components/pages/catalogSection/MainCatalog/MainCatalog.tsx[m
+[1mindex 8a47a55..e6d56e3 100644[m
+[1m--- a/src/appPages/site/components/pages/catalogSection/MainCatalog/MainCatalog.tsx[m
+[1m+++ b/src/appPages/site/components/pages/catalogSection/MainCatalog/MainCatalog.tsx[m
+[36m@@ -17,12 +17,35 @@[m [mimport Link from "next/link";[m
+ import Image from "next/image";[m
+ import { useRouter } from "next/navigation";[m
+ [m
+[32m+[m[32mtype GetBooksResponse = {[m
+[32m+[m[32m    id: number;[m
+[32m+[m[32m    book_images: Array<{[m
+[32m+[m[32m        book_images: string;[m
+[32m+[m[32m    }>;[m
+[32m+[m[32m    book_name: string;[m
+[32m+[m[32m    author: string;[m
+[32m+[m[32m    price: number;[m
+[32m+[m[32m    discount: number;[m
+[32m+[m[32m    description: string;[m
+[32m+[m[32m    average_rating: number;[m
+[32m+[m[32m    total_ratings: number;[m
+[32m+[m[32m    janre: Array<{[m
+[32m+[m[32m        janre_name: string;[m
+[32m+[m[32m    }>;[m
+[32m+[m[32m};[m
+[32m+[m
+ const MainCatalog = () => {[m
+     const [isClient, setIsClient] = useState(false);[m
+     const router = useRouter();[m
+[32m+[m[32m    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);[m
+[32m+[m[32m    const [minPrice, setMinPrice] = useState<number | "">("");[m
+[32m+[m[32m    const [maxPrice, setMaxPrice] = useState<number | "">("");[m
+[32m+[m[32m    const [isRatingChecked, setIsRatingChecked] = useState(false);[m
+[32m+[m[32m    const [isDiscountChecked, setIsDiscountChecked] = useState(false);[m
+[32m+[m[32m    const [likedItems, setLikedItems] = useState<number[]>([]);[m
+ [m
+     const {[m
+[31m-        data: books = [],[m
+[32m+[m[32m        data: books = [] as GetBooksResponse[],[m
+         isLoading: isBooksLoading,[m
+         isError: isBooksError,[m
+     } = useGetBooksQuery();[m
+[36m@@ -33,12 +56,22 @@[m [mconst MainCatalog = () => {[m
+         isError: isGenresError,[m
+     } = useGetGenreQuery();[m
+ [m
+[31m-    const [isRatingChecked, setIsRatingChecked] = useState(false);[m
+[31m-    const [isDiscountChecked, setIsDiscountChecked] = useState(false);[m
+[31m-    const [likedItems, setLikedItems] = useState<number[]>([]);[m
+[31m-[m
+     const stars = [star0, star1, star2, star3, star4, star5];[m
+ [m
+[32m+[m[32m    const handleGenreClick = (genreName: string) => {[m
+[32m+[m[32m        setSelectedGenre(selectedGenre === genreName ? null : genreName);[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {[m
+[32m+[m[32m        const value = e.target.value === "" ? "" : Number(e.target.value);[m
+[32m+[m[32m        setMinPrice(value);[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {[m
+[32m+[m[32m        const value = e.target.value === "" ? "" : Number(e.target.value);[m
+[32m+[m[32m        setMaxPrice(value);[m
+[32m+[m[32m    };[m
+[32m+[m
+     const handleRatingChange = () => {[m
+         setIsRatingChecked(!isRatingChecked);[m
+     };[m
+[36m@@ -55,12 +88,32 @@[m [mconst MainCatalog = () => {[m
+         );[m
+     };[m
+ [m
+[31m-    // Set isClient to true after the component mounts (client-side only)[m
+[32m+[m[32m    const filteredBooks = books.filter((book) => {[m
+[32m+[m[32m        const matchesGenre =[m
+[32m+[m[32m            !selectedGenre ||[m
+[32m+[m[32m            book.janre.some((genre) => genre.janre_name === selectedGenre);[m
+[32m+[m
+[32m+[m[32m        const matchesMinPrice = minPrice === "" || book.price >= minPrice;[m
+[32m+[m[32m        const matchesMaxPrice = maxPrice === "" || book.price <= maxPrice;[m
+[32m+[m
+[32m+[m[32m        const matchesRating = !isRatingChecked || book.average_rating >= 4;[m
+[32m+[m
+[32m+[m[32m        const matchesDiscount = !isDiscountChecked || book.discount > 0;[m
+[32m+[m
+[32m+[m[32m        return ([m
+[32m+[m[32m            matchesGenre &&[m
+[32m+[m[32m            matchesMinPrice &&[m
+[32m+[m[32m            matchesMaxPrice &&[m
+[32m+[m[32m            matchesRating &&[m
+[32m+[m[32m            matchesDiscount[m
+[32m+[m[32m        );[m
+[32m+[m[32m    });[m
+[32m+[m
+     useEffect(() => {[m
+         setIsClient(true);[m
+     }, []);[m
+ [m
+[31m-    if (!isClient) return null; // Avoid rendering before the component is mounted[m
+[32m+[m[32m    if (!isClient) return null;[m
+ [m
+     if (isBooksError || isGenresError) {[m
+         return ([m
+[36m@@ -85,7 +138,14 @@[m [mconst MainCatalog = () => {[m
+                                 {genres?.map((genre) => ([m
+                                     <h1[m
+                                         key={genre.janre_name}[m
+[31m-                                        className={scss.genre}[m
+[32m+[m[32m                                        className={`${scss.genre} ${[m
+[32m+[m[32m                                            selectedGenre === genre.janre_name[m
+[32m+[m[32m                                                ? scss.selectedGenre[m
+[32m+[m[32m                                                : ""[m
+[32m+[m[32m                                        }`}[m
+[32m+[m[32m                                        onClick={() =>[m
+[32m+[m[32m                                            handleGenreClick(genre.janre_name)[m
+[32m+[m[32m                                        }[m
+                                     >[m
+                                         {genre.janre_name}[m
+                                     </h1>[m
+[36m@@ -99,11 +159,17 @@[m [mconst MainCatalog = () => {[m
+                                     type="number"[m
+                                     placeholder="от"[m
+                                     className={scss.priceInput}[m
+[32m+[m[32m                                    value={minPrice}[m
+[32m+[m[32m                                    onChange={handleMinPriceChange}[m
+[32m+[m[32m                                    min="0"[m
+                                 />[m
+                                 <input[m
+                                     type="number"[m
+                                     placeholder="до"[m
+                                     className={scss.priceInput}[m
+[32m+[m[32m                                    value={maxPrice}[m
+[32m+[m[32m                                    onChange={handleMaxPriceChange}[m
+[32m+[m[32m                                    min="0"[m
+                                 />[m
+                             </div>[m
+                         </div>[m
+[36m@@ -139,11 +205,12 @@[m [mconst MainCatalog = () => {[m
+                             </Link>[m
+                             <Link href={"/catalog"} className={scss.nav2}>[m
+                                 Каталог[m
+[32m+[m[32m                                {selectedGenre && ` › ${selectedGenre}`}[m
+                             </Link>[m
+                         </div>[m
+                         <div className={scss.hr}></div>[m
+                         <div className={scss.cards}>[m
+[31m-                            {books.map((item) => ([m
+[32m+[m[32m                            {filteredBooks.map((item) => ([m
+                                 <div key={item.id} className={scss.card}>[m
+                                     <Image[m
+                                         onClick={() =>[m

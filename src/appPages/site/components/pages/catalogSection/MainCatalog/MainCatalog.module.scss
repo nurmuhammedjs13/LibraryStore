@@ -1,0 +1,329 @@
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #007bff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(25px);
+}
+
+.MainCatalog {
+    .content {
+        display: flex;
+        flex-direction: row;
+        .filterBlock {
+            z-index: 1000;
+            padding: 25px 25px 25px 0;
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            border-top: 0;
+            border-right: 2px solid #2652b0;
+            border-bottom: 0;
+            border-left: 0;
+            .genresBlock {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+                .genreTitle {
+                    font-size: 18px;
+                    font-weight: 600;
+                    line-height: 24.55px;
+                    text-align: left;
+                    color: black;
+                }
+                .genres {
+                    padding: 0 0 0 15px;
+                    display: flex;
+                    gap: 7px;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    .genre {
+                        font-size: 16px;
+                        color: black;
+                        cursor: pointer;
+                        font-weight: 400;
+                        line-height: 21.82px;
+                        text-align: left;
+                        transition: 0.3s;
+                        &:hover {
+                            color: #2652b0;
+                            transform: translateX(5px);
+                        }
+                        &.selectedGenre {
+                            color: #2652b0;
+                            font-weight: 600;
+                            transform: translateX(5px);
+                        }
+                    }
+                }
+            }
+            .price {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                .priceSection {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                    .priceInput {
+                        padding: 10px;
+                        border-radius: 10px;
+                        width: 100%;
+                        font-size: 18px;
+                        font-weight: 600;
+                        line-height: 24.55px;
+                        text-align: left;
+                        color: black;
+                        border: 1px solid gray;
+                    }
+                }
+                .priceTitle {
+                    font-size: 18px;
+                    font-weight: 600;
+                    line-height: 24.55px;
+                    text-align: left;
+                    color: black;
+                }
+            }
+            .checkBox {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                .rating {
+                    display: flex;
+                    width: 150px;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    align-items: center;
+                    .checkboxInput {
+                        width: 20px;
+                        height: 20px;
+                        cursor: pointer;
+                        accent-color: #007bff;
+                    }
+
+                    .ratingText {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: black;
+                        line-height: 24.55px;
+                        text-align: left;
+                    }
+                }
+                .discount {
+                    display: flex;
+                    flex-direction: row;
+                    width: 150px;
+                    justify-content: space-between;
+                    align-items: center;
+                    .checkboxInput {
+                        width: 20px;
+                        height: 20px;
+                        cursor: pointer;
+                        accent-color: #007bff;
+                    }
+
+                    .discountText {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: black;
+                        line-height: 24.55px;
+                        text-align: left;
+                    }
+                }
+            }
+        }
+        .CardBlock {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 25px 30px;
+            .hr {
+                width: 100%;
+                border-bottom: 2px solid #2652b0;
+            }
+            .cardsNav {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                align-items: flex-start;
+                .nav1 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 21.82px;
+                    text-align: left;
+                    color: #00000080;
+                }
+                .nav2 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 21.82px;
+                    text-align: left;
+                    color: #2652b0;
+                }
+            }
+            .cards {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                column-gap: 10px;
+                row-gap: 60px;
+                padding: 10px 0 50px 0;
+                overflow-y: auto;
+
+                .card {
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: row;
+
+                    .bookImage {
+                        flex: 1;
+                        width: 130px;
+                        height: 180px;
+                        border-radius: 4px;
+                        position: relative;
+                        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+                        transition: 0.3s;
+
+                        &:hover {
+                            transform: translateY(-5px);
+                        }
+                    }
+
+                    .cardInfo {
+                        flex: 1;
+                        display: flex;
+                        gap: 4px;
+                        align-items: flex-start;
+                        flex-direction: column;
+
+                        .name {
+                            font-size: 16px;
+                            font-weight: 600;
+                            line-height: 19.1px;
+                            text-align: left;
+                        }
+
+                        .author {
+                            font-size: 14px;
+                            color: #00000099;
+                            font-weight: 500;
+                            line-height: 16.37px;
+                            text-align: left;
+                        }
+
+                        .genre {
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 200px;
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height: 16.37px;
+                            text-align: left;
+                            color: #2652b0cc;
+
+                            .janre {
+                                font-size: 14px;
+                                font-weight: 500;
+                                line-height: 16.37px;
+                                text-align: left;
+                                color: #2652b0cc;
+                            }
+                        }
+
+                        .confirm {
+                            display: flex;
+                            gap: 7px;
+                            flex-direction: column;
+                            height: 100%;
+                            padding: 0 0 10px 0;
+                            align-items: flex-start;
+                            justify-content: flex-end;
+
+                            .price {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                gap: 5px;
+                                padding: 5px 0 0 0;
+                                font-size: 18px;
+                                font-weight: 500;
+                                line-height: 20.46px;
+                                text-align: left;
+                                color: #2652b0;
+                            }
+
+                            .actions {
+                                display: flex;
+                                flex-direction: row;
+                                gap: 10px;
+
+                                .button {
+                                    background: #2652b0;
+                                    font-size: 16px;
+                                    padding: 8px 10px;
+                                    color: white;
+                                    font-weight: 500;
+                                    border: none;
+                                    border-radius: 5px;
+                                    line-height: 21.82px;
+                                    text-align: left;
+                                    transition: 0.3s;
+
+                                    &:hover {
+                                        transform: translateY(-2px);
+                                    }
+                                }
+
+                                .buttonLike {
+                                    border: none;
+                                    background: transparent;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
