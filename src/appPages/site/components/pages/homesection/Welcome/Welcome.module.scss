@@ -26,6 +26,7 @@
       align-items: center;
       gap: 300px;
     }
+
     .left {
       display: flex;
       align-items: start;
@@ -72,6 +73,9 @@
     }
 
     .right {
+      // @media (max-width: 767px) {
+      //   display: none;
+      // }
       position: relative;
       display: flex;
       justify-content: center;
@@ -80,6 +84,9 @@
       gap: 20px;
 
       .book {
+        // @media (max-width: 767px) {
+        //   display: none;
+        // }
         position: absolute;
         opacity: 0;
         transform: translateX(100%) scale(0.8);

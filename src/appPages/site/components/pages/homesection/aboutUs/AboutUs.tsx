@@ -16,7 +16,7 @@ const AboutUs = () => {
     },
   ];
   return (
-    <section>
+    <section id="about-us">
       <div className={styles.aboutUs}>
         <div className={styles.aboutUsBlock}>
           <h1>О НАС</h1>

@@ -10,6 +10,12 @@ interface HeaderStore {
     icon: string;
     href: string;
   }[];
+  login: () => void;
+  logout: () => void;
+
+  isOpenProfileMenu: boolean;
+  setIsOpenProfileMenu: (isOpenProfileMenu: boolean) => void;
+
   isOpenBurgerMenu: boolean;
   setIsOpenBurgerMenu: (isOpenBurgerMenu: boolean) => void;
 }
@@ -35,6 +41,24 @@ export const useHeaderStore = create<HeaderStore>((set) => ({
       href: "/profile",
     },
   ],
+
+  login: () => {
+    window.open(
+      `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/login/`,
+      "_self"
+    );
+  },
+  logout: () => {
+    window.open(
+      `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/logout/`,
+      "_self"
+    );
+  },
+
+  isOpenProfileMenu: false,
+  setIsOpenProfileMenu: (isOpenProfileMenu) =>
+    set(() => ({ isOpenProfileMenu: isOpenProfileMenu })),
+
   isOpenBurgerMenu: false,
   setIsOpenBurgerMenu: (isOpenBurgerMenu) =>
     set(() => ({ isOpenBurgerMenu: isOpenBurgerMenu })),

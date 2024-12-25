@@ -6,6 +6,7 @@ import oku from "@/assets/footerOku.png";
 import Image from "next/image";
 import { useGetFooterQuery } from "@/redux/api/futer";
 import Link from "next/link";
+import { Link as ScrollLink } from "react-scroll";
 
 const shop = [
   {
@@ -61,9 +62,17 @@ const Footer = () => {
             <div className={scss.info}>
               <h1>Информация</h1>
               {info.map((el, idx) => (
-                <Link key={idx} href={el.href}>
+                <ScrollLink
+                  key={idx}
+                  activeClass="active"
+                  to={el.href}
+                  spy={true}
+                  smooth={true}
+                  offset={0}
+                  duration={500}
+                >
                   {el.name}
-                </Link>
+                </ScrollLink>
               ))}
             </div>
             <div className={scss.contact}>

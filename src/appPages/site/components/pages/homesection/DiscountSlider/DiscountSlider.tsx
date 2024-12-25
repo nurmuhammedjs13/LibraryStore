@@ -52,7 +52,7 @@ const DiscountSlider = () => {
     if (isError) return <div>Ошибка загрузки данных. Попробуйте позже.</div>;
 
     return (
-        <section className={scss.DiscountSlider}>
+        <section className={scss.DiscountSlider} id="sell">
             <div className="container">
                 <div className={scss.content}>
                     <h1 className={scss.title}>НАШИ СКИДКИ</h1>
