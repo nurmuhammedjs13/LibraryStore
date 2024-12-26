@@ -1,12 +1,10 @@
 "use client";
-import { useGetUserQuery } from "@/redux/api/auth";
 import scss from "./ProfileButton.module.scss";
 import { useHeaderStore } from "@/stores/useHeaderStore";
 import Image from "next/image";
 import profile from "@/assets/Icons/proicons_person.svg";
 
 const ProfileButton = () => {
-  //   const { data: session } = useGetUserQuery();
   const { isOpenProfileMenu, setIsOpenProfileMenu } = useHeaderStore();
 
   return (

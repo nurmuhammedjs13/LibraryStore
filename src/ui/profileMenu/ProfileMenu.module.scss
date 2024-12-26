@@ -1,10 +1,11 @@
 .ProfileMenu {
   position: absolute;
   top: 70px;
-  right: 0px;
+  right: 40%;
   visibility: hidden;
   opacity: 0;
   transition: 0.4s;
+  z-index: 999;
   &.active {
     visibility: visible;
     opacity: 1;
@@ -14,8 +15,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background: #ffffff;
-    border: 1px solid #353535;
+    // background: #ffffff;
+    // border: 1px solid #353535;
     .user {
       .user_cont {
         h1 {

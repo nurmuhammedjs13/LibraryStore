@@ -14,6 +14,7 @@ import ProfileButton from "@/ui/profileButton/ProfileButton";
 import ProfileMenu from "@/ui/profileMenu/ProfileMenu";
 import { useHeaderStore } from "@/stores/useHeaderStore";
 import { useGetMeQuery } from "@/redux/api/auth";
+import { useRouter } from "next/navigation";
 const Links = [
   {
     name: "Главная",
@@ -33,15 +34,14 @@ const LinkIcons = [
     icon: Basket,
     href: "/basket",
   },
-  {
-    icon: profile,
-    href: "/profile",
-  },
+  // {
+  //   icon: profile,
+  //   href: "/profile",
+  // },
 ];
 const Header = () => {
-  const { login } = useHeaderStore();
   const [isMobile, setIsMobile] = useState(true);
-
+  const nav =useRouter()
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1100);
     handleResize();
@@ -56,7 +56,7 @@ const Header = () => {
         <div className={scss.content}>
           <div className={scss.left}>
             <div className={scss.logo}>
-              <Image src={logo} alt="logo" width={100} height={20} />
+              <Image src={logo} alt="logo" width={100} height={20} onClick={()=>nav.push('/')} />
             </div>
             <div className={scss.search}>
               <SearchProducts />
@@ -84,6 +84,8 @@ const Header = () => {
                         />
                       </Link>
                     ))}
+                    <ProfileButton/>
+                    <ProfileMenu/>  
                   </div>
                 </div>
               </div>
