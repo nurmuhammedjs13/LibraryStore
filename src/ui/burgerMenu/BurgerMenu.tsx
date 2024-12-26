@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useHeaderStore } from "@/stores/useHeaderStore";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import ProfileButton from "../profileButton/ProfileButton";
+import ProfileMenu from "../profileMenu/ProfileMenu";
 
 const BurgerMenu = () => {
   const pathname = usePathname();
@@ -57,6 +59,8 @@ const BurgerMenu = () => {
                   <Image src={icon.icon} alt="icon" width={35} height={35} />
                 </Link>
               ))}
+              <ProfileButton />
+              <ProfileMenu />
             </div>
           </nav>
         </div>

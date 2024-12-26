@@ -10,8 +10,8 @@ interface HeaderStore {
     icon: string;
     href: string;
   }[];
-  login: () => void;
-  logout: () => void;
+  // login: () => void;
+  // logout: () => void;
 
   isOpenProfileMenu: boolean;
   setIsOpenProfileMenu: (isOpenProfileMenu: boolean) => void;
@@ -36,24 +36,24 @@ export const useHeaderStore = create<HeaderStore>((set) => ({
       icon: Basket,
       href: "/basket",
     },
-    {
-      icon: profile,
-      href: "/profile",
-    },
+    // {
+    //   icon: profile,
+    //   href: "/profile",
+    // },
   ],
 
-  login: () => {
-    window.open(
-      `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/login/`,
-      "_self"
-    );
-  },
-  logout: () => {
-    window.open(
-      `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/logout/`,
-      "_self"
-    );
-  },
+  // login: () => {
+  //   window.open(
+  //     `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/login/`,
+  //     "_self"
+  //   );
+  // },
+  // logout: () => {
+  //   window.open(
+  //     `${process.env.NEXT_PUBLIC_OKUKG_API}/accounts/logout/`,
+  //     "_self"
+  //   );
+  // },
 
   isOpenProfileMenu: false,
   setIsOpenProfileMenu: (isOpenProfileMenu) =>

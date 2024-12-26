@@ -1,0 +1,39 @@
+.Login {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  background: #2652b04d;
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  .content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    img {
+    }
+    .form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      input {
+        width: 100%;
+        padding: 10px 150px 10px 10px;
+        border-radius: 10px;
+        border: none;
+      }
+      button {
+        background: #2652b0;
+        color: #fff ;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+}
