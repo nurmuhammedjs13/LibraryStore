@@ -12,8 +12,8 @@ const api = index.injectEndpoints({
             providesTags: ["aksia"],
         }),
         getDiscountDetail: build.query<
-            Discount.GetDiscountResponse,
-            Discount.GetDiscountRequest
+            Discount.GetDiscountDetailResponse,
+            Discount.GetDiscountDetailRequest
         >({
             query: (id) => ({
                 url: `aksia/${id}`,

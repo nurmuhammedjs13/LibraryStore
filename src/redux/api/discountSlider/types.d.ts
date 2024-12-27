@@ -3,23 +3,34 @@ namespace Discount {
         {
             id: number;
             books: {
-                books: {
-                    book_images: Array<{
-                        book_images: string;
-                    }>;
-                    book_name: string;
-                    author: string;
-                    description: string;
-                    price: number;
-                    average_rating: number;
-                    total_ratings: number;
-                    janre: Array<{
-                        janre_name: string;
-                    }>;
-                };
-                discount: string;
-                discount_book: number;
+                book_images: Array<{
+                    book_images: string;
+                }>;
+                book_name: string;
+                author: string;
+                price: number;
+                average_rating: number;
+                total_ratings: number;
+                janre: Array<{
+                    janre_name: string;
+                }>;
+                description: string;
+                ratings: Array<{
+                    id: number;
+                    user_rating: {
+                        username: string;
+                    };
+                    book: number;
+                    aksia_books: unknown; // Используем unknown вместо any
+                    katalog_books: unknown; // Используем unknown вместо any
+                    katalog_aksia_books: unknown; // Используем unknown вместо any
+                    stars: number;
+                    comment: string;
+                    created_date: string;
+                }>;
             };
+            discount: string;
+            discount_book: number;
         }
     ];
 

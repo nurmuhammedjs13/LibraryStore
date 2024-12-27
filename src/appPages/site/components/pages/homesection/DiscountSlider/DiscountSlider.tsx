@@ -87,7 +87,7 @@ const Slide: React.FC<SlideComponentProps> = ({
                     </button>
                     <button
                         className={scss.buttonLike}
-                        onClick={() => onLikeToggle(slide.id)}
+                        onClick={() => onLikeToggle(Number(slide.id))}
                         aria-label={
                             isLiked
                                 ? "Remove from favorites"
