@@ -3,6 +3,8 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import Image from "next/image";
+import like from "@/assets/Icons/like.png";
+import likeActive from "@/assets/Icons/likeActive.png";
 import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
@@ -27,23 +29,30 @@ type SlideType = {
 
 interface SlideComponentProps {
     slide: SlideType;
+    onAddToCart: () => void;
+    isLiked: boolean;
+    onLikeToggle: (id: number) => void;
 }
 
-const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
+const Slide: React.FC<SlideComponentProps> = ({
+    slide,
+    onAddToCart,
+    isLiked,
+    onLikeToggle,
+}) => {
     const router = useRouter();
     const imageUrl =
         slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
 
     const handleClick = () => {
-        router.push(`/books/${slide.id}`);
+        router.push(`/aksia/${slide.id}`);
     };
 
-
-
     return (
-        <div className={scss.slide} onClick={handleClick}>
+        <div className={scss.slide}>
             <h1 className={scss.discount_bage}>{slide.discount}</h1>
             <Image
+                onClick={handleClick}
                 className={scss.bookImg}
                 width={220}
                 height={300}
@@ -72,7 +81,30 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
                     </div>
                 </div>
                 <div className={scss.action}>
-                    <button  className={scss.button}>В корзину</button>
+                    <button onClick={onAddToCart} className={scss.button}>
+                        В корзину
+                    </button>
+                    <button
+                        className={scss.buttonLike}
+                        onClick={() => onLikeToggle(Number(slide.id))}
+                        aria-label={
+                            isLiked
+                                ? "Remove from favorites"
+                                : "Add to favorites"
+                        }
+                    >
+                        <Image
+                            width={24}
+                            className={scss.buttonLikeImg}
+                            height={24}
+                            src={isLiked ? likeActive : like}
+                            alt={
+                                isLiked
+                                    ? "Remove from favorites"
+                                    : "Add to favorites"
+                            }
+                        />
+                    </button>
                 </div>
             </div>
         </div>
@@ -81,9 +113,11 @@ const Slide: React.FC<SlideComponentProps> = ({ slide }) => {
 
 const DiscountSlider: React.FC = () => {
     const router = useRouter();
-
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [likedItems, setLikedItems] = useState<number[]>([]);
+    const [slideWidth, setSlideWidth] = useState(29.33);
 
     const {
         data: slides = [],
@@ -96,6 +130,30 @@ const DiscountSlider: React.FC = () => {
             isError,
         }),
     });
+
+    const updateSlideWidth = useCallback(() => {
+        if (window.innerWidth <= 480) {
+            setSlideWidth(98);
+        } else if (window.innerWidth <= 740) {
+            setSlideWidth(50);
+        } else {
+            setSlideWidth(33.33);
+        }
+    }, []);
+
+    useEffect(() => {
+        updateSlideWidth();
+        window.addEventListener("resize", updateSlideWidth);
+        return () => window.removeEventListener("resize", updateSlideWidth);
+    }, [updateSlideWidth]);
+
+    const handleLikeToggle = useCallback((id: number) => {
+        setLikedItems((prevLikedItems) =>
+            prevLikedItems.includes(id)
+                ? prevLikedItems.filter((itemId) => itemId !== id)
+                : [...prevLikedItems, id]
+        );
+    }, []);
 
     const nextSlide = useCallback(() => {
         if (!isAnimating && slides.length > 0) {
@@ -113,6 +171,13 @@ const DiscountSlider: React.FC = () => {
         }
     }, [isAnimating, slides.length]);
 
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
+
     useEffect(() => {
         const autoSlide = setInterval(nextSlide, 3000);
         return () => clearInterval(autoSlide);
@@ -122,9 +187,22 @@ const DiscountSlider: React.FC = () => {
         const timer = setTimeout(() => {
             setIsAnimating(false);
         }, 500);
-
         return () => clearTimeout(timer);
     }, [currentIndex]);
+
+    const memoizedSlides = useMemo(
+        () =>
+            slides.map((slide) => (
+                <Slide
+                    key={slide.id}
+                    slide={slide}
+                    onAddToCart={handleAddToCart}
+                    isLiked={likedItems.includes(slide.id)}
+                    onLikeToggle={handleLikeToggle}
+                />
+            )),
+        [slides, likedItems, handleLikeToggle]
+    );
 
     if (isLoading)
         return (
@@ -135,14 +213,20 @@ const DiscountSlider: React.FC = () => {
     if (isError)
         return (
             <div className={scss.loaderBlock}>
-                <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+                <div>Ошибка загрузки данных. Попробуйте позже.</div>
             </div>
         );
+
     return (
         <section className={scss.DiscountSlider} id="sell">
             <div className="container">
                 <div className={scss.content}>
                     <h1 className={scss.title}>НАШИ СКИДКИ</h1>
+                    {showModal && (
+                        <div className={scss.modal}>
+                            <p>Товар добавлен в корзину✓</p>
+                        </div>
+                    )}
                     <div className={scss.slider}>
                         <button
                             className={scss.prevButton}
@@ -163,13 +247,12 @@ const DiscountSlider: React.FC = () => {
                                 }`}
                                 style={{
                                     transform: `translateX(-${
-                                        (currentIndex % slides.length) * 33.33
+                                        (currentIndex % slides.length) *
+                                        slideWidth
                                     }%)`,
                                 }}
                             >
-                                {slides.map((slide) => (
-                                    <Slide key={slide.id} slide={slide} />
-                                ))}
+                                {memoizedSlides}
                             </div>
                         </div>
                         <button

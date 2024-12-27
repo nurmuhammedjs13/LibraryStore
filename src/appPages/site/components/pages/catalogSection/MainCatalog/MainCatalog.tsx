@@ -37,6 +37,15 @@ type GetBooksResponse = {
 const MainCatalog = () => {
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
+    const [showModal, setShowModal] = useState(false);
+
+    const handleAddToCart = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 2000);
+    };
+
     const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
     const [minPrice, setMinPrice] = useState<number | "">("");
     const [maxPrice, setMaxPrice] = useState<number | "">("");
@@ -271,9 +280,20 @@ const MainCatalog = () => {
                                                 {item.price} c
                                             </h1>
                                             <div className={scss.actions}>
-                                                <button className={scss.button}>
+                                                <button
+                                                    onClick={handleAddToCart}
+                                                    className={scss.button}
+                                                >
                                                     В корзину
                                                 </button>
+                                                {showModal && (
+                                                    <div className={scss.modal}>
+                                                        <p>
+                                                            Товар добавлен в
+                                                            корзину✓
+                                                        </p>
+                                                    </div>
+                                                )}
                                                 <button
                                                     className={scss.buttonLike}
                                                     onClick={() =>
