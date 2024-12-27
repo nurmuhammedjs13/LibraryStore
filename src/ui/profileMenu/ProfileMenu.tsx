@@ -6,57 +6,98 @@ import { useHeaderStore } from "@/stores/useHeaderStore";
 import { useGetMeQuery } from "@/redux/api/auth";
 import Image from "next/image";
 import Login from "@/appPages/auth/components/pages/login";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SignUpPage from "@/appPages/auth/components/pages/SignUpPage";
-
-interface IUser {
-  username: string;
-  email: string;
-  user_image?: string;
-}
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
-  const { data, status } = useGetMeQuery();
+  const { status, data } = useGetMeQuery();
   const [isOpenAuth, setIsOpenAuth] = useState(true);
-
+  const pathname = usePathname();
+  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
+    useHeaderStore();
   const user = localStorage.getItem("user");
 
-  const displayStatus = user === null ? "rejected" : status;
+  const parsedUser = user ? JSON.parse(user) : null;
+
+  const displayStatus = parsedUser ? "fulfilled" : status;
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("user");
   };
-  useEffect(() => {
-    handleLogout();
-  }, []);
+
   return (
     <div
       className={`${scss.ProfileMenu} ${isOpenProfileMenu ? scss.active : ""}`}
       onClick={(e) => e.stopPropagation()}
     >
       <div className={scss.content}>
-        {displayStatus === "rejected" ? (
+        {displayStatus === "rejected" || !parsedUser ? (
           <>{isOpenAuth ? <Login /> : <SignUpPage />}</>
         ) : (
-          <div className={scss.user}>
-            <div className={scss.user_cont}>
-              <Image
-                src={data?.user_image || "/default-avatar.png"}
-                alt={data?.username || "User"}
-                width={50}
-                height={50}
-                className={scss.avatar}
-              />
-              <h2>{data?.username}</h2>
-              {/* <p>{data?.email}</p> Показываем email пользователя */}
+          <>
+            <div className={scss.user}>
+              <div className={scss.user_cont}>
+                <Image
+                  src={parsedUser?.user_image || "/default-avatar.png"}
+                  alt={parsedUser?.username || "User"}
+                  width={50}
+                  height={50}
+                  className={scss.avatar}
+                />
+                <h2>{parsedUser?.username}</h2>
+                <p>{parsedUser?.email}</p>
+              </div>
             </div>
-            <button className={scss.logout} onClick={handleLogout}>
+            <nav className={scss.nav}>
+              <ul>
+                {links.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      className={
+                        pathname === item.href
+                          ? `${scss.link} ${scss.active}`
+                          : `${scss.link}`
+                      }
+                      href={item.href}
+                      onClick={() => setIsOpenBurgerMenu(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className={scss.nav_right}>
+                {linksIcon.map((icon, index) => (
+                  <Link
+                    key={index}
+                    className={
+                      pathname === icon.href
+                        ? `${scss.link} ${scss.active}`
+                        : `${scss.link}`
+                    }
+                    href={icon.href}
+                    onClick={() => setIsOpenBurgerMenu(false)}
+                  >
+                    <Image src={icon.icon} alt="icon" width={35} height={35} />
+                  </Link>
+                ))}
+              </div>
+            </nav>
+            <button
+              className={`${scss.logout} ${
+                isOpenProfileMenu ? scss.active : ""
+              }`}
+              onClick={handleLogout}
+            >
               <TbLogout2 />
-              Logout
+              Выйти
             </button>
-          </div>
+          </>
         )}
       </div>
     </div>

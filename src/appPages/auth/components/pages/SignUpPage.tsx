@@ -25,7 +25,7 @@ const SignUpPage = () => {
 
       if (responseData) {
         localStorage.setItem("token", JSON.stringify(responseData));
-        route.push("/"); // Перенаправляем на главную
+        // route.push("/"); // Перенаправляем на главную
       } else if (error) {
         const err = error as { data?: { message?: string } };
         setErrorMessage(err?.data?.message || "Ошибка регистрации");
@@ -41,14 +41,14 @@ const SignUpPage = () => {
         <div className={scss.content}>
           <Image src={okuLoginLogo} alt="logo" width={100} height={21} />
           <form onSubmit={handleSubmit(onSubmit)} className={scss.form}>
-            <input
+            <input    
               placeholder="Email"
               type="email"
               {...register("email", { required: "Email обязателен" })}
             />
             <input
               placeholder="Пароль"
-              type="password"
+              type="text"
               {...register("password", { required: "Пароль обязателен" })}
             />
             <input

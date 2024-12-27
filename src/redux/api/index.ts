@@ -15,6 +15,7 @@ const baseQuery = fetchBaseQuery({
     }
     try {
       const parsedTokens = JSON.parse(tokens);
+      // console.log("🚀 ~ parsedTokens:", parsedTokens)
 
       if (parsedTokens?.access) {
         headers.set("Authorization", `Bearer ${parsedTokens.access}`);
@@ -47,6 +48,7 @@ export const api = createApi({
     "paymentdetails",
     "aboutUs",
     "auth",
+    "favorite_items"
   ],
   endpoints: () => ({}),
 });
