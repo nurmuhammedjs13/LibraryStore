@@ -2,7 +2,7 @@
 import scss from "./Card.module.scss";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useGetBooksDetailQuery } from "@/redux/api/books";
 import star from "@/assets/Icons/star.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
@@ -63,6 +63,7 @@ const CardDetail = () => {
     if (!data) {
         return <div>No data available.</div>;
     }
+
     console.log(data);
     if (isError) {
         return (
@@ -134,6 +135,7 @@ const CardDetail = () => {
                                                 Math.floor(data.average_rating)
                                             ] || star0
                                         }
+                                        className={scss.ratingStars}
                                         alt={`Rating: ${data.average_rating} stars`}
                                     />
                                     <button className={scss.bookPriceBlock}>
@@ -244,8 +246,8 @@ const CardDetail = () => {
                     </div>
                 </div>
             </section>
-            <DetailCards />
-            <CardComments />
+            {/* <DetailCards /> */}
+            {/* <CardComments /> */}
         </>
     );
 };
