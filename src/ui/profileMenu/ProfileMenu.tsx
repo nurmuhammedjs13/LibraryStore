@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { TbLogout2 } from "react-icons/tb";
 import scss from "./ProfileMenu.module.scss";
 import { useHeaderStore } from "@/stores/useHeaderStore";
@@ -18,16 +18,16 @@ const ProfileMenu = () => {
   const pathname = usePathname();
   const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
     useHeaderStore();
-  const user = localStorage.getItem("user");
 
-  const parsedUser = user ? JSON.parse(user) : null;
+  const userCookie = Cookies.get("user");
+  const parsedUser = userCookie ? JSON.parse(userCookie) : null;
 
   const displayStatus = parsedUser ? "fulfilled" : status;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
-    localStorage.removeItem("user");
+    Cookies.remove("token");
+    Cookies.remove("refresh");
+    Cookies.remove("user");
   };
 
   return (
@@ -37,18 +37,24 @@ const ProfileMenu = () => {
     >
       <div className={scss.content}>
         {displayStatus === "rejected" || !parsedUser ? (
-          <>{isOpenAuth ? <Login /> : <SignUpPage />}</>
+          <>
+            {!isOpenAuth ? (
+              <Login setIsOpenAuth={setIsOpenAuth} />
+            ) : (
+              <SignUpPage setIsOpenAuth={setIsOpenAuth} />
+            )}
+          </>
         ) : (
           <>
             <div className={scss.user}>
               <div className={scss.user_cont}>
-                <Image
+                {/* <Image
                   src={parsedUser?.user_image || "/default-avatar.png"}
                   alt={parsedUser?.username || "User"}
                   width={50}
                   height={50}
                   className={scss.avatar}
-                />
+                /> */}
                 <h2>{parsedUser?.username}</h2>
                 <p>{parsedUser?.email}</p>
               </div>
@@ -88,7 +94,8 @@ const ProfileMenu = () => {
                 ))}
               </div>
             </nav>
-            <button
+            <a
+              href=""
               className={`${scss.logout} ${
                 isOpenProfileMenu ? scss.active : ""
               }`}
@@ -96,7 +103,7 @@ const ProfileMenu = () => {
             >
               <TbLogout2 />
               Выйти
-            </button>
+            </a>
           </>
         )}
       </div>

@@ -3,26 +3,29 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
   prepareHeaders: (headers) => {
-    const tokens = localStorage.getItem("token");
+    const token = Cookies.get("token");
 
-    if (!tokens) {
-      console.warn("Token not found");
+    if (!token) {
+      console.warn("Token not found in cookies");
       return headers;
     }
-    try {
-      const parsedTokens = JSON.parse(tokens);
-      // console.log("🚀 ~ parsedTokens:", parsedTokens)
 
-      if (parsedTokens?.access) {
-        headers.set("Authorization", `Bearer ${parsedTokens.access}`);
+    try {
+      const parsedToken = JSON.parse(token);
+      if (parsedToken?.access) {
+        headers.set("Authorization", `Bearer ${parsedToken.access}`);
+      } else {
+        console.warn("Invalid token format in cookies");
       }
     } catch (error) {
-      console.error("Failed to parse tokens", error);
+      console.error("Failed to parse token from cookies", error);
     }
+
     return headers;
   },
 });
@@ -48,7 +51,7 @@ export const api = createApi({
     "paymentdetails",
     "aboutUs",
     "auth",
-    "favorite_items"
+    "favorite_items",
   ],
   endpoints: () => ({}),
 });
