@@ -36,9 +36,9 @@ const SignUpPage: FC<IIsopen> = ({ setIsOpenAuth }) => {
       //   localStorage.setItem("token", response.username);
       //   route.push("/");
       // }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Ошибка:", error);
-      setErrorMessage(error?.data?.message || "Ошибка регистрации");
+      // setErrorMessage(error || "Ошибка регистрации");
     }
   };
 
