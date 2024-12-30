@@ -34,12 +34,14 @@
       justify-content: start;
       gap: 30px;
       .text {
-        font-family: Nunito;
-        width: 100%;
-        max-width: 400px;
-        font-size: clamp(30px, 4vw, 48px);
-        color: #2652b0;
-        font-weight: 700;
+        p {
+          font-family: Nunito;
+          width: 100%;
+          max-width: 400px;
+          font-size: clamp(30px, 4vw, 48px);
+          color: #2652b0;
+          font-weight: 700;
+        }
       }
       .tools {
         a {
@@ -157,21 +159,29 @@
 
 @media (max-width: 768px) {
   .welcome {
-    // padding: 70px 0;
+    padding: 100px 0;
     margin-bottom: 0;
-
+    background: url("../../../../../../assets/welcome768.png") no-repeat center
+      center;
+    background-size: cover;
+    height: 70vh;
     .content {
+      align-items: center;
+      justify-content: center;
       gap: 30px;
       height: auto;
-
+      background: none;
       .left {
+        align-items: center;
         gap: 20px;
         .text {
-          font-size: clamp(20px, 5vw, 30px);
+          p {
+            text-align: center;
+            color: #ffffff;
+          }
         }
         .tools {
           display: flex;
-          flex-wrap: wrap;
           gap: 10px;
           a {
             padding: 5px 10px;
@@ -185,14 +195,15 @@
       }
 
       .right {
-        height: 300px;
+        display: none;
+        // height: 300px;
 
-        .book {
-          img {
-            max-width: 150px;
-            height: auto;
-          }
-        }
+        // .book {
+        //   img {
+        //     max-width: 150px;
+        //     height: auto;
+        //   }
+        // }
       }
     }
   }
@@ -207,7 +218,7 @@
         font-size: clamp(18px, 5vw, 24px);
       }
       .tools a {
-        font-size: 10px;
+        font-size: 7px;
       }
       .button button {
         font-size: 10px;
@@ -215,12 +226,13 @@
     }
 
     .right {
-      .book {
-        img {
-          max-width: 120px;
-          height: auto;
-        }
-      }
+      display: none;
+      // .book {
+      //   img {
+      //     max-width: 120px;
+      //     height: auto;
+      //   }
+      // }
     }
   }
 }
