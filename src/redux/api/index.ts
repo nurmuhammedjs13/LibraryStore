@@ -8,7 +8,8 @@ import Cookies from "js-cookie";
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
   prepareHeaders: (headers) => {
-    const token = Cookies.get("token");
+    const token = Cookies.get("t  oken");
+    // const token = localStorage.getItem("token");
 
     if (!token) {
       console.warn("Token not found in cookies");
@@ -23,7 +24,7 @@ const baseQuery = fetchBaseQuery({
         console.warn("Invalid token format in cookies");
       }
     } catch (error) {
-      console.error("Failed to parse token from cookies", error);
+      console.table(error);
     }
 
     return headers;

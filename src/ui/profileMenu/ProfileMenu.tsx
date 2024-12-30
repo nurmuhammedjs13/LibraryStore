@@ -10,7 +10,7 @@ import { useState } from "react";
 import SignUpPage from "@/appPages/auth/components/pages/SignUpPage";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-
+import userLogo from "@/assets/user.png";
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
   const { status, data } = useGetMeQuery();
@@ -20,6 +20,7 @@ const ProfileMenu = () => {
     useHeaderStore();
 
   const userCookie = Cookies.get("user");
+  // const userCookie = localStorage.getItem("user")
   const parsedUser = userCookie ? JSON.parse(userCookie) : null;
 
   const displayStatus = parsedUser ? "fulfilled" : status;
@@ -35,78 +36,78 @@ const ProfileMenu = () => {
       className={`${scss.ProfileMenu} ${isOpenProfileMenu ? scss.active : ""}`}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className={scss.content}>
-        {displayStatus === "rejected" || !parsedUser ? (
-          <>
-            {!isOpenAuth ? (
-              <Login setIsOpenAuth={setIsOpenAuth} />
-            ) : (
-              <SignUpPage setIsOpenAuth={setIsOpenAuth} />
-            )}
-          </>
-        ) : (
-          <>
-            <div className={scss.user}>
-              <div className={scss.user_cont}>
-                {/* <Image
-                  src={parsedUser?.user_image || "/default-avatar.png"}
-                  alt={parsedUser?.username || "User"}
-                  width={50}
-                  height={50}
-                  className={scss.avatar}
-                /> */}
-                <h2>{parsedUser?.username}</h2>
-                <p>{parsedUser?.email}</p>
+      {displayStatus === "rejected" || !parsedUser ? (
+        <>
+          {!isOpenAuth ? (
+            <Login setIsOpenAuth={setIsOpenAuth} />
+          ) : (
+            <SignUpPage setIsOpenAuth={setIsOpenAuth} />
+          )}
+        </>
+      ) : (
+        <div className={scss.content}>
+          <div className={scss.user}>
+            <div className={scss.user_cont}>
+              <h3>{parsedUser?.username}</h3>
+
+              <Image
+                src={parsedUser?.user_image || userLogo}
+                alt={parsedUser?.username || "User"}
+                width={70}
+                height={70}
+                className={scss.avatar}
+              />
+              <div className={scss.username}>
+                <h2>{parsedUser.username}</h2>
+                <p>{parsedUser.email}</p>
               </div>
             </div>
-            <nav className={scss.nav}>
-              <ul>
-                {links.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      className={
-                        pathname === item.href
-                          ? `${scss.link} ${scss.active}`
-                          : `${scss.link}`
-                      }
-                      href={item.href}
-                      onClick={() => setIsOpenBurgerMenu(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className={scss.nav_right}>
-                {linksIcon.map((icon, index) => (
+          </div>
+          <nav className={scss.nav}>
+            <ul>
+              {links.map((item, index) => (
+                <li key={index}>
                   <Link
-                    key={index}
                     className={
-                      pathname === icon.href
+                      pathname === item.href
                         ? `${scss.link} ${scss.active}`
                         : `${scss.link}`
                     }
-                    href={icon.href}
+                    href={item.href}
                     onClick={() => setIsOpenBurgerMenu(false)}
                   >
-                    <Image src={icon.icon} alt="icon" width={35} height={35} />
+                    {item.name}
                   </Link>
-                ))}
-              </div>
-            </nav>
-            <a
-              href=""
-              className={`${scss.logout} ${
-                isOpenProfileMenu ? scss.active : ""
-              }`}
-              onClick={handleLogout}
-            >
-              <TbLogout2 />
-              Выйти
-            </a>
-          </>
-        )}
-      </div>
+                </li>
+              ))}
+            </ul>
+            <div className={scss.nav_right}>
+              {linksIcon.map((icon, index) => (
+                <Link
+                  key={index}
+                  className={
+                    pathname === icon.href
+                      ? `${scss.link} ${scss.active}`
+                      : `${scss.link}`
+                  }
+                  href={icon.href}
+                  onClick={() => setIsOpenBurgerMenu(false)}
+                >
+                  <Image src={icon.icon} alt="icon" width={35} height={35} />
+                </Link>
+              ))}
+            </div>
+          </nav>
+          <a
+            href=""
+            className={`${scss.logout} ${isOpenProfileMenu ? scss.active : ""}`}
+            onClick={handleLogout}
+          >
+            <TbLogout2 />
+            Выйти
+          </a>
+        </div>
+      )}
     </div>
   );
 };

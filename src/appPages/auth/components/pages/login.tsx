@@ -32,6 +32,9 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
     try {
       const { data: responseData, error } = await postLogin(data);
       if (responseData) {
+        // localStorage.setItem("token", responseData.access)
+        // localStorage.setItem("refresh", responseData.refresh)
+        // localStorage.setItem("user", JSON.stringify(responseData.user))
         Cookies.set("token", responseData.access, { expires: 360 });
         Cookies.set("refresh", responseData.refresh, { expires: 360 });
         Cookies.set("user", JSON.stringify(responseData.user), {
