@@ -15,9 +15,11 @@ import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import Link from "next/link";
 import Image from "next/image";
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import { useRouter } from "next/navigation";
+import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 
-type GetBooksResponse = {
+type BookType = {
     id: number;
     book_images: Array<{
         book_images: string;
@@ -32,6 +34,39 @@ type GetBooksResponse = {
     janre: Array<{
         janre_name: string;
     }>;
+};
+
+type DiscountBookType = {
+    id: number;
+    books: {
+        book_images: Array<{
+            book_images: string;
+        }>;
+        book_name: string;
+        author: string;
+        price: number;
+        average_rating: number;
+        total_ratings: number;
+        janre: Array<{
+            janre_name: string;
+        }>;
+        description: string;
+        ratings: Array<{
+            id: number;
+            user_rating: {
+                username: string;
+            };
+            book: number;
+            aksia_books: unknown;
+            katalog_books: unknown;
+            katalog_aksia_books: unknown;
+            stars: number;
+            comment: string;
+            created_date: string;
+        }>;
+    };
+    discount: string;
+    discount_book: number;
 };
 
 const MainCatalog = () => {
@@ -54,10 +89,16 @@ const MainCatalog = () => {
     const [likedItems, setLikedItems] = useState<number[]>([]);
 
     const {
-        data: books = [] as GetBooksResponse[],
+        data: books = [] as BookType[],
         isLoading: isBooksLoading,
         isError: isBooksError,
     } = useGetBooksQuery();
+
+    const {
+        data: discountBooks = [] as DiscountBookType[],
+        isError: isDiscountError,
+        isLoading: isDiscountLoading,
+    } = useGetDiscountQuery();
 
     const {
         data: genres = [],
@@ -66,6 +107,25 @@ const MainCatalog = () => {
     } = useGetGenreQuery();
 
     const stars = [star0, star1, star2, star3, star4, star5];
+
+    const calculateDiscountedPrice = (price: number, discount: number) => {
+        return Math.round(price - (price * discount) / 100);
+    };
+
+    const transformedDiscountBooks = discountBooks.map((discountBook) => ({
+        id: discountBook.id,
+        book_images: discountBook.books.book_images,
+        book_name: discountBook.books.book_name,
+        author: discountBook.books.author,
+        price: discountBook.books.price,
+        discount: parseFloat(discountBook.discount),
+        description: discountBook.books.description,
+        average_rating: discountBook.books.average_rating,
+        total_ratings: discountBook.books.total_ratings,
+        janre: discountBook.books.janre,
+        isDiscountBook: true,
+        originalBookId: discountBook.discount_book,
+    }));
 
     const handleGenreClick = (genreName: string) => {
         setSelectedGenre(selectedGenre === genreName ? null : genreName);
@@ -81,14 +141,6 @@ const MainCatalog = () => {
         setMaxPrice(value);
     };
 
-    const handleRatingChange = () => {
-        setIsRatingChecked(!isRatingChecked);
-    };
-
-    const handleDiscountChange = () => {
-        setIsDiscountChecked(!isDiscountChecked);
-    };
-
     const toggleLike = (id: number) => {
         setLikedItems((prev) =>
             prev.includes(id)
@@ -97,26 +149,50 @@ const MainCatalog = () => {
         );
     };
 
-    const filteredBooks = books.filter((book) => {
+    const handleRatingChange = () => {
+        setIsRatingChecked(!isRatingChecked);
+    };
+
+    const handleDiscountChange = () => {
+        setIsDiscountChecked(!isDiscountChecked);
+    };
+
+    const handleBookClick = (item: any) => {
+        if (item.isDiscountBook) {
+            router.push(`/aksia/${item.id}`);
+        } else {
+            router.push(`/books/${item.id}`);
+        }
+    };
+
+    const filteredBooks = (
+        isDiscountChecked ? transformedDiscountBooks : books
+    ).filter((book) => {
         const matchesGenre =
             !selectedGenre ||
             book.janre.some((genre) => genre.janre_name === selectedGenre);
 
-        const matchesMinPrice = minPrice === "" || book.price >= minPrice;
-        const matchesMaxPrice = maxPrice === "" || book.price <= maxPrice;
+        const bookPrice = book.isDiscountBook
+            ? calculateDiscountedPrice(book.price, book.discount)
+            : book.price;
+
+        const matchesMinPrice = minPrice === "" || bookPrice >= minPrice;
+        const matchesMaxPrice = maxPrice === "" || bookPrice <= maxPrice;
 
         const matchesRating = !isRatingChecked || book.average_rating >= 4;
 
-        const matchesDiscount = !isDiscountChecked || book.discount > 0;
-
         return (
-            matchesGenre &&
-            matchesMinPrice &&
-            matchesMaxPrice &&
-            matchesRating &&
-            matchesDiscount
+            matchesGenre && matchesMinPrice && matchesMaxPrice && matchesRating
         );
     });
+
+    const resetAllFilters = () => {
+        setSelectedGenre(null);
+        setMinPrice("");
+        setMaxPrice("");
+        setIsRatingChecked(false);
+        setIsDiscountChecked(false);
+    };
 
     useEffect(() => {
         setIsClient(true);
@@ -209,115 +285,167 @@ const MainCatalog = () => {
                     </div>
                     <div className={scss.CardBlock}>
                         <div className={scss.cardsNav}>
-                            <Link href={"/"} className={scss.nav1}>
-                                Главная ›{" "}
-                            </Link>
-                            <Link href={"/catalog"} className={scss.nav2}>
-                                Каталог
-                                {selectedGenre && ` › ${selectedGenre}`}
-                            </Link>
+                            <div className={scss.navs}>
+                                <Link href={"/"} className={scss.nav1}>
+                                    Главная ›{" "}
+                                </Link>
+                                <Link href={"/catalog"} className={scss.nav2}>
+                                    Каталог
+                                    {selectedGenre && ` › ${selectedGenre}`}
+                                </Link>
+                            </div>
+                            <button
+                                onClick={resetAllFilters}
+                                className={scss.filtButton}
+                            >
+                                ✕
+                            </button>
                         </div>
                         <div className={scss.hr}></div>
                         <div className={scss.cards}>
-                            {filteredBooks.map((item) => (
-                                <div key={item.id} className={scss.card}>
-                                    <Image
-                                        onClick={() =>
-                                            router.push(`/books/${item.id}`)
-                                        }
-                                        width={150}
-                                        height={200}
-                                        quality={80}
-                                        className={scss.bookImage}
-                                        src={
-                                            item.book_images[0]?.book_images ||
-                                            ""
-                                        }
-                                        alt="Photo of book"
-                                    />
-                                    <div className={scss.cardInfo}>
-                                        <div className={scss.rating}>
-                                            <Image
-                                                width={110}
-                                                src={
-                                                    stars[
-                                                        item.average_rating
-                                                    ] || star0
-                                                }
-                                                alt={`${
-                                                    item.average_rating || 0
-                                                } rating`}
-                                            />
-                                        </div>
-                                        <h1 className={scss.name}>
-                                            {item.book_name}
-                                        </h1>
-                                        <h1 className={scss.author}>
-                                            {item.author}
-                                        </h1>
-                                        <h1 className={scss.genre}>
-                                            Жанр:
-                                            {item.janre.map((janre, i) => (
-                                                <span
-                                                    key={janre.janre_name}
-                                                    className={scss.janre}
-                                                >
-                                                    {janre.janre_name}
-                                                    {i <
-                                                        item.janre.length - 1 &&
-                                                        ", "}
-                                                </span>
-                                            ))}
-                                        </h1>
-                                        <div className={scss.confirm}>
-                                            <h1 className={scss.price}>
+                            {filteredBooks.length > 0 ? (
+                                filteredBooks.map((item) => (
+                                    <div key={item.id} className={scss.card}>
+                                        <Image
+                                            onClick={() =>
+                                                handleBookClick(item)
+                                            }
+                                            width={150}
+                                            height={200}
+                                            quality={80}
+                                            className={scss.bookImage}
+                                            src={
+                                                item.book_images[0]
+                                                    ?.book_images || defaultBook
+                                            }
+                                            alt="Photo of book"
+                                        />
+                                        <div className={scss.cardInfo}>
+                                            <div className={scss.rating}>
                                                 <Image
-                                                    width={20}
-                                                    height={20}
-                                                    src={price}
-                                                    alt="price icon"
-                                                />
-                                                {item.price} c
-                                            </h1>
-                                            <div className={scss.actions}>
-                                                <button
-                                                    onClick={handleAddToCart}
-                                                    className={scss.button}
-                                                >
-                                                    В корзину
-                                                </button>
-                                                {showModal && (
-                                                    <div className={scss.modal}>
-                                                        <p>
-                                                            Товар добавлен в
-                                                            корзину✓
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                <button
-                                                    className={scss.buttonLike}
-                                                    onClick={() =>
-                                                        toggleLike(item.id)
+                                                    width={110}
+                                                    src={
+                                                        stars[
+                                                            item.average_rating
+                                                        ] || star0
                                                     }
-                                                >
+                                                    alt={`${
+                                                        item.average_rating || 0
+                                                    } rating`}
+                                                />
+                                            </div>
+                                            <h1 className={scss.name}>
+                                                {item.book_name}
+                                            </h1>
+                                            <h1 className={scss.author}>
+                                                {item.author}
+                                            </h1>
+                                            <h1 className={scss.genre}>
+                                                Жанр:
+                                                {item.janre.map((janre, i) => (
+                                                    <span
+                                                        key={janre.janre_name}
+                                                        className={scss.janre}
+                                                    >
+                                                        {janre.janre_name}
+                                                        {i <
+                                                            item.janre.length -
+                                                                1 && ", "}
+                                                    </span>
+                                                ))}
+                                            </h1>
+                                            <div className={scss.confirm}>
+                                                <h1 className={scss.price}>
                                                     <Image
-                                                        width={24}
-                                                        height={24}
-                                                        src={
-                                                            likedItems.includes(
-                                                                item.id
-                                                            )
-                                                                ? likeActive
-                                                                : like
-                                                        }
-                                                        alt="add to like"
+                                                        width={20}
+                                                        height={20}
+                                                        src={price}
+                                                        alt="price icon"
                                                     />
-                                                </button>
+                                                    {item.isDiscountBook ? (
+                                                        <>
+                                                            {calculateDiscountedPrice(
+                                                                item.price,
+                                                                item.discount
+                                                            )}
+                                                            c
+                                                            <span
+                                                                className={
+                                                                    scss.originalPrice
+                                                                }
+                                                            >
+                                                                {item.price}c
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        `${item.price}c`
+                                                    )}
+                                                    {item.discount > 0 && (
+                                                        <span
+                                                            className={
+                                                                scss.discount
+                                                            }
+                                                        >
+                                                            -{item.discount}%
+                                                        </span>
+                                                    )}
+                                                </h1>
+                                                <div className={scss.actions}>
+                                                    <button
+                                                        onClick={
+                                                            handleAddToCart
+                                                        }
+                                                        className={scss.button}
+                                                    >
+                                                        В корзину
+                                                    </button>
+                                                    {showModal && (
+                                                        <div
+                                                            className={
+                                                                scss.modal
+                                                            }
+                                                        >
+                                                            <p>
+                                                                Товар добавлен в
+                                                                корзину✓
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                    <button
+                                                        className={
+                                                            scss.buttonLike
+                                                        }
+                                                        onClick={() =>
+                                                            toggleLike(item.id)
+                                                        }
+                                                    >
+                                                        <Image
+                                                            width={24}
+                                                            height={24}
+                                                            src={
+                                                                likedItems.includes(
+                                                                    item.id
+                                                                )
+                                                                    ? likeActive
+                                                                    : like
+                                                            }
+                                                            alt="add to like"
+                                                        />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className={scss.noResults}>
+                                    <h1 className={scss.noResultsText}>
+                                        По вашему запросу ничего не найдено.
+                                        Попробуйте изменить параметры
+                                        фильтрации.
+                                    </h1>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
                 </div>
@@ -325,5 +453,3 @@ const MainCatalog = () => {
         </section>
     );
 };
-
-export default MainCatalog;

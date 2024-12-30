@@ -16,11 +16,13 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            width: 60%;
             padding: 0 0 0 40px;
             .publicButton {
                 border: none;
+                display: flex;
+                align-self: flex-end;
                 width: 172px;
-                margin-left: 47%;
                 padding: 3px 20px;
                 border-radius: 10px;
                 font-size: 18px;
@@ -34,7 +36,6 @@
                 }
             }
             .commentInput {
-                width: 60%;
                 background: #a2baeb33;
                 font-size: 18px;
                 font-weight: 400;
@@ -49,7 +50,6 @@
                 background: #a2baeb33;
                 border-radius: 10px;
                 display: flex;
-                width: 60%;
 
                 gap: 15px;
 
@@ -103,6 +103,17 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
+        }
+    }
+}
+
+@media screen and (max-width: 730px) {
+    .CardComments {
+        .content {
+            .commentSection {
+                padding: 0;
+                width: 100%;
+            }
         }
     }
 }

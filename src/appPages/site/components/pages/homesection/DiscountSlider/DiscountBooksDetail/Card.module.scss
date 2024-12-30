@@ -38,8 +38,6 @@
 
 .CardDetail {
     background: linear-gradient(180deg, #669ceb 0%, #f8ede6 100%);
-    height: 100vh;
-    padding: 0 0 100px 0;
     .content {
         display: flex;
         flex-direction: column;
@@ -73,10 +71,13 @@
                 .cardInfo {
                     display: flex;
                     flex-direction: column;
-
                     align-items: flex-start;
                     gap: 10px;
                     justify-content: center;
+                    .ratingStars {
+                        width: 150px;
+                        height: 30px;
+                    }
                     .bookNameBlock {
                         .bookName {
                             font-size: 24px;
@@ -116,7 +117,7 @@
                     background: white;
                     display: flex;
                     flex-direction: row;
-                    gap: 3px;
+                    gap: 5px;
                     align-items: center;
                     font-size: 15px;
                     font-weight: 500;
@@ -230,6 +231,798 @@
                 font-weight: 400;
                 line-height: 21.82px;
                 text-align: left;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .CardDetail {
+        .content {
+            .detailContent {
+                .bookContent {
+                    gap: 20px;
+                    .cardInfo {
+                        gap: 6px;
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 23px;
+                            }
+                            .authorName {
+                                font-size: 17px;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        .genreBlock {
+                            font-size: 13px;
+                        }
+                    }
+                    .bookPriceBlock {
+                        font-size: 13px;
+                    }
+                    .bookActAndDesBlock {
+                        gap: 18px;
+                        .actions {
+                            gap: 10px;
+                        }
+                        .description {
+                            font-size: 17px;
+                        }
+                        .cardButton {
+                            width: 150px;
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 10px 0;
+            .ratingContent {
+                .toRating {
+                    gap: 10px;
+                    .toRatingText {
+                        font-size: 19px;
+                        .zeroStars {
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        .starButton {
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1180px) {
+    .CardDetail {
+        .content {
+            .detailContent {
+                .bookContent {
+                    gap: 20px;
+                    .cardInfo {
+                        gap: 6px;
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 22px;
+                            }
+                            .authorName {
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        .genreBlock {
+                            font-size: 12px;
+                        }
+                    }
+                    .bookPriceBlock {
+                        font-size: 12px;
+                    }
+                    .bookActAndDesBlock {
+                        gap: 18px;
+                        .actions {
+                            gap: 10px;
+                        }
+                        .description {
+                            font-size: 16px;
+                        }
+                        .cardButton {
+                            width: 150px;
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 10px 0;
+            .ratingContent {
+                .toRating {
+                    gap: 10px;
+                    .toRatingText {
+                        font-size: 18px;
+                        .zeroStars {
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        .starButton {
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1080px) {
+    .CardDetail {
+        .content {
+            .detailContent {
+                .bookContent {
+                    .cardImg {
+                        width: 200px;
+                        height: 100%;
+                    }
+                    gap: 20px;
+                    .cardInfo {
+                        gap: 4px;
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 21px;
+                            }
+                            .authorName {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        .genreBlock {
+                            font-size: 11px;
+                        }
+                    }
+                    .bookPriceBlock {
+                        font-size: 11px;
+                    }
+                    .bookActAndDesBlock {
+                        gap: 18px;
+                        .actions {
+                            gap: 10px;
+                        }
+                        .description {
+                            font-size: 15px;
+                        }
+                        .cardButton {
+                            width: 150px;
+                            font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 10px 0;
+            .ratingContent {
+                .toRating {
+                    gap: 10px;
+                    .toRatingText {
+                        font-size: 17px;
+                        .zeroStars {
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        .starButton {
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 980px) {
+    .CardDetail {
+        .content {
+            .detailContent {
+                .bookContent {
+                    .cardImg {
+                        width: 180px;
+                        height: 100%;
+                    }
+                    gap: 20px;
+                    .cardInfo {
+                        .ratingStars {
+                            width: 120px;
+                            height: 25px;
+                        }
+                        gap: 2px;
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 21px;
+                            }
+                            .authorName {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+
+                    .bookPriceBlock {
+                        padding: 4px 8px;
+                        border-radius: 8px;
+                    }
+                    .bookGenreBlock {
+                        .genreBlock {
+                            font-size: 11px;
+                        }
+                    }
+                    .bookPriceBlock {
+                        font-size: 11px;
+                    }
+                    .bookActAndDesBlock {
+                        gap: 18px;
+                        .actions {
+                            gap: 10px;
+                        }
+                        .description {
+                            font-size: 15px;
+                        }
+                        .cardButton {
+                            width: 150px;
+                            font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 10px 0;
+            .ratingContent {
+                .toRating {
+                    gap: 10px;
+                    .toRatingText {
+                        font-size: 17px;
+                        .zeroStars {
+                            .star {
+                                width: 10px;
+                                height: 10px;
+                            }
+                        }
+                    }
+                    .stars {
+                        .starButton {
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 880px) {
+    .CardDetail {
+        .content {
+            .detailContent {
+                .bookContent {
+                    gap: 15px;
+                    .cardInfo {
+                        .ratingStars {
+                            width: 110px;
+                            height: 23px;
+                        }
+                        gap: 2px;
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 21px;
+                            }
+                            .authorName {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+
+                    .bookPriceBlock {
+                        padding: 2px 8px;
+                        border-radius: 8px;
+                    }
+                    .bookGenreBlock {
+                        .genreBlock {
+                            font-size: 11px;
+                        }
+                    }
+                    .bookPriceBlock {
+                        font-size: 11px;
+                    }
+                    .bookActAndDesBlock {
+                        gap: 18px;
+                        .actions {
+                            gap: 10px;
+                        }
+                        .description {
+                            font-size: 13px;
+                        }
+                        .cardButton {
+                            width: 150px;
+                            font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 10px 0;
+            .ratingContent {
+                .toRating {
+                    gap: 10px;
+                    .toRatingText {
+                        font-size: 17px;
+                        .zeroStars {
+                            .star {
+                                width: 10px;
+                                height: 10px;
+                            }
+                        }
+                    }
+                    .stars {
+                        .starButton {
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 730px) {
+    .CardDetail {
+        background: linear-gradient(180deg, #669ceb 0%, #f8ede6 100%);
+        .content {
+            display: flex;
+            flex-direction: column;
+            .backButton {
+                padding: 20px 0;
+                width: 25px;
+                height: 100%;
+                transition: 0.3s;
+                cursor: pointer;
+                &:hover {
+                    transform: translateX(-5px);
+                }
+            }
+            .detailContent {
+                display: flex;
+                width: 100%;
+                padding: 0 0 30px 0;
+                flex-direction: column;
+                justify-content: center;
+                .bookContent {
+                    .cardImg {
+                        box-shadow: -20px 20px 20px rgba(0, 0, 0, 0.5);
+                        width: 240px;
+                        height: 100%;
+                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 40px;
+                    width: 100%;
+                    flex-direction: column;
+                    .cardInfo {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 10px;
+                        justify-content: center;
+                        .ratingStars {
+                            width: 150px;
+                            height: 30px;
+                        }
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 24px;
+                                color: #2652b0;
+                                font-weight: 600;
+                                line-height: 32.74px;
+                                text-align: left;
+                            }
+                            .authorName {
+                                font-size: 18px;
+                                color: black;
+                                font-weight: 600;
+                                line-height: 24.55px;
+                                text-align: left;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        color: white;
+                        .genreBlock {
+                            color: gray;
+                            display: flex;
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 19.1px;
+                            text-align: left;
+                        }
+                    }
+                    .bookPriceBlock {
+                        margin-bottom: 30px;
+                        border: none;
+                        padding: 6px;
+                        border-radius: 10px;
+                        background: white;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 5px;
+                        align-items: center;
+                        font-size: 15px;
+                        font-weight: 500;
+                        line-height: 20.46px;
+                        text-align: left;
+                        color: #2652b0;
+
+                        .priceIcon {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                    .bookActAndDesBlock {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        width: 100%;
+                        .actions {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 10px;
+                            align-items: center;
+                            .buttonLike {
+                                border: none;
+                                background: transparent;
+                            }
+                        }
+                        .description {
+                            font-size: 18px;
+                            color: rgb(0, 0, 0);
+                            font-weight: 400;
+                            line-height: 24.55px;
+                            text-align: left;
+                        }
+                        .cardButton {
+                            border: none;
+                            background: #2652b0;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 500;
+                            width: 100%;
+                            display: flex;
+                            cursor: pointer;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            line-height: 21.82px;
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 20px 0;
+            .hr {
+                width: 100%;
+                border-bottom: 2px solid white;
+            }
+            .ratingContent {
+                display: flex;
+                padding: 10px 0;
+                flex-direction: column;
+                gap: 5px;
+                .toRating {
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: row;
+                    .toRatingText {
+                        font-size: 20px;
+                        gap: 10px;
+                        display: flex;
+                        flex-direction: row;
+                        font-weight: 600;
+                        line-height: 27.28px;
+                        text-align: left;
+                        color: black;
+                        .zeroStars {
+                            display: flex;
+                            gap: 5px;
+                            flex-direction: row;
+                            align-items: center;
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        display: flex;
+                        gap: 5px;
+                        flex-direction: row;
+                        align-items: center;
+                        .starButton {
+                            border: none;
+                            background: none;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    color: rgb(0, 0, 0);
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 21.82px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .CardDetail {
+        background: linear-gradient(180deg, #669ceb 0%, #f8ede6 100%);
+        .content {
+            display: flex;
+            flex-direction: column;
+            .backButton {
+                padding: 20px 0;
+                width: 25px;
+                height: 100%;
+                transition: 0.3s;
+                cursor: pointer;
+                &:hover {
+                    transform: translateX(-5px);
+                }
+            }
+            .detailContent {
+                display: flex;
+                width: 100%;
+                padding: 0 0 30px 0;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                .bookContent {
+                    .cardImg {
+                        box-shadow: -20px 20px 20px rgba(0, 0, 0, 0.5);
+                        width: 180px;
+                        height: 100%;
+                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 40px;
+                    flex-direction: column;
+                    .cardInfo {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 10px;
+                        justify-content: center;
+                        .ratingStars {
+                            width: 150px;
+                            height: 30px;
+                        }
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 24px;
+                                color: #2652b0;
+                                font-weight: 600;
+                                line-height: 32.74px;
+                                text-align: left;
+                            }
+                            .authorName {
+                                font-size: 18px;
+                                color: black;
+                                font-weight: 600;
+                                line-height: 24.55px;
+                                text-align: left;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        color: white;
+                        .genreBlock {
+                            color: gray;
+                            display: flex;
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 19.1px;
+                            text-align: left;
+                        }
+                    }
+                    .bookPriceBlock {
+                        margin-bottom: 30px;
+                        border: none;
+                        padding: 6px;
+                        border-radius: 10px;
+                        background: white;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 5px;
+                        align-items: center;
+                        font-size: 15px;
+                        font-weight: 500;
+                        line-height: 20.46px;
+                        text-align: left;
+                        color: #2652b0;
+
+                        .priceIcon {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                    .bookActAndDesBlock {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        .actions {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 10px;
+                            align-items: center;
+                            .buttonLike {
+                                border: none;
+                                background: transparent;
+                            }
+                        }
+                        .description {
+                            font-size: 18px;
+                            color: rgb(0, 0, 0);
+                            font-weight: 400;
+                            line-height: 24.55px;
+                            text-align: left;
+                        }
+                        .cardButton {
+                            border: none;
+                            background: #2652b0;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 500;
+                            width: 100%;
+                            padding: 4px 0;
+                            display: flex;
+                            cursor: pointer;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            line-height: 21.82px;
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 20px 0;
+            .hr {
+                width: 100%;
+                border-bottom: 2px solid white;
+            }
+            .ratingContent {
+                display: flex;
+                padding: 10px 0;
+                flex-direction: column;
+                gap: 5px;
+                .toRating {
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: row;
+                    .toRatingText {
+                        font-size: 20px;
+                        gap: 10px;
+                        display: flex;
+                        flex-direction: row;
+                        font-weight: 600;
+                        line-height: 27.28px;
+                        text-align: left;
+                        color: black;
+                        .zeroStars {
+                            display: flex;
+                            gap: 5px;
+                            flex-direction: row;
+                            align-items: center;
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        display: flex;
+                        gap: 5px;
+                        flex-direction: row;
+                        align-items: center;
+                        .starButton {
+                            border: none;
+                            background: none;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    color: rgb(0, 0, 0);
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 21.82px;
+                    text-align: left;
+                }
             }
         }
     }

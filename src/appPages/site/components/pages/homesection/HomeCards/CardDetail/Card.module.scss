@@ -626,7 +626,7 @@
         }
     }
 }
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 730px) {
     .CardDetail {
         background: linear-gradient(180deg, #669ceb 0%, #f8ede6 100%);
         .content {
@@ -653,6 +653,208 @@
                     .cardImg {
                         box-shadow: -20px 20px 20px rgba(0, 0, 0, 0.5);
                         width: 240px;
+                        height: 100%;
+                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 40px;
+                    flex-direction: column;
+                    .cardInfo {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 10px;
+                        justify-content: center;
+                        .ratingStars {
+                            width: 150px;
+                            height: 30px;
+                        }
+                        .bookNameBlock {
+                            .bookName {
+                                font-size: 24px;
+                                color: #2652b0;
+                                font-weight: 600;
+                                line-height: 32.74px;
+                                text-align: left;
+                            }
+                            .authorName {
+                                font-size: 18px;
+                                color: black;
+                                font-weight: 600;
+                                line-height: 24.55px;
+                                text-align: left;
+                            }
+                        }
+                    }
+                    .bookGenreBlock {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        color: white;
+                        .genreBlock {
+                            color: gray;
+                            display: flex;
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 19.1px;
+                            text-align: left;
+                        }
+                    }
+                    .bookPriceBlock {
+                        margin-bottom: 30px;
+                        border: none;
+                        padding: 6px;
+                        border-radius: 10px;
+                        background: white;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 5px;
+                        align-items: center;
+                        font-size: 15px;
+                        font-weight: 500;
+                        line-height: 20.46px;
+                        text-align: left;
+                        color: #2652b0;
+
+                        .priceIcon {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                    .bookActAndDesBlock {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        .actions {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 10px;
+                            align-items: center;
+                            .buttonLike {
+                                border: none;
+                                background: transparent;
+                            }
+                        }
+                        .description {
+                            font-size: 18px;
+                            color: rgb(0, 0, 0);
+                            font-weight: 400;
+                            line-height: 24.55px;
+                            text-align: left;
+                        }
+                        .cardButton {
+                            border: none;
+                            background: #2652b0;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 500;
+                            width: 100%;
+                            padding: 4px 0;
+                            display: flex;
+                            cursor: pointer;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            line-height: 21.82px;
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+        .rating {
+            padding: 20px 0;
+            .hr {
+                width: 100%;
+                border-bottom: 2px solid white;
+            }
+            .ratingContent {
+                display: flex;
+                padding: 10px 0;
+                flex-direction: column;
+                gap: 5px;
+                .toRating {
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: row;
+                    .toRatingText {
+                        font-size: 20px;
+                        gap: 10px;
+                        display: flex;
+                        flex-direction: row;
+                        font-weight: 600;
+                        line-height: 27.28px;
+                        text-align: left;
+                        color: black;
+                        .zeroStars {
+                            display: flex;
+                            gap: 5px;
+                            flex-direction: row;
+                            align-items: center;
+                            .star {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                    .stars {
+                        display: flex;
+                        gap: 5px;
+                        flex-direction: row;
+                        align-items: center;
+                        .starButton {
+                            border: none;
+                            background: none;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            .starIcon {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .ratingUsers {
+                    color: rgb(0, 0, 0);
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 21.82px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .CardDetail {
+        background: linear-gradient(180deg, #669ceb 0%, #f8ede6 100%);
+        .content {
+            display: flex;
+            flex-direction: column;
+            .backButton {
+                padding: 20px 0;
+                width: 25px;
+                height: 100%;
+                transition: 0.3s;
+                cursor: pointer;
+                &:hover {
+                    transform: translateX(-5px);
+                }
+            }
+            .detailContent {
+                display: flex;
+                width: 100%;
+                padding: 0 0 30px 0;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                .bookContent {
+                    .cardImg {
+                        box-shadow: -20px 20px 20px rgba(0, 0, 0, 0.5);
+                        width: 180px;
                         height: 100%;
                     }
                     display: flex;

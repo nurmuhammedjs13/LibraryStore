@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import scss from "./DetailCards.module.scss";
-import img from "@/assets/image 33.png";
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import Image from "next/image";
 import star0 from "@/assets/Icons/star0.png";
 import star1 from "@/assets/Icons/star1.png";
@@ -84,7 +84,10 @@ const DetailCards = () => {
                                     height={200}
                                     quality={80}
                                     className={scss.bookImage}
-                                    src={item.book_images[0]?.book_images || ""}
+                                    src={
+                                        item.book_images[0]?.book_images ||
+                                        defaultBook
+                                    }
                                     alt="Photo of book"
                                 />
                                 <div className={scss.cardInfo}>

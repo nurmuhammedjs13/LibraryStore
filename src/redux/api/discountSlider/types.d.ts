@@ -21,9 +21,9 @@ namespace Discount {
                         username: string;
                     };
                     book: number;
-                    aksia_books: unknown; // Используем unknown вместо any
-                    katalog_books: unknown; // Используем unknown вместо any
-                    katalog_aksia_books: unknown; // Используем unknown вместо any
+                    aksia_books: unknown;
+                    katalog_books: unknown;
+                    katalog_aksia_books: unknown;
                     stars: number;
                     comment: string;
                     created_date: string;

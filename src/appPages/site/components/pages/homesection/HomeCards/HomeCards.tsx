@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetBooksQuery } from "@/redux/api/books";
 import scss from "./HomeCards.module.scss";
-
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import star0 from "@/assets/Icons/star0.png";
 import star1 from "@/assets/Icons/star1.png";
 import star2 from "@/assets/Icons/star2.png";
@@ -60,7 +60,7 @@ const BookCard: React.FC<BookCardProps> = ({
                 height={200}
                 quality={80}
                 className={scss.bookImage}
-                src={book.book_images[0]?.book_images || "/placeholder.png"}
+                src={book.book_images[0]?.book_images || defaultBook}
                 alt={`Cover of ${book.book_name}`}
                 priority
             />

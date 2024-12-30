@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import star0 from "@/assets/Icons/star0.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
-
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import star1 from "@/assets/Icons/star1.png";
 import star2 from "@/assets/Icons/star2.png";
 import star3 from "@/assets/Icons/star3.png";
@@ -34,7 +34,6 @@ const CardDetail = () => {
         setTimeout(() => setShowModal(false), 2000);
     };
 
-    // Логика для переключения состояния лайка
     const toggleLike = (bookId: number) => {
         setLikedItems((prev) =>
             prev.includes(bookId)
@@ -43,7 +42,6 @@ const CardDetail = () => {
         );
     };
 
-    // Обработка загрузки данных
     if (isLoading) {
         return (
             <div className={scss.loaderBlock}>
@@ -60,15 +58,12 @@ const CardDetail = () => {
         );
     }
 
-    // Проверяем, есть ли данные
     if (!data || !data[0]?.books) {
         return <div>Данные не найдены.</div>;
     }
 
-    // Получаем объект книги по ID из URL
     const book = data.find((data) => data.id.toString() === id);
 
-    // Если книга не найдена
     if (!book) {
         return <div>Книга не найдена.</div>;
     }
@@ -92,7 +87,7 @@ const CardDetail = () => {
                                 <Image
                                     src={
                                         book.books.book_images[0].book_images ||
-                                        ""
+                                        defaultBook
                                     }
                                     alt={`Book cover for ${book.books.book_name}`}
                                     className={scss.cardImg}

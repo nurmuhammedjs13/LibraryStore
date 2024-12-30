@@ -9,6 +9,7 @@ import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
 import { useRouter } from "next/navigation";
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 
 type BookType = {
     book_name: string;
@@ -41,8 +42,7 @@ const Slide: React.FC<SlideComponentProps> = ({
     onLikeToggle,
 }) => {
     const router = useRouter();
-    const imageUrl =
-        slide.books.book_images?.[0]?.book_images || "/default-image.jpg";
+    const imageUrl = slide.books.book_images?.[0]?.book_images || defaultBook;
 
     const handleClick = () => {
         router.push(`/aksia/${slide.id}`);

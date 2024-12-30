@@ -16,7 +16,7 @@ import star5 from "@/assets/Icons/star5.png";
 import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import back from "@/assets/Icons/Back.png";
-
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import CardComments from "./CardDetailSection/CardComments/CardComments";
 
@@ -100,7 +100,7 @@ const CardDetail = () => {
                                 <Image
                                     src={
                                         data.book_images?.[0]?.book_images ||
-                                        "/placeholder.png"
+                                        defaultBook
                                     }
                                     alt={`Book cover for ${data.book_name}`}
                                     className={scss.cardImg}
@@ -246,8 +246,8 @@ const CardDetail = () => {
                     </div>
                 </div>
             </section>
-            {/* <DetailCards /> */}
-            {/* <CardComments /> */}
+            <DetailCards />
+            <CardComments />
         </>
     );
 };

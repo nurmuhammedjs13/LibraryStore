@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import scss from "./DetailCards.module.scss";
-import img from "@/assets/image 33.png";
 import Image from "next/image";
 import star0 from "@/assets/Icons/star0.png";
 import star1 from "@/assets/Icons/star1.png";
 import price from "@/assets/Icons/HomePrice.png";
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import star2 from "@/assets/Icons/star2.png";
 import star3 from "@/assets/Icons/star3.png";
 import star4 from "@/assets/Icons/star4.png";
 import star5 from "@/assets/Icons/star5.png";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import { useGetBooksQuery } from "@/redux/api/books";
@@ -82,7 +82,10 @@ const DetailCards = () => {
                                     height={200}
                                     quality={80}
                                     className={scss.bookImage}
-                                    src={item.book_images[0]?.book_images || ""}
+                                    src={
+                                        item.book_images[0]?.book_images ||
+                                        defaultBook
+                                    }
                                     alt="Photo of book"
                                 />
                                 <div className={scss.cardInfo}>
