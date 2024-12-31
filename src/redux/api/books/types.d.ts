@@ -1,6 +1,7 @@
 namespace Books {
     type GetBooksResponse = [
         {
+            isDiscountBook: boolean;
             id: number;
             book_images: Array<{
                 book_images: string;
