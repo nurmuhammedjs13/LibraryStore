@@ -6,42 +6,43 @@ import { useHeaderStore } from "@/stores/useHeaderStore";
 import { useGetMeQuery } from "@/redux/api/auth";
 import Image from "next/image";
 import Login from "@/appPages/auth/components/pages/login";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignUpPage from "@/appPages/auth/components/pages/SignUpPage";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import userLogo from "@/assets/user.png";
+
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
-  const { status, data } = useGetMeQuery();
+  const { status, data: userData } = useGetMeQuery();
   const [isOpenAuth, setIsOpenAuth] = useState(true);
   const pathname = usePathname();
   const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
     useHeaderStore();
 
-  const userCookie = Cookies.get("user");
-  // const userCookie = localStorage.getItem("user")
-  const parsedUser = userCookie ? JSON.parse(userCookie) : null;
-
-  const displayStatus = parsedUser ? "fulfilled" : status;
-
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("refresh");
     Cookies.remove("user");
+    window.location.reload(); // Обновление после выхода
   };
+
+  const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
+  const isRejected = !tokenExists || status === "rejected"; // Определяем статус
+
+  const parsedUser = userData || null;
 
   return (
     <div
       className={`${scss.ProfileMenu} ${isOpenProfileMenu ? scss.active : ""}`}
       onClick={(e) => e.stopPropagation()}
     >
-      {displayStatus === "rejected" || !parsedUser ? (
+      {isRejected || !parsedUser ? (
         <>
-          {!isOpenAuth ? (
-            <Login setIsOpenAuth={setIsOpenAuth} />
-          ) : (
+          {isOpenAuth ? (
             <SignUpPage setIsOpenAuth={setIsOpenAuth} />
+          ) : (
+            <Login setIsOpenAuth={setIsOpenAuth} />
           )}
         </>
       ) : (
@@ -49,7 +50,6 @@ const ProfileMenu = () => {
           <div className={scss.user}>
             <div className={scss.user_cont}>
               <h3>{parsedUser?.username}</h3>
-
               <Image
                 src={parsedUser?.user_image || userLogo}
                 alt={parsedUser?.username || "User"}
@@ -58,8 +58,8 @@ const ProfileMenu = () => {
                 className={scss.avatar}
               />
               <div className={scss.username}>
-                <h2>{parsedUser.username}</h2>
-                <p>{parsedUser.email}</p>
+                <h2>{parsedUser?.username}</h2>
+                <p>{parsedUser?.email}</p>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ const ProfileMenu = () => {
                     className={
                       pathname === item.href
                         ? `${scss.link} ${scss.active}`
-                        : `${scss.link}`
+                        : scss.link
                     }
                     href={item.href}
                     onClick={() => setIsOpenBurgerMenu(false)}
@@ -88,7 +88,7 @@ const ProfileMenu = () => {
                   className={
                     pathname === icon.href
                       ? `${scss.link} ${scss.active}`
-                      : `${scss.link}`
+                      : scss.link
                   }
                   href={icon.href}
                   onClick={() => setIsOpenBurgerMenu(false)}
