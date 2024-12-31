@@ -4,6 +4,7 @@ namespace AUTH {
     user_image: string;
     username: string;
     phone_number: string;
+    email: string;
   };
   type GetRequest = void;
   type PostLoginResponse = {

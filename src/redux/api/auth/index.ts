@@ -7,6 +7,7 @@ const api = index.injectEndpoints({
         url: `user/`,
         method: "GET",
       }),
+      
       providesTags: ["auth"],
     }),
     postLogin: build.mutation<AUTH.PostLoginResponse, AUTH.PostLoginRequest>({
