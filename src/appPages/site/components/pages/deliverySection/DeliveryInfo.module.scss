@@ -1,0 +1,113 @@
+.deliveryMain {
+  margin-bottom: 6%;
+  .delivery {
+    .breatCrums {
+      margin: 5% 0;
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: rgba(0, 0, 0, 0.5);
+        font-family: Nunito;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 22px;
+        span {
+          color: rgb(38, 82, 176);
+          font-family: Nunito;
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 22px;
+        }
+      }
+    }
+    .deliveryBlock {
+      .truck {
+        position: absolute;
+        left: 10;
+      }
+      .imgBlock {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+      
+      }
+
+      h1 {
+        color: rgb(38, 82, 176);
+        font-family: Nunito;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 33px;
+        text-align: center;
+      }
+      .text {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        position: relative;
+        h2 {
+          color: rgb(38, 82, 176);
+          font-family: Nunito;
+          font-size: 20px;
+          font-weight: 500;
+          line-height: 27px;
+          margin-top: 2%;
+        }
+        p {
+          color: rgb(0, 0, 0);
+          font-family: Nunito;
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 25px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1190px) {
+  .deliveryMain {
+    margin-bottom: 20%;
+  }
+}
+
+@media (max-width: 744px) {
+  .deliveryMain {
+    .delivery {
+      .deliveryBlock {
+        .truck {
+          display: none;
+        }
+        .imgBlock {
+          .bigBox {
+            display: none;
+          }
+          .smallBox {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 744px) {
+  .deliveryMain {
+    margin-bottom: 30%;
+  }
+}
+
+@media (max-width: 548px) {
+  .deliveryMain {
+    margin-top: 10%;
+    .delivery {
+      .breatCrums {
+        display: none;
+      }
+    }
+  }
+}
