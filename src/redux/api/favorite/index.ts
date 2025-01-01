@@ -2,11 +2,27 @@ import { api as baseApi } from "..";
 
 const favoriteApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    // Получить список избранных элементов
-    getFavoriteItems: build.query({
+    getFavorite: build.query({
       query: () => ({
         url: `favorite_items/`,
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Предполагается, что токен хранится в localStorage
+        },
+      }),
+      providesTags: ["favorite_items"],
+    }),
+    // Получить список избранных элементов
+    getFavoriteItems: build.query<
+      FAVORITE.GetFavoriteItemsReaponse,
+      FAVORITE.GetFavoriteItemsRequest
+    >({
+      query: () => ({
+        url: `favorite_items/`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Предполагается, что токен хранится в localStorage
+        },
       }),
       providesTags: ["favorite_items"],
     }),
@@ -17,6 +33,9 @@ const favoriteApi = baseApi.injectEndpoints({
         url: `favorite_items/`,
         method: "POST",
         body: newItem,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Токен для авторизации
+        },
       }),
       invalidatesTags: ["favorite_items"],
     }),
@@ -26,6 +45,9 @@ const favoriteApi = baseApi.injectEndpoints({
       query: (id) => ({
         url: `favorite_items/${id}/`,
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Токен для авторизации
+        },
       }),
       invalidatesTags: ["favorite_items"],
     }),
@@ -33,6 +55,7 @@ const favoriteApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetFavoriteQuery,
   useGetFavoriteItemsQuery,
   useCreateFavoriteItemMutation,
   useDeleteFavoriteItemMutation,
