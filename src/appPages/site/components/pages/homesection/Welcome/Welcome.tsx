@@ -4,9 +4,6 @@ import scss from "./Welcome.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetOpeningQuery } from "@/redux/api/opening";
-import Login from "@/appPages/auth/components/pages/login";
-import SignUpPage from "@/appPages/auth/components/pages/SignUpPage";
-import User from "@/appPages/auth/components/pages/User";
 
 const Tools = [
   { name: "КНИГИ" },
@@ -90,9 +87,6 @@ const Welcome = () => {
           </div>
         </div>
       </div>
-      {/* <Login />
-      <SignUpPage /> */}
-      <User />
     </section>
   );
 };

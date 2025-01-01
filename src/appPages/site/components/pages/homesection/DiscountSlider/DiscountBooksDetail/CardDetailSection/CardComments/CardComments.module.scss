@@ -1,0 +1,108 @@
+.CardComments {
+    padding: 0 0 150px 0;
+    .content {
+        display: flex;
+        flex-direction: column;
+
+        .commentTitle {
+            font-size: 24px;
+            padding: 0 0 20px 0;
+            color: #2652b0;
+            font-weight: 800;
+            line-height: 32.74px;
+            text-align: left;
+        }
+        .commentSection {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 0 0 0 40px;
+            .publicButton {
+                border: none;
+                width: 172px;
+                margin-left: 47%;
+                padding: 3px 20px;
+                border-radius: 10px;
+                font-size: 18px;
+                font-weight: 400;
+                background: #2652b0;
+                line-height: 24.55px;
+                color: white;
+                transition: 0.3s;
+                &:hover {
+                    transform: translateX(-3px);
+                }
+            }
+            .commentInput {
+                width: 60%;
+                background: #a2baeb33;
+                font-size: 18px;
+                font-weight: 400;
+                outline: none;
+                border: none;
+                padding: 10px 10px 100px 10px;
+                border-radius: 10px;
+            }
+
+            .comment {
+                padding: 20px 15px;
+                background: #a2baeb33;
+                border-radius: 10px;
+                display: flex;
+                width: 60%;
+
+                gap: 15px;
+
+                .commenLeft {
+                    display: flex;
+                    align-items: start;
+                    gap: 20px;
+                    width: 100%;
+
+                    .commentInfo {
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                        gap: 10px;
+                        justify-content: space-between;
+
+                        .commentName {
+                            display: flex;
+                            flex-direction: row;
+
+                            .name {
+                                width: 100%;
+                                font-size: 18px;
+                                font-weight: 500;
+                                line-height: 24.55px;
+                                color: #2652b0;
+                            }
+                            span {
+                                width: 100%;
+                                display: flex;
+                                justify-content: flex-end;
+                                font-size: clmp(4px, 4vw, 14px);
+                                color: #000000;
+                            }
+                        }
+                        p {
+                            font-size: clamp(7px, 4vw, 16px);
+                            font-weight: 500;
+                            line-height: 20px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        button {
+            padding: 20px 40px;
+            background-color: #1b295966;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+}

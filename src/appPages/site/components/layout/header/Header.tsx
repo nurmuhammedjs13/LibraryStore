@@ -4,16 +4,12 @@ import logo from "@/assets/lofo.svg";
 import Image from "next/image";
 import SearchProducts from "@/shared/SearchProduct";
 import Basket from "@/assets/Icons/clarity_shopping-bag-line.svg";
-import profile from "@/assets/Icons/proicons_person.svg";
 import like from "@/assets/Icons/like_icon.svg";
 import Link from "next/link";
 import BurgerButton from "@/ui/burgerButton/BurgerButton";
 import BurgerMenu from "@/ui/burgerMenu/BurgerMenu";
-// import { useGetUserQuery } from "@/redux/api/auth";
 import ProfileButton from "@/ui/profileButton/ProfileButton";
 import ProfileMenu from "@/ui/profileMenu/ProfileMenu";
-import { useHeaderStore } from "@/stores/useHeaderStore";
-import { useGetMeQuery } from "@/redux/api/auth";
 import { useRouter } from "next/navigation";
 const Links = [
   {
@@ -34,14 +30,10 @@ const LinkIcons = [
     icon: Basket,
     href: "/basket",
   },
-  // {
-  //   icon: profile,
-  //   href: "/profile",
-  // },
 ];
 const Header = () => {
   const [isMobile, setIsMobile] = useState(true);
-  const nav =useRouter()
+  const nav = useRouter();
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1100);
     handleResize();
@@ -56,7 +48,13 @@ const Header = () => {
         <div className={scss.content}>
           <div className={scss.left}>
             <div className={scss.logo}>
-              <Image src={logo} alt="logo" width={100} height={20} onClick={()=>nav.push('/')} />
+              <Image
+                src={logo}
+                alt="logo"
+                width={100}
+                height={20}
+                onClick={() => nav.push("/")}
+              />
             </div>
             <div className={scss.search}>
               <SearchProducts />
@@ -84,16 +82,16 @@ const Header = () => {
                         />
                       </Link>
                     ))}
-                    <ProfileButton/>
-                    <ProfileMenu/>  
+                    <ProfileButton />
+                    <ProfileMenu />
                   </div>
                 </div>
               </div>
             </>
           ) : (
             <>
-              <BurgerButton />
-              <BurgerMenu />
+              <ProfileButton />
+              <ProfileMenu />
             </>
           )}
         </div>

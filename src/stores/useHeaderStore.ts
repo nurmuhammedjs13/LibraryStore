@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import Basket from "@/assets/Icons/clarity_shopping-bag-line.svg";
 import profile from "@/assets/Icons/proicons_person.svg";
+import like from "@/assets/Icons/like_icon.svg";
+
 interface HeaderStore {
   links: {
     name: string;
@@ -30,8 +32,16 @@ export const useHeaderStore = create<HeaderStore>((set) => ({
       name: "Каталог",
       href: "/catalog",
     },
+    {
+      name:"История Покупок",
+      href: "/history"
+    }
   ],
   linksIcon: [
+    {
+      icon: like,
+      href: "/favorite",
+    },
     {
       icon: Basket,
       href: "/basket",

@@ -1,43 +1,130 @@
+$spotify-green: #1db954;
+$spotify-black: #0a6ff3;
+$bg: #05bcf8;
+$white-color: #ffffff;
+$black-color: $spotify-black;
+$lightest-slate: #d9dadc;
+$navy-shadow: rgba(255, 255, 255, 0.7);
+$black: $spotify-black;
+$border-radius: 8px;
+$transition: 0.3s ease;
 .ProfileMenu {
   position: absolute;
   top: 70px;
-  right: 40%;
+  right: 10%;
   visibility: hidden;
   opacity: 0;
   transition: 0.4s;
   z-index: 999;
+  background: $bg;
+  @media (max-width: 350px) {
+    right: 3%;
+  }
   &.active {
     visibility: visible;
     opacity: 1;
   }
   .content {
-    padding: 15px;
+    width: 300px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    // background: #ffffff;
-    // border: 1px solid #353535;
+    justify-content: space-between;
     .user {
       .user_cont {
-        h1 {
-          //   color: white;
-        }
-        h2 {
-          //   color: white;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 35px;
         h3 {
-          //   color: white;
+          font-family: Nunito;
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 24.55px;
+          color: #fff;
+          text-align: center;
+          width: 300px;
+          padding: 10px 0 40px 0;
+          background: #a2baeb;
+          position: relative;
+        }
+        img {
+          // padding: 20px;
+          position: absolute;
+          top: 40px;
+        }
+        .username {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 10px;
+          h2 {
+            color: #fff;
+          }
+          p {
+            color: #fff;
+          }
+        }
+      }
+    }
+    .nav {
+      padding: 15px;
+      ul {
+        li {
+          .link {
+            padding: 7px 14px;
+            display: block;
+            border-radius: $border-radius;
+            color: $black;
+            transition: $transition;
+
+            &:hover {
+              background-color: $lightest-slate;
+            }
+
+            &.active {
+              background-color: $black;
+              color: $white-color;
+            }
+          }
+        }
+      }
+      .nav_right {
+        display: flex;
+        align-items: center;
+
+        .link {
+          padding: 7px 14px;
+          display: block;
+          border-radius: $border-radius;
+          color: $black;
+          transition: $transition;
+
+          &:hover {
+            background-color: $lightest-slate;
+          }
+
+          &.active {
+            background-color: $black;
+            color: $white-color;
+          }
         }
       }
     }
     .logout {
+      margin: 15px;
       padding: 7px 10px;
       display: flex;
       gap: 5px;
       justify-content: center;
       align-items: center;
-      background: #323232;
+      background: none;
       border-radius: 7px;
+      color: #fff;
+      border: none;
       svg {
         width: 20px;
         height: 20px;

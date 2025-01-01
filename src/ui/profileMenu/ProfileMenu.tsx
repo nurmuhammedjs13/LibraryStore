@@ -1,64 +1,113 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { TbLogout2 } from "react-icons/tb";
 import scss from "./ProfileMenu.module.scss";
 import { useHeaderStore } from "@/stores/useHeaderStore";
 import { useGetMeQuery } from "@/redux/api/auth";
 import Image from "next/image";
 import Login from "@/appPages/auth/components/pages/login";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import SignUpPage from "@/appPages/auth/components/pages/SignUpPage";
-
-interface IUser {
-  username: string;
-  email: string;
-  user_image?: string;
-}
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import userLogo from "@/assets/user.png";
 
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
-  const { data, status } = useGetMeQuery();
+  const { status, data: userData } = useGetMeQuery();
   const [isOpenAuth, setIsOpenAuth] = useState(true);
-
-  const user = localStorage.getItem("user");
-
-  const displayStatus = user === null ? "rejected" : status;
+  const pathname = usePathname();
+  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
+    useHeaderStore();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    Cookies.remove("token");
+    Cookies.remove("refresh");
+    Cookies.remove("user");
+    window.location.reload(); // Обновление после выхода
   };
-  useEffect(() => {
-    handleLogout();
-  }, []);
+
+  const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
+  const isRejected = !tokenExists || status === "rejected"; // Определяем статус
+
+  const parsedUser = userData || null;
+
   return (
     <div
       className={`${scss.ProfileMenu} ${isOpenProfileMenu ? scss.active : ""}`}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className={scss.content}>
-        {displayStatus === "rejected" ? (
-          <>{isOpenAuth ? <Login /> : <SignUpPage />}</>
-        ) : (
+      {isRejected || !parsedUser ? (
+        <>
+          {isOpenAuth ? (
+            <SignUpPage setIsOpenAuth={setIsOpenAuth} />
+          ) : (
+            <Login setIsOpenAuth={setIsOpenAuth} />
+          )}
+        </>
+      ) : (
+        <div className={scss.content}>
           <div className={scss.user}>
             <div className={scss.user_cont}>
+              <h3>{parsedUser?.username}</h3>
               <Image
-                src={data?.user_image || "/default-avatar.png"}
-                alt={data?.username || "User"}
-                width={50}
-                height={50}
+                src={parsedUser?.user_image || userLogo}
+                alt={parsedUser?.username || "User"}
+                width={70}
+                height={70}
                 className={scss.avatar}
               />
-              <h2>{data?.username}</h2>
-              {/* <p>{data?.email}</p> Показываем email пользователя */}
+              <div className={scss.username}>
+                <h2>{parsedUser?.username}</h2>
+                <p>{parsedUser?.email}</p>
+              </div>
             </div>
-            <button className={scss.logout} onClick={handleLogout}>
-              <TbLogout2 />
-              Logout
-            </button>
           </div>
-        )}
-      </div>
+          <nav className={scss.nav}>
+            <ul>
+              {links.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    className={
+                      pathname === item.href
+                        ? `${scss.link} ${scss.active}`
+                        : scss.link
+                    }
+                    href={item.href}
+                    onClick={() => setIsOpenBurgerMenu(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className={scss.nav_right}>
+              {linksIcon.map((icon, index) => (
+                <Link
+                  key={index}
+                  className={
+                    pathname === icon.href
+                      ? `${scss.link} ${scss.active}`
+                      : scss.link
+                  }
+                  href={icon.href}
+                  onClick={() => setIsOpenBurgerMenu(false)}
+                >
+                  <Image src={icon.icon} alt="icon" width={35} height={35} />
+                </Link>
+              ))}
+            </div>
+          </nav>
+          <a
+            href=""
+            className={`${scss.logout} ${isOpenProfileMenu ? scss.active : ""}`}
+            onClick={handleLogout}
+          >
+            <TbLogout2 />
+            Выйти
+          </a>
+        </div>
+      )}
     </div>
   );
 };
