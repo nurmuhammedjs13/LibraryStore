@@ -80,6 +80,8 @@ const ITEMS_PER_PAGE = 24;
 
 const MainCatalog: React.FC = () => {
     const [isClient, setIsClient] = useState<boolean>(false);
+    const [isFilterActive, setIsFilterActive] = useState(false);
+
     const router = useRouter();
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
@@ -209,11 +211,22 @@ const MainCatalog: React.FC = () => {
             matchesGenre && matchesMinPrice && matchesMaxPrice && matchesRating
         );
     });
-    const [isFilterActive, setIsFilterActive] = useState(false);
 
     const handleFilterClick = () => {
-        setIsFilterActive(!isFilterActive);
+        const newFilterState = !isFilterActive;
+        setIsFilterActive(newFilterState);
+
+        if (newFilterState) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
     };
+    useEffect(() => {
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
     const visibleBooks = filteredBooks.slice(0, visibleItems);
     const hasMoreBooks = visibleItems < filteredBooks.length;
 
@@ -322,6 +335,12 @@ const MainCatalog: React.FC = () => {
                                 </label>
                             </div>
                         </div>
+                        <button
+                            onClick={handleFilterClick}
+                            className={scss.searchButton}
+                        >
+                            Найти
+                        </button>
                     </div>
                     <div className={scss.CardBlock}>
                         <div className={scss.cardsNav}>
