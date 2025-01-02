@@ -30,7 +30,7 @@ const shop = [
 const info = [
   {
     name: "Доставка",
-    href: "deliver",
+    href: "/delivery",
   },
   {
     name: "О нас ",

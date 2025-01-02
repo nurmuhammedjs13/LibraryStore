@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import scss from "./DetailCards.module.scss";
 import img from "@/assets/image 33.png";

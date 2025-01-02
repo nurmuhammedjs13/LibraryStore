@@ -1,11 +1,9 @@
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetBooksQuery } from "@/redux/api/books";
 import scss from "./HomeCards.module.scss";
-
 import star0 from "@/assets/Icons/star0.png";
 import star1 from "@/assets/Icons/star1.png";
 import star2 from "@/assets/Icons/star2.png";
