@@ -1632,8 +1632,8 @@ input:checked + .slider:before {
                 }
             }
             .CardBlock {
+                padding: 25px 0 0 0;
                 padding-bottom: 120px;
-
                 .phoneTop {
                     padding: 0 25px;
                     width: 100vw;
@@ -1666,9 +1666,16 @@ input:checked + .slider:before {
                     }
                 }
                 .noResults {
-                    width: 70vw;
-                    height: 70vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    height: 100vh;
                     .noResultsText {
+                        width: 70%;
+                        text-align: center;
+                        margin-left: 20%;
+                        position: absolute;
                         font-size: 16px;
                     }
                     border: none;
