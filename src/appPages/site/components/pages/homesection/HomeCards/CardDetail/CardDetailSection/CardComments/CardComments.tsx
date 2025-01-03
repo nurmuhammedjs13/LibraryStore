@@ -1,7 +1,10 @@
 import React from "react";
 import scss from "./CardComments.module.scss";
+import { useGetRatingsQuery } from "@/redux/api/rating";
 
 const CardComments = () => {
+    const { data, isError, isLoading } = useGetRatingsQuery();
+
     const commentsList = [
         {
             id: 1,

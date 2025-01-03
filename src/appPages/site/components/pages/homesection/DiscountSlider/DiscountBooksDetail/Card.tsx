@@ -68,7 +68,6 @@ const CardDetail = () => {
         return <div>Книга не найдена.</div>;
     }
 
-    console.log(book.books.description);
     return (
         <>
             <section className={scss.CardDetail}>
