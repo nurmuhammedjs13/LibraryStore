@@ -149,9 +149,9 @@ const CardDetail = () => {
                                         {data.price} сом
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
-                                        <div className={scss.description}>
+                                        <h1 className={scss.description}>
                                             {data.description}
-                                        </div>
+                                        </h1>
                                         <div className={scss.actions}>
                                             <button
                                                 onClick={handleAddToCart}
