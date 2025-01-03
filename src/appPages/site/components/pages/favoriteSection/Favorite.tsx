@@ -12,7 +12,13 @@ const Favorite = () => {
   return (
     <section className={scss.Favorite}>
       <div className="container">
-        <div className={scss.content}></div>
+        <div className={scss.content}>
+          {data?.map((item, index) => (
+            <div key={index}>
+              <h1>{item.book_name}</h1>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
