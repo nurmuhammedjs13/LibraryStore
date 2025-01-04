@@ -50,6 +50,7 @@ const BookCard: React.FC<BookCardProps> = ({
             setShowModal(false);
         }, 2000);
     };
+    
 
     return (
         <div className={scss.card}>
