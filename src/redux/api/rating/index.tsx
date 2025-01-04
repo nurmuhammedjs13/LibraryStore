@@ -20,10 +20,6 @@ const api = index.injectEndpoints({
             query: (request) => ({
                 url: `ratings`,
                 method: "POST",
-                body: request.data,
-                headers: {
-                    "Content-Type": "application/json",
-                },
             }),
             invalidatesTags: ["ratings"],
         }),

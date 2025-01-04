@@ -13,19 +13,24 @@ const CardComments = () => {
         return `${month}.${day}.${year}`;
     };
 
-    // Функция публикации комментария
     const handlePostComment = async () => {
         if (!commentText.trim()) {
             alert("Комментарий не может быть пустым.");
             return;
         }
         try {
-            await postRating({
+            const newComment = await postRating({
                 data: { comment: commentText, stars },
             }).unwrap();
+            console.log("Комментарий успешно добавлен:", newComment);
             setCommentText("");
         } catch (error) {
             console.error("Ошибка при публикации комментария:", error);
+            if (error instanceof Error) {
+                alert(`Ошибка: ${error.message}`);
+            } else {
+                alert("Произошла неизвестная ошибка при публикации.");
+            }
         }
     };
 
