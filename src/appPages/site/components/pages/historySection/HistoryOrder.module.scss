@@ -150,3 +150,40 @@
     }
   }
 }
+
+@media (max-width: 829px) {
+  .history {
+    margin-bottom: 20%;
+    .historyBlock {
+      .mainBlock {
+        .block {
+          .dateDelivery {
+          }
+          .cardMain {
+            .cardInfo {
+              .cardImg {
+                .imageInfo {
+                  img {
+                  }
+                }
+                .textImg {
+                }
+              }
+
+              .priceBlock {
+              }
+            }
+          }
+
+          .TotalPrice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+          }
+        }
+      }
+    }
+  }
+}
