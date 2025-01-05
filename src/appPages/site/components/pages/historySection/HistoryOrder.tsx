@@ -73,6 +73,28 @@ const HistoryOrder = () => {
         },
       ],
     },
+    {
+      delivery: "Самовывоз",
+      date: "26.10.2024",
+      books: [
+        {
+          image: img1,
+          bookName: "К себе нежно",
+          author: "Ольга Примаченко",
+          price: 1200,
+          quantity: 10,
+          totalSumByQuantity: 12000,
+        },
+        {
+          image: img1,
+          bookName: "Мать верующих",
+          author: "Сулейман Ан-Надви",
+          price: 800,
+          quantity: 3,
+          totalSumByQuantity: 2400,
+        },
+      ],
+    },
   ];
   return (
     <div className={styles.history}>

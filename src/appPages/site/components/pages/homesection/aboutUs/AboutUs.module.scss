@@ -172,6 +172,7 @@
 
 @media (max-width: 1229px) {
   .aboutUs {
+    margin-bottom: 15%;
     .aboutUsBlock {
       .info {
         .aboutUsImg {
@@ -483,7 +484,7 @@
   }
 }
 
-@media (max-width: 639px) {
+@media (max-width: 785px) {
   .aboutUs {
     .aboutUsBlock {
       .info {
@@ -532,49 +533,206 @@
   }
 }
 
-@media (max-width: 531px) {
+@media (max-width: 749px) {
   .aboutUs {
+    margin-bottom: 30%;
     .aboutUsBlock {
       .info {
         .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 25%;
+            border-radius: 10px;
+          }
           .text {
+            position: relative;
             .cardText {
-              width: 30%;
-              height: auto;
-              padding: 3%;
-
+              width: 90%;
+              height: 500px;
+              border-radius: 15px;
+              background: rgba(0, 0, 0, 0.05);
               h1 {
-                font-size: 15px;
-                font-weight: 800;
-                line-height: 1.4;
-                margin-top: -10px;
+                color: rgb(38, 82, 176);
               }
+
               p {
-                width: 100%;
-                font-size: 6px;
-                font-weight: 500;
-                line-height: 10x;
+                color: black;
+                font-size: 12px;
               }
             }
-
             .AboutUsBox {
-              gap: 5px;
+              height: 50%;
+              z-index: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-left: 30px;
               .box {
-                padding: 5px 10px;
-                h4 {
-                  font-size: 8px;
-                }
+                margin-top: -5pc;
               }
             }
             .bookShop {
-              height: 75%;
-              width: 10%;
               img {
-                width: 160%;
-                height: 45%;
+                display: none;
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+
+
+@media (max-width: 623px) {
+  .aboutUs {
+    margin-bottom: 30%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 30%;
+            border-radius: 10px;
+          }
+        
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 539px) {
+  .aboutUs {
+    margin-bottom: 30%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 40%;
+            border-radius: 10px;
+          }
+          
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 473px) {
+  .aboutUs {
+    margin-bottom: 30%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 50%;
+            border-radius: 10px;
+          }
+          
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 409px) {
+  .aboutUs {
+    margin-bottom: 30%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 60%;
+            border-radius: 10px;
+          }
+          
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 359px) {
+  .aboutUs {
+    margin-bottom: 40%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 70%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 75%;
+            border-radius: 10px;
+          }
+          
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 323px) {
+  .aboutUs {
+    margin-bottom: 40%;
+    .aboutUsBlock {
+      .info {
+        .aboutUsImg {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 1%;
+          .image {
+            width: 75%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 80%;
+            border-radius: 10px;
+          }
+          .text {
+            .AboutUsBox {
+              margin-left: 25px;
+            }
+          }
+          
         }
       }
     }

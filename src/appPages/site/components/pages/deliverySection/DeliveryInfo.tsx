@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import styles from "./DeliveryInfo.module.scss";
 import Link from "next/link";
@@ -6,20 +7,35 @@ import Image from "next/image";
 import img1 from "@/assets/welcome/delivery1.png";
 import img2 from "@/assets/welcome/delivery2.png";
 import img3 from "@/assets/welcome/delivery3.png";
+import { useGetDostavkaQuery } from "@/redux/api/delivery";
 
 const DeliveryInfo = () => {
-  const delivery = [
-    {
-      nameInformation: "Упаковка",
-      textInformation:
-        "Lorem ipsum dolor sit amet consectetur. Purus eget diam fringilla diam amet urna mi vulputate id. Velit commodo curabitur bibendum posuere eget purus cum tellus egestas. A massa adipiscing gravida neque suspendisse in enim convallis pulvinar. Semper integer libero viverra lorem amet eget. Tempus lacus ultrices massa gravida diam at in. Elementum ultricies diam sollicitudin vitae arcu fermentum. Proin quis sed luctus elit non ac tortor phasellus. Amet quis velit eu fermentum aliquam urna. Sem enim amet dignissim malesuada. Facilisis magna arcu sit posuere ut dui neque aliquet. Sem lobortis quis sit porttitor. Pulvinar eget et aliquam et.Lorem ipsum dolor sit amet consectetur. Purus eget diam fringilla diam amet urna mi vulputate id. Velit commodo curabitur bibendum posuere eget purus cum tellus egestas. A massa adipiscing gravida neque suspendisse in enim convallis pulvinar. Semper integer libero viverra lorem amet eget. Tempus lacus ultrices massa gravida diam at in. Elementum ultricies diam sollicitudin vitae arcu fermentum. Proin quis sed luctus elit non ac tortor phasellus.Amet quis velit eu fermentum aliquam urna. Sem enim amet dignissim malesuada. Facilisis magna arcu sit posuere ut dui neque aliquet. Sem lobortis quis sit porttitor. Pulvinar eget et aliquam et.",
-    },
-    {
-      nameInformation: "Доставка",
-      textInformation:
-        "Lorem ipsum dolor sit amet consectetur. Purus eget diam fringilla diam amet urna mi vulputate id. Velit commodo curabitur bibendum posuere eget purus cum tellus egestas. A massa adipiscing gravida neque suspendisse in enim convallis pulvinar. Semper integer libero viverra lorem amet eget. Tempus lacus ultrices massa gravida diam at in. Elementum ultricies diam sollicitudin vitae arcu fermentum. Proin quis sed luctus elit non ac tortor phasellus. Amet quis velit eu fermentum aliquam urna. Sem enim amet dignissim malesuada. Facilisis magna arcu sit posuere ut dui neque aliquet. Sem lobortis quis sit porttitor. Pulvinar eget et aliquam et.Lorem ipsum dolor sit amet consectetur. Purus eget diam fringilla diam amet urna mi vulputate id. Velit commodo curabitur bibendum posuere eget purus cum tellus egestas. A massa adipiscing gravida neque suspendisse in enim convallis pulvinar. Semper integer libero viverra lorem amet eget. Tempus lacus ultrices massa gravida diam at in. Elementum ultricies diam sollicitudin vitae arcu fermentum. Proin quis sed luctus elit non ac tortor phasellus.Amet quis velit eu fermentum aliquam urna. Sem enim amet dignissim malesuada. Facilisis magna arcu sit posuere ut dui neque aliquet. Sem lobortis quis sit porttitor. Pulvinar eget et aliquam et.",
-    },
-  ];
+  const {
+    data,
+    isLoading: IsGlobalLoading,
+    isError: isGlobalError,
+  } = useGetDostavkaQuery();
+
+  const {
+    data: deliveryData = [],
+    isLoading: isLocalLoading,
+    isError: isLocalError,
+  } = useGetDostavkaQuery(undefined, {
+    selectFromResult: ({ data, isLoading, isError }) => ({
+      data: data || [],
+      isLoading,
+      isError,
+    }),
+  });
+
+  if (IsGlobalLoading || isLocalLoading) {
+    return <>Loading...</>;
+  }
+
+  if (isGlobalError || isLocalError) {
+    return <>Error</>;
+  }
+
   return (
     <div className={styles.deliveryMain}>
       <div className="container">
@@ -38,10 +54,10 @@ const DeliveryInfo = () => {
               <Image className={styles.bigBox} src={img2} alt="img" />
               <Image className={styles.smallBox} src={img3} alt="img" />
             </div>
-            {delivery.map((el, index) => (
+            {deliveryData.map((el, index) => (
               <div key={index} className={styles.text}>
-                <h2>{el.nameInformation}</h2>
-                <p>{el.textInformation}</p>
+                <h2>{el.name_information}</h2>
+                <p>{el.text_information}</p>
               </div>
             ))}
           </div>

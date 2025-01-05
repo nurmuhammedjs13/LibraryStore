@@ -1,31 +1,32 @@
-namespace FAVORITE {
-  type GetFavoriteResponse = [
-    id: number,
-    book_name: string,
-    author: string,
-    price: number,
-    average_rating: number,
-    book_images: Array<{ book_images: string }>,
-    janre: Array<{ janre_name: string }>
-  ];
-  type GetFavoriteRequest = void;
-  type GetFavoriteItemsReaponse = [
-    id: number,
-    book_name: string,
-    author: string,
-    price: number,
-    average_rating: number,
-    book_images: Array<{ book_images: string }>,
-    janre: Array<{ janre_name: string }>
-  ];
-  type GetFavoriteItemsRequest = void;
+ namespace FAVORITE {
+  type GetFavoriteItemsRequest =void
+  type GetFavoriteItemsReaponse ={
+    items: Array<{
+      id: number;
+      book_name: string;
+      author: string;
+      price: number;
+      janre: { janre_name: string }[];
+    }>;
+  }
 
   type CreateFavoriteItemRequest = {
-    title: string;
+    username: string;
+    book_name: string;
     author: string;
     price: number;
-    image: string;
-  };
+    janre: { janre_name: string }[];
+  }
 
-  type DeleteFavoriteItemRequest = number;
+  type CreateFavoriteItemResponse ={
+    success: boolean;
+    message: string;
+    data: {
+      id: number;
+      book_name: string;
+      author: string;
+      price: number;
+      janre: { janre_name: string }[];
+    };
+  }
 }

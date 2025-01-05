@@ -41,7 +41,6 @@ export const api = createApi({
         "paymentdetails",
         "aboutUs",
         "auth",
-        "ratings",
         "favorite_items",
     ],
     endpoints: () => ({}),
