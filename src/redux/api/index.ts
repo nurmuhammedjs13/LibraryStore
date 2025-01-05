@@ -9,6 +9,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");
+    console.log("🚀 ~ token:", token)
 
     if (!token) {
       console.warn("Token not found in cookies");
@@ -43,7 +44,7 @@ export const api = createApi({
     "paymentdetails",
     "aboutUs",
     "auth",
-    "favorite_items",
+    "favorite",
   ],
   endpoints: () => ({}),
 });

@@ -15,6 +15,7 @@ import userLogo from "@/assets/user.png";
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
   const { status, data: userData } = useGetMeQuery();
+  // console.log("🚀 ~ ProfileMenu ~ userData:", userData)
   const [isOpenAuth, setIsOpenAuth] = useState(true);
   const pathname = usePathname();
   const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
