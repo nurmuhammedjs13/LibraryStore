@@ -9,126 +9,126 @@ $black: $spotify-black;
 $border-radius: 8px;
 $transition: 0.3s ease;
 .ProfileMenu {
-  position: absolute;
-  top: 70px;
-  right: 10%;
-  visibility: hidden;
-  opacity: 0;
-  transition: 0.4s;
-  z-index: 999;
-  background: $bg;
-  @media (max-width: 350px) {
-    right: 3%;
-  }
-  &.active {
-    visibility: visible;
-    opacity: 1;
-  }
-  .content {
-    width: 300px;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    .user {
-      .user_cont {
+    position: absolute;
+    top: 70px;
+    right: 10%;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.4s;
+    z-index: 999;
+    background: $bg;
+    @media (max-width: 350px) {
+        right: 3%;
+    }
+    &.active {
+        visibility: visible;
+        opacity: 1;
+    }
+    .content {
+        width: 300px;
+        height: 500px;
         display: flex;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
-        gap: 35px;
-        h3 {
-          font-family: Nunito;
-          font-size: 18px;
-          font-weight: 500;
-          line-height: 24.55px;
-          color: #fff;
-          text-align: center;
-          width: 300px;
-          padding: 10px 0 40px 0;
-          background: #a2baeb;
-          position: relative;
-        }
-        img {
-          // padding: 20px;
-          position: absolute;
-          top: 40px;
-        }
-        .username {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-          gap: 10px;
-          h2 {
-            color: #fff;
-          }
-          p {
-            color: #fff;
-          }
-        }
-      }
-    }
-    .nav {
-      padding: 15px;
-      ul {
-        li {
-          .link {
-            padding: 7px 14px;
-            display: block;
-            border-radius: $border-radius;
-            color: $black;
-            transition: $transition;
-
-            &:hover {
-              background-color: $lightest-slate;
+        align-items: flex-start;
+        justify-content: space-between;
+        .user {
+            .user_cont {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 35px;
+                h3 {
+                    font-family: Nunito;
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 24.55px;
+                    color: #fff;
+                    text-align: center;
+                    width: 300px;
+                    padding: 10px 0 40px 0;
+                    background: #a2baeb;
+                    position: relative;
+                }
+                img {
+                    // padding: 20px;
+                    position: absolute;
+                    top: 40px;
+                }
+                .username {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 10px;
+                    h2 {
+                        color: #fff;
+                    }
+                    p {
+                        color: #fff;
+                    }
+                }
             }
+        }
+        .nav {
+            padding: 15px;
+            ul {
+                li {
+                    .link {
+                        padding: 7px 14px;
+                        display: block;
+                        border-radius: $border-radius;
+                        color: $black;
+                        transition: $transition;
 
-            &.active {
-              background-color: $black;
-              color: $white-color;
+                        &:hover {
+                            background-color: $lightest-slate;
+                        }
+
+                        &.active {
+                            background-color: $black;
+                            color: $white-color;
+                        }
+                    }
+                }
             }
-          }
+            .nav_right {
+                display: flex;
+                align-items: center;
+
+                .link {
+                    padding: 7px 14px;
+                    display: block;
+                    border-radius: $border-radius;
+                    color: $black;
+                    transition: $transition;
+
+                    &:hover {
+                        background-color: $lightest-slate;
+                    }
+
+                    &.active {
+                        background-color: $black;
+                        color: $white-color;
+                    }
+                }
+            }
         }
-      }
-      .nav_right {
-        display: flex;
-        align-items: center;
-
-        .link {
-          padding: 7px 14px;
-          display: block;
-          border-radius: $border-radius;
-          color: $black;
-          transition: $transition;
-
-          &:hover {
-            background-color: $lightest-slate;
-          }
-
-          &.active {
-            background-color: $black;
-            color: $white-color;
-          }
+        .logout {
+            margin: 15px;
+            padding: 7px 10px;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+            background: none;
+            border-radius: 7px;
+            color: #fff;
+            border: none;
+            svg {
+                width: 20px;
+                height: 20px;
+            }
         }
-      }
     }
-    .logout {
-      margin: 15px;
-      padding: 7px 10px;
-      display: flex;
-      gap: 5px;
-      justify-content: center;
-      align-items: center;
-      background: none;
-      border-radius: 7px;
-      color: #fff;
-      border: none;
-      svg {
-        width: 20px;
-        height: 20px;
-      }
-    }
-  }
 }
