@@ -8,10 +8,10 @@ interface HeaderStore {
         name: string;
         href: string;
     }[];
-    linksIcon: {
-        icon: string;
-        href: string;
-    }[];
+    // linksIcon: {
+    //     icon: string;
+    //     href: string;
+    // }[];
 
     isOpenProfileMenu: boolean;
     setIsOpenProfileMenu: (isOpenProfileMenu: boolean) => void;
@@ -34,21 +34,29 @@ export const useHeaderStore = create<HeaderStore>((set) => ({
             name: "История Покупок",
             href: "/history",
         },
-    ],
-    linksIcon: [
         {
-            icon: like,
+            name: "Избранное",
             href: "/favorite",
         },
         {
-            icon: Basket,
+            name: "Корзина",
             href: "/basket",
         },
+    ],
+    // linksIcon: [
+        // {
+        //     icon: like,
+        //     href: "/favorite",
+        // },
+        // {
+        //     icon: Basket,
+        //     href: "/basket",
+        // },
         // {
         //   icon: profile,
         //   href: "/profile",
         // },
-    ],
+    // ],
 
     // login: () => {
     //   window.open(
