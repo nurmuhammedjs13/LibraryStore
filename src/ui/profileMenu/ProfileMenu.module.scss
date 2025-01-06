@@ -1,6 +1,6 @@
 $spotify-green: #1db954;
 $spotify-black: #0a6ff3;
-$bg: #05bcf8;
+$bg: #fbfbfb;
 $white-color: #ffffff;
 $black-color: $spotify-black;
 $lightest-slate: #d9dadc;
@@ -11,15 +11,13 @@ $transition: 0.3s ease;
 .ProfileMenu {
     position: absolute;
     top: 70px;
-    right: 10%;
+    right: 2%;
     visibility: hidden;
     opacity: 0;
     transition: 0.4s;
     z-index: 999;
     background: $bg;
-    @media (max-width: 350px) {
-        right: 3%;
-    }
+
     &.active {
         visibility: visible;
         opacity: 1;
@@ -62,10 +60,10 @@ $transition: 0.3s ease;
                     flex-direction: column;
                     gap: 10px;
                     h2 {
-                        color: #fff;
+                        color: #0a6ff3;
                     }
                     p {
-                        color: #fff;
+                        color: #0a6ff3;
                     }
                 }
             }
@@ -123,7 +121,7 @@ $transition: 0.3s ease;
             align-items: center;
             background: none;
             border-radius: 7px;
-            color: #fff;
+            color: #0a6ff3;
             border: none;
             svg {
                 width: 20px;

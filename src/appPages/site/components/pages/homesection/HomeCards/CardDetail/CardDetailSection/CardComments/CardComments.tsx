@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import scss from "./CardComments.module.scss";
 import { useGetRatingsQuery, usePostRatingMutation } from "@/redux/api/rating";
 
-const CardComments = () => {
+interface CardCommentsProps {
+    id: number;
+}
+
+const CardComments: React.FC<CardCommentsProps> = ({ id }) => {
     const { data = [], isError, isLoading } = useGetRatingsQuery();
     const [postRating] = usePostRatingMutation();
     const [commentText, setCommentText] = useState<string>("");
     const [stars, setStars] = useState<number>(5);
 
     const formatDate = (dateString: string) => {
-        const [day, month, year] = dateString.split("-");
-        return `${month}.${day}.${year}`;
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year = date.getFullYear();
+
+        return `${day}.${month}.${year}`;
     };
 
     const handlePostComment = async () => {
@@ -20,7 +28,7 @@ const CardComments = () => {
         }
         try {
             const newComment = await postRating({
-                data: { comment: commentText, stars },
+                data: { comment: commentText, stars, books: id },
             }).unwrap();
             console.log("Комментарий успешно добавлен:", newComment);
             setCommentText("");
@@ -33,6 +41,8 @@ const CardComments = () => {
             }
         }
     };
+
+    const filteredComments = data.filter((comment) => comment.books === id);
 
     return (
         <section className={scss.CardComments}>
@@ -57,8 +67,10 @@ const CardComments = () => {
                             <p>Загрузка комментариев...</p>
                         ) : isError ? (
                             <p>Ошибка загрузки комментариев</p>
+                        ) : filteredComments.length === 0 ? (
+                            <p>Комментарии отсутствуют</p>
                         ) : (
-                            data.map((comment) => (
+                            filteredComments.map((comment) => (
                                 <div key={comment.id} className={scss.comment}>
                                     <div className={scss.commenLeft}>
                                         <div className={scss.commentInfo}>

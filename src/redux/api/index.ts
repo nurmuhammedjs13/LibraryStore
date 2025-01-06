@@ -22,7 +22,6 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryExtended: BaseQueryFn = async (args, api, extraOptions) => {
     const result = await baseQuery(args, api, extraOptions);
-
     return result;
 };
 
@@ -33,15 +32,18 @@ export const api = createApi({
     refetchOnReconnect: true,
     tagTypes: [
         "opening",
+        "dostavka",
         "footer",
         "books",
+        "ratings",
         "aksia",
         "booksDetail",
         "genre",
         "paymentdetails",
         "aboutUs",
+
         "auth",
-        "favorite_items",
+        "favorite",
     ],
     endpoints: () => ({}),
 });

@@ -255,7 +255,7 @@ const CardDetail = () => {
                 </div>
             </section>
             <DetailCards />
-            <CardComments />
+            <CardComments id={data.id} />
         </>
     );
 };

@@ -4,6 +4,7 @@ export interface RatingRequest {
     data: {
         comment: string;
         stars: number;
+        books: number;
     };
 }
 

@@ -1,31 +1,21 @@
 namespace RATINGS {
-    type GetRatingResponse = [
-        {
-            id: number;
-            user_rating: {
-                username: string;
-            };
-            stars: number;
-            comment: string;
-            created_date: string;
-        }
-    ];
-
-    type GetRatingResponse = GetRatingResponse[];
-    type GetRatingRequest = void;
-
-    type PostRatingRequest = {
-        comment: string;
-        stars: number;
-    };
-
-    type PostRatingResponse = {
+    export type GetRatingResponse = {
         id: number;
-        comment: string;
+        user_rating: number;
+        books: number;
         stars: number;
+        comment: string;
         created_date: string;
-        user_rating: {
-            username: string;
-        };
+    }[];
+
+    export type GetRatingRequest = void;
+
+    export type PostRatingRequest = {
+        user_rating: number;
+        books: number;
+        stars: number;
+        comment: string;
     };
+
+    export type PostRatingResponse = {};
 }

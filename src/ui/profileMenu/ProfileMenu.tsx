@@ -17,18 +17,17 @@ const ProfileMenu = () => {
     const { status, data: userData } = useGetMeQuery();
     const [isOpenAuth, setIsOpenAuth] = useState(true);
     const pathname = usePathname();
-    const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
-        useHeaderStore();
+    const { isOpenBurgerMenu, setIsOpenBurgerMenu, links } = useHeaderStore();
 
     const handleLogout = () => {
         Cookies.remove("token");
         Cookies.remove("refresh");
         Cookies.remove("user");
-        window.location.reload(); // Обновление после выхода
+        window.location.reload();
     };
 
-    const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
-    const isRejected = !tokenExists || status === "rejected"; // Определяем статус
+    const tokenExists = Boolean(Cookies.get("token"));
+    const isRejected = !tokenExists || status === "rejected";
 
     const parsedUser = userData || null;
 
@@ -85,27 +84,22 @@ const ProfileMenu = () => {
                                 </li>
                             ))}
                         </ul>
-                        <div className={scss.nav_right}>
-                            {linksIcon.map((icon, index) => (
-                                <Link
-                                    key={index}
-                                    className={
-                                        pathname === icon.href
-                                            ? `${scss.link} ${scss.active}`
-                                            : scss.link
-                                    }
-                                    href={icon.href}
-                                    onClick={() => setIsOpenBurgerMenu(false)}
-                                >
-                                    <Image
-                                        src={icon.icon}
-                                        alt="icon"
-                                        width={35}
-                                        height={35}
-                                    />
-                                </Link>
-                            ))}
-                        </div>
+                        {/* <div className={scss.nav_right}>
+              {linksIcon.map((icon, index) => (
+                <Link
+                  key={index}
+                  className={
+                    pathname === icon.href
+                      ? `${scss.link} ${scss.active}`
+                      : scss.link
+                  }
+                  href={icon.href}
+                  onClick={() => setIsOpenBurgerMenu(false)}
+                >
+                  <Image src={icon.icon} alt="icon" width={35} height={35} />
+                </Link>
+              ))}
+            </div> */}
                     </nav>
                     <a
                         href=""
