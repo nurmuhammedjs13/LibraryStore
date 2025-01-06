@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       "16.171.197.151"
     ],
   },
+
 };
 
 export default nextConfig;
