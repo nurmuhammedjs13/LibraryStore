@@ -1,32 +1,38 @@
- namespace FAVORITE {
-  type GetFavoriteItemsRequest =void
-  type GetFavoriteItemsReaponse ={
-    items: Array<{
+namespace FAVORITE {
+  type GetFavoriteItemsRequest = void ; ;
+
+  type GetFavoriteItemsReaponse = {
+    id: number;
+    user_favorite: number;
+    katalog_books_like: {
       id: number;
-      book_name: string;
-      author: string;
-      price: number;
-      janre: { janre_name: string }[];
-    }>;
-  }
+      books: {
+        book_images: {
+          book_images: string;
+        }[];
+        book_name: string;
+        author: string;
+        price: number;
+        average_rating: number;
+        total_ratings: number;
+        janre: {
+          janre_name: string;
+        }[];
+      };
+    };
+    like_favorite: boolean;
+  }[];
 
   type CreateFavoriteItemRequest = {
-    username: string;
-    book_name: string;
-    author: string;
-    price: number;
-    janre: { janre_name: string }[];
-  }
+    id?: number;
+    katalog_books_like: number;
+    like_favorite: boolean;
+    user_favorite: number;
+  };
 
-  type CreateFavoriteItemResponse ={
-    success: boolean;
-    message: string;
-    data: {
-      id: number;
-      book_name: string;
-      author: string;
-      price: number;
-      janre: { janre_name: string }[];
-    };
-  }
+  type CreateFavoriteItemResponse = {
+    katalog_books_like: number;
+    like_favorite: boolean;
+    user_favorite: number;
+  };
 }
