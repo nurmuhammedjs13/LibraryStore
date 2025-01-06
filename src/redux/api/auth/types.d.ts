@@ -1,6 +1,6 @@
 namespace AUTH {
   type GetResponse = {
-    id: number;
+    id?: number;
     user_image: string;
     username: string;
     phone_number: string;

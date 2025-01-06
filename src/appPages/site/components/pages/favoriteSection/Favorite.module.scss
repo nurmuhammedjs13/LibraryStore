@@ -1,0 +1,1516 @@
+.loaderBlock {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .loader {
+    width: 35px;
+    aspect-ratio: 1;
+    --_g: no-repeat radial-gradient(farthest-side, #3d57a4 94%, #0000);
+    background: var(--_g) 0 0, var(--_g) 100% 0, var(--_g) 100% 100%,
+      var(--_g) 0 100%;
+    background-size: 40% 40%;
+    animation: l38 0.5s infinite;
+  }
+  @keyframes l38 {
+    100% {
+      background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+    }
+  }
+}
+
+.button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.modal {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 5px;
+  z-index: 1000;
+  animation: fadeInOut 2s forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.Favorite {
+  padding: 100px 0;
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    padding: 0 0 50px 0;
+    .buttonToCatalog {
+      color: black;
+      font-size: 20px;
+      display: flex;
+      align-self: center;
+      font-weight: 600;
+      cursor: pointer;
+      line-height: 27.28px;
+      text-align: left;
+      border: none;
+      border-radius: 10px;
+      background: #0000001a;
+      padding: 10px 150px;
+      transition: 0.3s;
+      &:hover {
+        transform: translateY(-3px);
+      }
+    }
+    .title {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 54.56px;
+      text-align: left;
+      color: #2652b0;
+      text-decoration-skip-ink: none;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      column-gap: 10px;
+      row-gap: 60px;
+      padding: 10px 0 50px 0;
+      overflow-y: auto;
+
+      .card {
+        display: flex;
+        gap: 10px;
+        flex-direction: row;
+
+        .bookImage {
+          flex: 1;
+          width: 130px;
+          height: 180px;
+          border-radius: 4px;
+          position: relative;
+          box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+          transition: 0.3s;
+
+          &:hover {
+            transform: translateY(-5px);
+          }
+        }
+
+        .cardInfo {
+          flex: 1;
+          display: flex;
+          gap: 4px;
+          align-items: flex-start;
+          flex-direction: column;
+
+          .name {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 19.1px;
+            text-align: left;
+          }
+
+          .author {
+            font-size: 14px;
+            color: #00000099;
+            font-weight: 500;
+            line-height: 16.37px;
+            text-align: left;
+          }
+
+          .genre {
+            display: flex;
+            flex-wrap: wrap;
+            width: 200px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16.37px;
+            text-align: left;
+            color: #2652b0cc;
+
+            .janre {
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 16.37px;
+              text-align: left;
+              color: #2652b0cc;
+            }
+          }
+
+          .confirm {
+            display: flex;
+            gap: 7px;
+            flex-direction: column;
+            height: 100%;
+            padding: 0 0 10px 0;
+            align-items: flex-start;
+            justify-content: flex-end;
+
+            .price {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 5px;
+              padding: 5px 0 0 0;
+              font-size: 18px;
+              font-weight: 500;
+              line-height: 20.46px;
+              text-align: left;
+              color: #2652b0;
+            }
+
+            .actions {
+              display: flex;
+              flex-direction: row;
+              gap: 10px;
+
+              .button {
+                background: #2652b0;
+                font-size: 16px;
+                padding: 8px 10px;
+                color: white;
+                font-weight: 500;
+                border: none;
+                border-radius: 5px;
+                line-height: 21.82px;
+                text-align: left;
+                transition: 0.3s;
+
+                &:hover {
+                  transform: translateY(-2px);
+                }
+              }
+
+              .buttonLike {
+                border: none;
+                background: transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1440px) {
+  .Favorite {
+    .content {
+      gap: 35px;
+      padding: 0 0 45px 0;
+      .buttonToCatalog {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 40px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 55px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 9px;
+
+          .bookImage {
+            width: 125px;
+            height: 175px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 15px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 13px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 195px;
+              font-size: 13px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 13px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 6px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 17px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 9px;
+
+                .button {
+                  font-size: 15px;
+                  padding: 8px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1380px) {
+  .Favorite {
+    .content {
+      gap: 30px;
+      padding: 0 0 40px 0;
+      .buttonToCatalog {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 39px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 8px;
+
+          .bookImage {
+            width: 115px;
+            height: 165px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 14px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 190px;
+              font-size: 12px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 12px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 16px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 14px;
+                  padding: 8px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1320px) {
+  .Favorite {
+    .content {
+      gap: 30px;
+      padding: 0 0 40px 0;
+      .buttonToCatalog {
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 38px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 105px;
+            height: 155px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 13px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 180px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 15px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 13px;
+                  padding: 8px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1220px) {
+  .Favorite {
+    .content {
+      gap: 30px;
+      padding: 0 0 40px 0;
+      .buttonToCatalog {
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 37px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 90px;
+            height: 140px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 180px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 14px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 12px;
+                  padding: 5px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1180px) {
+  .Favorite {
+    padding: 0 0 50px 0;
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 50px;
+      padding: 0 0 50px 0;
+      .buttonToCatalog {
+        color: black;
+        font-size: 20px;
+        display: flex;
+        align-self: center;
+        font-weight: 600;
+        cursor: pointer;
+        line-height: 27.28px;
+        text-align: left;
+        border: none;
+        border-radius: 10px;
+        background: #0000001a;
+        padding: 10px 150px;
+        transition: 0.3s;
+        &:hover {
+          transform: translateY(-3px);
+        }
+      }
+      .title {
+        font-size: 42px;
+        font-weight: 800;
+        line-height: 54.56px;
+        text-align: left;
+        color: #2652b0;
+        text-decoration-skip-ink: none;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 60px;
+        padding: 10px 0 50px 0;
+        overflow-y: auto;
+
+        .card {
+          display: flex;
+          gap: 10px;
+          flex-direction: row;
+
+          .bookImage {
+            flex: 1;
+            width: 130px;
+            height: 200px;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+
+            &:hover {
+              transform: translateY(-5px);
+            }
+          }
+
+          .cardInfo {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+            align-items: flex-start;
+            flex-direction: column;
+
+            .name {
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 19.1px;
+              text-align: left;
+            }
+
+            .author {
+              font-size: 14px;
+              color: #00000099;
+              font-weight: 500;
+              line-height: 16.37px;
+              text-align: left;
+            }
+
+            .genre {
+              display: flex;
+              flex-wrap: wrap;
+              width: 200px;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 16.37px;
+              text-align: left;
+              color: #2652b0cc;
+
+              .janre {
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 16.37px;
+                text-align: left;
+                color: #2652b0cc;
+              }
+            }
+
+            .confirm {
+              display: flex;
+              gap: 7px;
+              flex-direction: column;
+              height: 100%;
+              padding: 0 0 10px 0;
+              align-items: flex-start;
+              justify-content: flex-end;
+
+              .price {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 0 0 0;
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 20.46px;
+                text-align: left;
+                color: #2652b0;
+              }
+
+              .actions {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+
+                .button {
+                  background: #2652b0;
+                  font-size: 16px;
+                  padding: 8px 10px;
+                  color: white;
+                  font-weight: 500;
+                  border: none;
+                  border-radius: 5px;
+                  line-height: 21.82px;
+                  text-align: left;
+                  transition: 0.3s;
+
+                  &:hover {
+                    transform: translateY(-2px);
+                  }
+                }
+
+                .buttonLike {
+                  border: none;
+                  background: transparent;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .Favorite {
+    .content {
+      gap: 30px;
+      padding: 0 0 40px 0;
+      .buttonToCatalog {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 39px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 8px;
+
+          .bookImage {
+            width: 105px;
+            height: 185px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 14px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 190px;
+              font-size: 12px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 12px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 16px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 14px;
+                  padding: 8px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .Favorite {
+    .content {
+      gap: 30px;
+      padding: 0 0 40px 0;
+      .buttonToCatalog {
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 38px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 5px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 100px;
+            height: 155px;
+          }
+
+          .cardInfo {
+            .name {
+              font-size: 13px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 180px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 15px;
+                font-weight: 500;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 13px;
+                  padding: 6px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 920px) {
+  .Favorite {
+    .content {
+      gap: 25px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 36px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 3px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 90px;
+            height: 145px;
+          }
+
+          .cardInfo {
+            .rating {
+              .ratingImage {
+                width: 100px;
+                height: 15px;
+              }
+            }
+            .name {
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 160px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 13px;
+                font-weight: 500;
+                height: 20px;
+                .priceIcon {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 12px;
+                  padding: 2px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 820px) {
+  .Favorite {
+    .content {
+      gap: 25px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 35px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 3px;
+        row-gap: 45px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 85px;
+            height: 140px;
+          }
+
+          .cardInfo {
+            .rating {
+              .ratingImage {
+                width: 100px;
+                height: 15px;
+              }
+            }
+            .name {
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 150px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 13px;
+                font-weight: 500;
+                height: 20px;
+                .priceIcon {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 12px;
+                  padding: 0px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 780px) {
+  .Favorite {
+    .content {
+      gap: 25px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 35px;
+        font-weight: 800;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 3px;
+        row-gap: 40px;
+        padding: 10px 0 50px 0;
+
+        .card {
+          gap: 7px;
+
+          .bookImage {
+            width: 80px;
+            height: 130px;
+          }
+
+          .cardInfo {
+            .rating {
+              .ratingImage {
+                width: 100px;
+                height: 15px;
+              }
+            }
+            .name {
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .author {
+              font-size: 11px;
+              font-weight: 500;
+            }
+
+            .genre {
+              width: 140px;
+              font-size: 11px;
+              font-weight: 500;
+
+              .janre {
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+
+            .confirm {
+              gap: 5px;
+              height: 100%;
+              padding: 0 0 10px 0;
+
+              .price {
+                font-size: 12px;
+                font-weight: 500;
+                height: 20px;
+                .priceIcon {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 11px;
+                  padding: 0px 10px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 730px) {
+  .Favorite {
+    padding: 0 0 50px 0;
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 50px;
+      padding: 0 0 50px 0;
+      .buttonToCatalog {
+        color: black;
+        font-size: 20px;
+        display: flex;
+        align-self: center;
+        font-weight: 600;
+        cursor: pointer;
+        line-height: 27.28px;
+        border: none;
+        border-radius: 10px;
+        background: #0000001a;
+        padding: 10px 150px;
+        transition: 0.3s;
+        &:hover {
+          transform: translateY(-3px);
+        }
+      }
+      .title {
+        font-size: 42px;
+        font-weight: 800;
+        line-height: 54.56px;
+        text-align: center;
+        color: #2652b0;
+        text-decoration-skip-ink: none;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 30px;
+        row-gap: 40px;
+        padding: 10px 20px 30px 20px;
+        overflow-y: auto;
+
+        .card {
+          display: flex;
+          box-shadow: 3px 10px 20px rgba(0, 0, 0, 0.5);
+
+          padding: 40px 0 0 0;
+          border-radius: 15px;
+          gap: 40px;
+          align-items: center;
+          background: #caf0f8b2;
+          flex-direction: column;
+
+          .bookImage {
+            flex: 1;
+            width: 130px;
+            height: 180px;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+
+            &:hover {
+              transform: translateY(-5px);
+            }
+          }
+
+          .cardInfo {
+            flex: 1;
+            background: white;
+            display: flex;
+            border-radius: 15px;
+            gap: 4px;
+            padding: 20px;
+            width: 100%;
+            align-items: flex-start;
+            flex-direction: column;
+
+            .name {
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 19.1px;
+              text-align: left;
+            }
+
+            .author {
+              font-size: 14px;
+              color: #00000099;
+              font-weight: 500;
+              line-height: 16.37px;
+              text-align: left;
+            }
+
+            .genre {
+              display: flex;
+              flex-wrap: wrap;
+              width: 100%;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 16.37px;
+              text-align: left;
+              color: #2652b0cc;
+
+              .janre {
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 16.37px;
+                text-align: left;
+                color: #2652b0cc;
+              }
+            }
+
+            .confirm {
+              display: flex;
+              gap: 7px;
+              flex-direction: column;
+              height: 100%;
+              padding: 0 0 10px 0;
+              align-items: flex-start;
+              justify-content: flex-end;
+
+              .price {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 0 0 0;
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 20.46px;
+                text-align: left;
+                color: #2652b0;
+              }
+
+              .actions {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+
+                .button {
+                  background: #2652b0;
+                  font-size: 16px;
+                  padding: 8px 10px;
+                  color: white;
+                  font-weight: 500;
+                  border: none;
+                  border-radius: 5px;
+                  line-height: 21.82px;
+                  text-align: left;
+                  transition: 0.3s;
+
+                  &:hover {
+                    transform: translateY(-2px);
+                  }
+                }
+
+                .buttonLike {
+                  border: none;
+                  background: transparent;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 580px) {
+  .button {
+    background-color: #4caf50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+
+  .modal {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    width: 300px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: fadeInOut 2s forwards;
+  }
+
+  .Favorite {
+    .content {
+      gap: 50px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 18px;
+        padding: 10px 100px;
+      }
+      .title {
+        font-size: 40px;
+      }
+
+      .cards {
+        column-gap: 30px;
+        row-gap: 40px;
+        padding: 10px 20px 30px 20px;
+        overflow-y: auto;
+
+        .card {
+          padding: 30px 0 0 0;
+          gap: 30px;
+
+          .bookImage {
+            width: 120px;
+            height: 170px;
+          }
+
+          .cardInfo {
+            padding: 16px;
+
+            .name {
+              font-size: 14px;
+            }
+
+            .author {
+              font-size: 12px;
+            }
+
+            .genre {
+              font-size: 12px;
+
+              .janre {
+                font-size: 12px;
+              }
+            }
+
+            .confirm {
+              .price {
+                font-size: 16px;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 14px;
+                  padding: 7px 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 480px) {
+  .button {
+    background-color: #4caf50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+
+  .modal {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    width: 300px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: fadeInOut 2s forwards;
+  }
+  .Favorite {
+    .content {
+      gap: 50px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 18px;
+        padding: 10px 100px;
+      }
+      .title {
+        font-size: 40px;
+      }
+
+      .cards {
+        column-gap: 20px;
+        row-gap: 30px;
+        padding: 10px 20px 30px 20px;
+
+        .card {
+          padding: 30px 0 0 0;
+          gap: 30px;
+
+          .bookImage {
+            width: 100px;
+            height: 150px;
+          }
+
+          .cardInfo {
+            padding: 16px;
+
+            .name {
+              font-size: 12px;
+            }
+
+            .author {
+              font-size: 11px;
+            }
+
+            .genre {
+              font-size: 11px;
+
+              .janre {
+                font-size: 11px;
+              }
+            }
+
+            .confirm {
+              .price {
+                font-size: 15px;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 13px;
+                  padding: 5px 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 420px) {
+  .Favorite {
+    .content {
+      gap: 50px;
+      padding: 0 0 30px 0;
+      .buttonToCatalog {
+        font-size: 18px;
+        padding: 10px 100px;
+      }
+      .title {
+        font-size: 30px;
+      }
+
+      .cards {
+        column-gap: 30px;
+        grid-template-columns: 1fr;
+        row-gap: 40px;
+        padding: 10px 25px 30px 25px;
+        overflow-y: auto;
+
+        .card {
+          padding: 30px 0 0 0;
+          gap: 30px;
+
+          .bookImage {
+            width: 140px;
+            height: 190px;
+          }
+
+          .cardInfo {
+            padding: 18px;
+
+            .name {
+              font-size: 16px;
+            }
+
+            .author {
+              font-size: 14px;
+            }
+
+            .genre {
+              font-size: 14px;
+
+              .janre {
+                font-size: 14px;
+              }
+            }
+
+            .confirm {
+              .price {
+                font-size: 18px;
+              }
+
+              .actions {
+                gap: 8px;
+
+                .button {
+                  font-size: 16px;
+                  padding: 7px 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -26,6 +26,7 @@ const Links = [
 
 const Header = () => {
   const { status, data: userData } = useGetMeQuery();
+  // console.log("🚀 ~ Header ~ userData:", userData)
   const [isMobile, setIsMobile] = useState(true);
   const nav = useRouter();
   const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
