@@ -8,7 +8,6 @@ import { useGetFooterQuery } from "@/redux/api/futer";
 import Link from "next/link";
 import { Link as ScrollLink } from "react-scroll";
 
-
 const shop = [
   {
     name: "Главная",
@@ -28,10 +27,10 @@ const shop = [
   },
 ];
 const info = [
-  {
-    name: "Доставка",
-    href: "/delivery",
-  },
+  // {
+  //   name: "Доставка",
+  //   href: "/delivery",
+  // },
   {
     name: "О нас ",
     href: "about-us",
@@ -62,6 +61,7 @@ const Footer = () => {
             </div>
             <div className={scss.info}>
               <h1>Информация</h1>
+              <Link href={"/delivery"}>Доставка</Link>
               {info.map((el, idx) => (
                 <ScrollLink
                   key={idx}
