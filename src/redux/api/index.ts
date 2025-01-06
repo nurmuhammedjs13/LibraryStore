@@ -45,6 +45,8 @@ export const api = createApi({
     "aboutUs",
     "auth",
     "favorite",
+
+    "dostavka",
   ],
   endpoints: () => ({}),
 });

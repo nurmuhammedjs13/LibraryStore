@@ -1,4 +1,4 @@
-namespace ABOUTUS {
+    namespace ABOUTUS {
     type GetAboutusReaponse = [
         {
             name_site: string;

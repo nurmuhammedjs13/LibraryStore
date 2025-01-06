@@ -150,3 +150,103 @@
     }
   }
 }
+
+@media (max-width: 829px) {
+  .history {
+    margin-bottom: 20%;
+    .historyBlock {
+      .breatCrums {
+        display: none;
+      }
+      .mainBlock {
+        margin-top: 20%;
+        .block {
+          .dateDelivery {
+            flex-direction: column;
+            text-align: center;
+          }
+          .cardMain {
+            .cardInfo {
+              display: flex;
+              flex-direction: column;
+              text-align: center;
+              .cardImg {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                .textImg {
+                  h4 {
+                    text-align: center;
+                  }
+                }
+              }
+
+              .priceBlock {
+                margin-bottom: 10px;
+              }
+            }
+          }
+
+          .TotalPrice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 551px) {
+  .history {
+    margin-bottom: 20%;
+    .historyBlock {
+      .mainBlock {
+        background-color: none;
+        padding: 40px 30px;
+        .block {
+          .dateDelivery {
+            flex-direction: column;
+            text-align: center;
+          }
+          .cardMain {
+            .cardInfo {
+              display: flex;
+              flex-direction: column;
+              text-align: center;
+              .cardImg {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                .textImg {
+                  h4 {
+                    text-align: center;
+                  }
+                }
+              }
+
+              .priceBlock {
+                margin-bottom: 10px;
+              }
+            }
+          }
+
+          .TotalPrice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
