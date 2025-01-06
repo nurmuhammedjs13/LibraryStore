@@ -15,21 +15,19 @@ import userLogo from "@/assets/user.png";
 const ProfileMenu = () => {
   const { isOpenProfileMenu } = useHeaderStore();
   const { status, data: userData } = useGetMeQuery();
-  // console.log("🚀 ~ ProfileMenu ~ userData:", userData)
   const [isOpenAuth, setIsOpenAuth] = useState(true);
   const pathname = usePathname();
-  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
-    useHeaderStore();
+  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links } = useHeaderStore();
 
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("refresh");
     Cookies.remove("user");
-    window.location.reload(); // Обновление после выхода
+    window.location.reload();
   };
 
-  const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
-  const isRejected = !tokenExists || status === "rejected"; // Определяем статус
+  const tokenExists = Boolean(Cookies.get("token"));
+  const isRejected = !tokenExists || status === "rejected";
 
   const parsedUser = userData || null;
 
@@ -82,7 +80,7 @@ const ProfileMenu = () => {
                 </li>
               ))}
             </ul>
-            <div className={scss.nav_right}>
+            {/* <div className={scss.nav_right}>
               {linksIcon.map((icon, index) => (
                 <Link
                   key={index}
@@ -97,7 +95,7 @@ const ProfileMenu = () => {
                   <Image src={icon.icon} alt="icon" width={35} height={35} />
                 </Link>
               ))}
-            </div>
+            </div> */}
           </nav>
           <a
             href=""
