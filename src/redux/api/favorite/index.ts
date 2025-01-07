@@ -17,7 +17,7 @@ const api = index.injectEndpoints({
           katalog_books_like: katalog_books_like,
           like_favorite: true,
         };
-        console.log("Запрос к API addFavoriteItem:", body);
+        // console.log("Запрос к API addFavoriteItem:", body);
         return {
           url: "create_favorite_items/",
           method: "POST",

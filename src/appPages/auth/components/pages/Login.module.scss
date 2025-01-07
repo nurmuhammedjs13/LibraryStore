@@ -12,27 +12,57 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    img {
-    }
+
     .form {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       gap: 20px;
+
       input {
         width: 100%;
         padding: 10px 150px 10px 10px;
         border-radius: 10px;
         border: none;
+        font-size: 16px;
+        outline: none;
       }
+
+      .passwordWrapper {
+        position: relative;
+        width: 100%;
+
+        input {
+          padding-right: 50px; /* Учитываем кнопку для переключения пароля */
+        }
+
+        .togglePassword {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #007bff;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
       button {
         background: #2652b0;
-        color: #fff ;
+        color: #fff;
         border: none;
         padding: 10px 20px;
         border-radius: 10px;
         cursor: pointer;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: #1e4291;
+        }
       }
     }
   }
