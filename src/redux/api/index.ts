@@ -9,19 +9,18 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");
-    console.log("🚀 ~ token:", token)
-
+    const refreshToken = Cookies.get("refresh");
     if (!token) {
-      console.warn("Token not found in cookies");
+      headers.set("Authorization", `Bearer ${refreshToken}`);
+
+      // console.warn("Token not found in cookies");
       return headers;
     }
 
-    // Устанавливаем токен в заголовки
     headers.set("Authorization", `Bearer ${token}`);
     return headers;
   },
 });
-
 
 const baseQueryExtended: BaseQueryFn = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);
