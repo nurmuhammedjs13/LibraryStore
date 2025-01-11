@@ -27,17 +27,18 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
   } = useForm<ILogin>();
   const [postLogin] = usePostLoginMutation();
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false); 
-
+  const [showPassword, setShowPassword] = useState(false);
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
     try {
       const { data: responseData, error } = await postLogin(data);
+
       if (responseData) {
         Cookies.set("token", responseData.access, { expires: 360 });
         Cookies.set("refresh", responseData.refresh, { expires: 360 });
         Cookies.set("user", JSON.stringify(responseData.user), {
           expires: 360,
         });
+        window.location.reload()
       } else {
         setLoginError("Ошибка входа, попробуйте еще раз.");
         console.error("Ошибка:", error);
@@ -75,7 +76,7 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
                 className={scss.togglePassword}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <FaRegEye /> : <FaRegEyeSlash />} 
+                {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </button>
             </div>
             {errors.password && (

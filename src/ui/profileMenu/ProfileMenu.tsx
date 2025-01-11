@@ -13,11 +13,13 @@ import Link from "next/link";
 import userLogo from "@/assets/user.png";
 
 const ProfileMenu = () => {
-  const { isOpenProfileMenu } = useHeaderStore();
+  const { isOpenProfileMenu, setIsOpenProfileMenu, links } = useHeaderStore();
   const { status, data: userData } = useGetMeQuery();
+  console.log("🚀 ~ ProfileMenu ~ userData:", userData);
+  console.log("🚀 ~ ProfileMenu ~ status:", status);
   const [isOpenAuth, setIsOpenAuth] = useState(true);
   const pathname = usePathname();
-  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links } = useHeaderStore();
+  // const { isOpenBurgerMenu, setIsOpenBurgerMenu, links } = useHeaderStore();
 
   const handleLogout = () => {
     Cookies.remove("token");
@@ -33,7 +35,11 @@ const ProfileMenu = () => {
 
   return (
     <div
-      className={`${scss.ProfileMenu} ${isOpenProfileMenu ? scss.active : ""}`}
+      className={
+        isOpenProfileMenu
+          ? `${scss.ProfileMenu} ${scss.active}`
+          : `${scss.ProfileMenu}`
+      }
       onClick={(e) => e.stopPropagation()}
     >
       {isRejected || !parsedUser ? (
@@ -70,10 +76,10 @@ const ProfileMenu = () => {
                     className={
                       pathname === item.href
                         ? `${scss.link} ${scss.active}`
-                        : scss.link
+                        : `${scss.link}`
                     }
                     href={item.href}
-                    onClick={() => setIsOpenBurgerMenu(false)}
+                    onClick={() => setIsOpenProfileMenu(false)}
                   >
                     {item.name}
                   </Link>

@@ -26,11 +26,10 @@ const Links = [
 
 const Header = () => {
   const { status, data: userData } = useGetMeQuery();
-  // console.log("🚀 ~ Header ~ userData:", userData)
   const [isMobile, setIsMobile] = useState(true);
   const nav = useRouter();
-  const tokenExists = Boolean(Cookies.get("token")); // Проверяем наличие токена
-  const isRejected = !tokenExists || status === "rejected"; // Определяем статус
+  const tokenExists = Boolean(Cookies.get("token"));
+  const isRejected = !tokenExists || status === "rejected";
 
   const parsedUser = userData || null;
   const { isOpenProfileMenu, setIsOpenProfileMenu } = useHeaderStore();
