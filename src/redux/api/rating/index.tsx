@@ -1,26 +1,22 @@
 import { api as index } from "..";
 
-export interface RatingRequest {
-    data: {
-        comment: string;
-        stars: number;
-        books: number;
-    };
-}
-
 const api = index.injectEndpoints({
     endpoints: (build) => ({
         getRatings: build.query<RATINGS.GetRatingResponse, void>({
             query: () => ({
-                url: `ratings`,
+                url: `ratings-list/`,
                 method: "GET",
             }),
             providesTags: ["ratings"],
         }),
-        postRating: build.mutation<RATINGS.PostRatingResponse, RatingRequest>({
+        postRating: build.mutation<
+            RATINGS.PostRatingResponse,
+            RATINGS.PostRatingRequest
+        >({
             query: (request) => ({
-                url: `ratings`,
+                url: `ratings-post`,
                 method: "POST",
+                body: request,
             }),
             invalidatesTags: ["ratings"],
         }),

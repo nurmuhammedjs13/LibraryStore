@@ -1,7 +1,7 @@
 namespace RATINGS {
     export type GetRatingResponse = {
         id: number;
-        user_rating: number;
+        user_rating: { username: string };
         books: number;
         stars: number;
         comment: string;
@@ -11,11 +11,16 @@ namespace RATINGS {
     export type GetRatingRequest = void;
 
     export type PostRatingRequest = {
-        user_rating: number;
+        user_rating: { username: string };
         books: number;
         stars: number;
         comment: string;
     };
 
-    export type PostRatingResponse = {};
+    export type PostRatingResponse = {
+        user_rating: { username: string };
+        books: number;
+        stars: number;
+        comment: string;
+    };
 }
