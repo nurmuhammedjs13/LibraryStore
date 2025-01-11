@@ -5,15 +5,14 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
+
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API}/`,
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");
-    const refreshToken = Cookies.get("refresh");
     if (!token) {
-      headers.set("Authorization", `Bearer ${refreshToken}`);
+      console.warn("Token not found in cookies");
 
-      // console.warn("Token not found in cookies");
       return headers;
     }
 

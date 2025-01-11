@@ -9,7 +9,7 @@ import ProfileMenu from "../profileMenu/ProfileMenu";
 
 const BurgerMenu = () => {
   const pathname = usePathname();
-  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links, linksIcon } =
+  const { isOpenBurgerMenu, setIsOpenBurgerMenu, links,  } =
     useHeaderStore();
 
   return (
@@ -44,7 +44,7 @@ const BurgerMenu = () => {
                 </li>
               ))}
             </ul>
-            <div className={scss.nav_right}>
+            {/* <div className={scss.nav_right}>
               {linksIcon.map((icon, index) => (
                 <Link
                   key={index}
@@ -61,7 +61,7 @@ const BurgerMenu = () => {
               ))}
               <ProfileButton />
               <ProfileMenu />
-            </div>
+            </div> */}
           </nav>
         </div>
       </div>

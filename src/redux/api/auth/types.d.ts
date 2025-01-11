@@ -23,45 +23,18 @@ namespace AUTH {
     username: string;
     email: string;
     date_registered: string;
-    // message: string;
-    // accessToken: string;
-    // accessTokenExpiration: number;
-    // refreshToken: string;
   };
   type PostRegistrationRequest = {
     username: string;
     email: string;
     password: string;
   };
-  //   type PatchRefreshResponse = {
-  //     accessToken: string;
-  //     accessTokenExpiration: number;
-  //     refreshToken: string;
-  //   };
-  //   type PatchRefreshRequest = {
-  //     refreshToken: string;
-  //   };
-
-  //   type PostForgotPasswordResponse = {
-  //     message: string;
-  //   };
-  //   type PostForgotPasswordRequest = {
-  //     email: string;
-  //     frontEndUrl: string;
-  //   };
-
-  //   type PatchResetPasswordResponse = {
-  //     message: string;
-  //   };
-  //   type PatchResetPasswordRequest = {
-  //     token: string;
-  //     newPassword: string;
-  //   };
-  //   type PostLogoutResponse = {
-  //     message: string;
-  //   };
-  //   type PostLogoutRequest = {
-  //     email: string;
-  //     frontEndUrl: string;
-  //   };
+  type PostRefreshResponse = {
+    access: string;
+    refresh: string;
+  };
+  type PostRefreshRequest = {
+    refresh: string;
+    // refreshToken?: string;
+  };
 }
