@@ -23,7 +23,6 @@ export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
     }
 
     try {
-      // Декодируем токен
       const { exp } = JSON.parse(atob(token.split(".")[1]));
       const accessTokenExpiration = exp * 1000;
 
@@ -49,7 +48,6 @@ export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Ошибка обновления токена:", error);
 
-      // Удаляем токены при ошибке
       Cookies.remove("token");
       Cookies.remove("refresh");
     }
