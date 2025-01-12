@@ -33,18 +33,15 @@ export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
       );
 
       if (accessTokenExpiration < new Date().getTime()) {
-        // Удаляем старые токены
         Cookies.remove("token");
 
-        // Отправляем запрос на обновление токенов
         const { data: responseData } = await refreshTokenMutation({
           refresh: refreshToken,
         });
 
-        // Сохраняем новые токены
         Cookies.set("token", responseData?.access as string);
         Cookies.set("refresh", responseData?.refresh as string);
-
+        window.location.reload();
         console.log("Токены обновлены.");
       } else {
         console.log("Токен еще действителен");
