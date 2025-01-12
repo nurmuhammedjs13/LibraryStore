@@ -49,7 +49,6 @@ const CardDetail = () => {
     const bookId = typeof id === "string" ? parseInt(id, 10) : undefined;
 
     const [likedItems, setLikedItems] = useState<number[]>([]);
-    const [userRating, setUserRating] = useState<number>(0);
 
     const { data, isLoading, isError } = useGetBooksDetailQuery(bookId ?? -1);
     const {
@@ -208,44 +207,6 @@ const CardDetail = () => {
                         <div className={scss.rating}>
                             <div className={scss.hr} />
                             <div className={scss.ratingContent}>
-                                <div className={scss.toRating}>
-                                    <h2 className={scss.toRatingText}>
-                                        Оценить:
-                                        <div className={scss.stars}>
-                                            {[1, 2, 3, 4, 5].map(
-                                                (starNumber) => (
-                                                    <button
-                                                        key={starNumber}
-                                                        className={
-                                                            scss.starButton
-                                                        }
-                                                        onClick={() =>
-                                                            setUserRating(
-                                                                starNumber
-                                                            )
-                                                        }
-                                                        aria-label={`Rate ${starNumber} stars`}
-                                                    >
-                                                        <Image
-                                                            width={100}
-                                                            height={100}
-                                                            className={
-                                                                scss.starIcon
-                                                            }
-                                                            src={
-                                                                starNumber <=
-                                                                userRating
-                                                                    ? activeStar
-                                                                    : star
-                                                            }
-                                                            alt={`${starNumber} stars`}
-                                                        />
-                                                    </button>
-                                                )
-                                            )}
-                                        </div>
-                                    </h2>
-                                </div>
                                 <p className={scss.ratingUsers}>
                                     Оценок: {data.total_ratings}
                                 </p>
