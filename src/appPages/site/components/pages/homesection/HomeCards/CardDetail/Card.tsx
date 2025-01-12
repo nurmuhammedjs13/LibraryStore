@@ -19,6 +19,7 @@ import back from "@/assets/Icons/Back.png";
 import defaultBook from "@/assets/Icons/defaultBook.webp";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import CardComments from "./CardDetailSection/CardComments/CardComments";
+import { useGetMeQuery } from "@/redux/api/auth";
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 
@@ -51,6 +52,13 @@ const CardDetail = () => {
     const [userRating, setUserRating] = useState<number>(0);
 
     const { data, isLoading, isError } = useGetBooksDetailQuery(bookId ?? -1);
+    const {
+        data: account,
+        isLoading: accLoading,
+        isError: accError,
+    } = useGetMeQuery();
+
+    console.log(account);
 
     if (isLoading) {
         return (
@@ -149,9 +157,9 @@ const CardDetail = () => {
                                         {data.price} сом
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
-                                        <div className={scss.description}>
+                                        <h1 className={scss.description}>
                                             {data.description}
-                                        </div>
+                                        </h1>
                                         <div className={scss.actions}>
                                             <button
                                                 onClick={handleAddToCart}
@@ -247,7 +255,7 @@ const CardDetail = () => {
                 </div>
             </section>
             <DetailCards />
-            <CardComments />
+            <CardComments id={data.id} />
         </>
     );
 };
