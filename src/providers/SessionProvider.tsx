@@ -26,11 +26,6 @@ export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
       const { exp } = JSON.parse(atob(token.split(".")[1]));
       const accessTokenExpiration = exp * 1000;
 
-      console.log(
-        "🚀 ~ handleRefreshToken ~ accessTokenExpiration:",
-        accessTokenExpiration
-      );
-
       if (accessTokenExpiration < new Date().getTime()) {
         Cookies.remove("token");
 

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -48,7 +47,8 @@ const HomeCards: React.FC = () => {
   const [cartModal, setCartModal] = useState<boolean>(false);
 
   const { data: books = [], isLoading: isBooksLoading } = useGetBooksQuery();
-  const { data: favoriteData = [], isLoading: isFavLoading } = useGetFavoriteQuery();
+  const { data: favoriteData = [], isLoading: isFavLoading } =
+    useGetFavoriteQuery();
 
   const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
   const userId = meData?.id || null;
