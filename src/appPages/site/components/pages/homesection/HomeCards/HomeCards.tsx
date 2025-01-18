@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetBooksQuery } from "@/redux/api/books";
 import {
-  useGetFavoriteQuery,
-  useAddFavoriteItemMutation,
-  useRemoveFavoriteItemMutation,
+  useGetKatFavoriteQuery,
+  useAddKatFavoriteItemMutation,
+  useRemoveKatFavoriteItemMutation,
 } from "@/redux/api/favorite";
 import { useGetMeQuery } from "@/redux/api/auth";
 import scss from "./HomeCards.module.scss";
@@ -35,11 +35,6 @@ interface Book {
   book_images: { book_images: string }[];
 }
 
-interface FavoriteItem {
-  id: number;
-  user_favorite: number;
-  katalog_books_like: number;
-}
 
 const HomeCards: React.FC = () => {
   const router = useRouter();
@@ -48,13 +43,13 @@ const HomeCards: React.FC = () => {
 
   const { data: books = [], isLoading: isBooksLoading } = useGetBooksQuery();
   const { data: favoriteData = [], isLoading: isFavLoading } =
-    useGetFavoriteQuery();
+    useGetKatFavoriteQuery();
 
   const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
   const userId = meData?.id || null;
 
-  const [addFavorite] = useAddFavoriteItemMutation();
-  const [removeFavorite] = useRemoveFavoriteItemMutation();
+  const [addFavorite] = useAddKatFavoriteItemMutation();
+  const [removeFavorite] = useRemoveKatFavoriteItemMutation();
 
   const toggleLike = async (bookId: number) => {
     if (!userId) {
@@ -63,20 +58,20 @@ const HomeCards: React.FC = () => {
     }
 
     const isLiked = favoriteData.some(
-      (item) => item.katalog_books_like.id === bookId
+      (item) => item.books_like.id === bookId
     );
 
     try {
       if (isLiked) {
         const favoriteItem = favoriteData.find(
-          (item) => item.katalog_books_like.id === bookId
+          (item) => item.books_like.id === bookId
         );
         if (favoriteItem?.id) {
           await removeFavorite(favoriteItem.id).unwrap();
         }
       } else {
         await addFavorite({
-          katalog_books_like: bookId,
+          books_like: bookId,
           user_favorite: userId,
           like_favorite: true,
         }).unwrap();
@@ -171,7 +166,7 @@ const HomeCards: React.FC = () => {
                         onClick={() => toggleLike(book.id)}
                         aria-label={
                           favoriteData.some(
-                            (item) => item.katalog_books_like.id === book.id
+                            (item) => item.books_like.id === book.id
                           )
                             ? "Удалить из избранного"
                             : "Добавить в избранное"
@@ -182,14 +177,14 @@ const HomeCards: React.FC = () => {
                           height={24}
                           src={
                             favoriteData.some(
-                              (item) => item.katalog_books_like.id === book.id
+                              (item) => item.books_like.id === book.id
                             )
                               ? likeActive
                               : like
                           }
                           alt={
                             favoriteData.some(
-                              (item) => item.katalog_books_like.id === book.id
+                              (item) => item.books_like.id === book.id
                             )
                               ? "Удалить из избранного"
                               : "Добавить в избранное"

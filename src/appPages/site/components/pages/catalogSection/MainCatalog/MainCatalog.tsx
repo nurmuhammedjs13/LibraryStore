@@ -185,13 +185,13 @@ const MainCatalog: React.FC = () => {
     }
 
     const isLiked = favoriteData.some(
-      (item) => item.katalog_books_like.id === bookId
+      (item) => item.books_like.id === bookId
     );
 
     try {
       if (isLiked) {
         const favoriteItem = favoriteData.find(
-          (item) => item.katalog_books_like.id === bookId
+          (item) => item.books_like.id === bookId
         );
         if (favoriteItem?.id) {
           await removeFavorite(favoriteItem.id).unwrap();
@@ -200,7 +200,7 @@ const MainCatalog: React.FC = () => {
         await addFavorite({
           user_favorite: userId,
           like_favorite: true,
-          katalog_books_like: bookId,
+          books_like: bookId,
         }).unwrap();
       }
     } catch (error) {
@@ -482,7 +482,7 @@ const MainCatalog: React.FC = () => {
                               aria-label={
                                 favoriteData.some(
                                   (book) =>
-                                    book.katalog_books_like.id === item.id
+                                    book.books_like.id === item.id
                                 )
                                   ? "Удалить из избранного"
                                   : "Добавить в избранное"
@@ -494,7 +494,7 @@ const MainCatalog: React.FC = () => {
                                 src={
                                   favoriteData.some(
                                     (book) =>
-                                      book.katalog_books_like.id === item.id
+                                      book.books_like.id === item.id
                                   )
                                     ? likeActive
                                     : like
@@ -502,7 +502,7 @@ const MainCatalog: React.FC = () => {
                                 alt={
                                   favoriteData.some(
                                     (book) =>
-                                      book.katalog_books_like.id === item.id
+                                      book.books_like.id === item.id
                                   )
                                     ? "Удалить из избранного"
                                     : "Добавить в избранное"
