@@ -36,6 +36,23 @@ const api = index.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["auth"],
+    }),
+    postForgotPassword: build.mutation({
+      query: (email) => ({
+        url: "password_reset/",
+        method: "POST",
+        body: { email },
+      }),
+      invalidatesTags: ["auth"],
+    }),
+    postResetPassword: build.mutation({
+      query: ({newPassword,email,resetcode}) => ({
+        url: "password_reset/verify_code/",
+        method: "POST",
+        body: { newPassword,email,resetcode },
+      }),
+      invalidatesTags: ["auth"],
     }),
   }),
 });
@@ -44,8 +61,6 @@ export const {
   usePostLoginMutation,
   usePostRegistrationMutation,
   usePostRefreshTokenMutation,
-  // usePostForgotPasswordMutation,
-  // usePatchResetPasswordMutation,
-  // usePostLogoutMutation,
-  // usePatchRefreshTokenMutation
+  usePostForgotPasswordMutation,
+  usePostResetPasswordMutation
 } = api;

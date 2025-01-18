@@ -14,7 +14,7 @@ const api = index.injectEndpoints({
             RATINGS.PostRatingRequest
         >({
             query: (request) => ({
-                url: `ratings-post/`,
+                url: `create_ratings/`,
                 method: "POST",
                 body: request,
             }),

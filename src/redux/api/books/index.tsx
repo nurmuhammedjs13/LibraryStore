@@ -18,6 +18,7 @@ const api = index.injectEndpoints({
                 method: "GET",
             }),
         }),
+        
     }),
 });
 

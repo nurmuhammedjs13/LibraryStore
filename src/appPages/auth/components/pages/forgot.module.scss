@@ -1,0 +1,73 @@
+.Login {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  background: #2652b04d;
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 100px auto;
+  .content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+
+      input {
+        width: 100%;
+        padding: 10px 150px 10px 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .passwordWrapper {
+        position: relative;
+        width: 100%;
+
+        input {
+          padding-right: 50px; /* Учитываем кнопку для переключения пароля */
+        }
+
+        .togglePassword {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #007bff;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
+      button {
+        background: #2652b0;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: #1e4291;
+        }
+      }
+    }
+  }
+}

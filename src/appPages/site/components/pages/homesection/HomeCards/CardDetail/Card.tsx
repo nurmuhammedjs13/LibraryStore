@@ -59,20 +59,20 @@ const CardDetail = () => {
     }
 
     const isLiked = favoriteData.some(
-      (item) => item.katalog_books_like.id === bookId
+      (item) => item.books_like.id === bookId
     );
 
     try {
       if (isLiked) {
         const favoriteItem = favoriteData.find(
-          (item) => item.katalog_books_like.id === bookId
+          (item) => item.books_like.id === bookId
         );
         if (favoriteItem?.id) {
           await removeFavorite(favoriteItem.id).unwrap();
         }
       } else {
         await addFavorite({
-          katalog_books_like: bookId,
+          books_like: bookId,
           user_favorite: userId,
           like_favorite: true,
         }).unwrap();
@@ -179,7 +179,7 @@ const CardDetail = () => {
                         onClick={() => toggleLike(data.id)}
                         aria-label={
                           favoriteData.some(
-                            (item) => item.katalog_books_like.id === data.id
+                            (item) => item.books_like.id === data.id
                           )
                             ? "Удалить из избранного"
                             : "Добавить в избранное"
@@ -190,14 +190,14 @@ const CardDetail = () => {
                           height={24}
                           src={
                             favoriteData.some(
-                              (item) => item.katalog_books_like.id === data.id
+                              (item) => item.books_like.id === data.id
                             )
                               ? likeActive
                               : like
                           }
                           alt={
                             favoriteData.some(
-                              (item) => item.katalog_books_like.id === data.id
+                              (item) => item.books_like.id === data.id
                             )
                               ? "Удалить из избранного"
                               : "Добавить в избранное"

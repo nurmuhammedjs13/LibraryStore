@@ -28,6 +28,7 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
   const [postLogin] = usePostLoginMutation();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const nav =useRouter()
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
     try {
       const { data: responseData, error } = await postLogin(data);
@@ -90,6 +91,7 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
             У вас нет аккаунта?{" "}
             <span onClick={() => setIsOpenAuth(true)}>Зарегистрироваться</span>
           </a>
+          <a onClick={()=>nav.push('/forgot')}>Забыли пароль</a>
         </div>
       </div>
     </div>
