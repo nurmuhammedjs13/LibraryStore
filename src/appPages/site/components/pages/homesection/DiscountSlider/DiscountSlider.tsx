@@ -3,8 +3,6 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 import scss from "./DiscountSlider.module.scss";
 import Image from "next/image";
-import like from "@/assets/Icons/like.png";
-import likeActive from "@/assets/Icons/likeActive.png";
 import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
@@ -31,16 +29,9 @@ type SlideType = {
 interface SlideComponentProps {
     slide: SlideType;
     onAddToCart: () => void;
-    isLiked: boolean;
-    onLikeToggle: (id: number) => void;
 }
 
-const Slide: React.FC<SlideComponentProps> = ({
-    slide,
-    onAddToCart,
-    isLiked,
-    onLikeToggle,
-}) => {
+const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
     const router = useRouter();
     const imageUrl = slide.books.book_images?.[0]?.book_images || defaultBook;
 
@@ -84,27 +75,6 @@ const Slide: React.FC<SlideComponentProps> = ({
                     <button onClick={onAddToCart} className={scss.button}>
                         В корзину
                     </button>
-                    <button
-                        className={scss.buttonLike}
-                        onClick={() => onLikeToggle(Number(slide.id))}
-                        aria-label={
-                            isLiked
-                                ? "Remove from favorites"
-                                : "Add to favorites"
-                        }
-                    >
-                        <Image
-                            width={24}
-                            className={scss.buttonLikeImg}
-                            height={24}
-                            src={isLiked ? likeActive : like}
-                            alt={
-                                isLiked
-                                    ? "Remove from favorites"
-                                    : "Add to favorites"
-                            }
-                        />
-                    </button>
                 </div>
             </div>
         </div>
@@ -112,11 +82,9 @@ const Slide: React.FC<SlideComponentProps> = ({
 };
 
 const DiscountSlider: React.FC = () => {
-    const router = useRouter();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
     const [slideWidth, setSlideWidth] = useState(29.33);
 
     const {
@@ -146,14 +114,6 @@ const DiscountSlider: React.FC = () => {
         window.addEventListener("resize", updateSlideWidth);
         return () => window.removeEventListener("resize", updateSlideWidth);
     }, [updateSlideWidth]);
-
-    const handleLikeToggle = useCallback((id: number) => {
-        setLikedItems((prevLikedItems) =>
-            prevLikedItems.includes(id)
-                ? prevLikedItems.filter((itemId) => itemId !== id)
-                : [...prevLikedItems, id]
-        );
-    }, []);
 
     const nextSlide = useCallback(() => {
         if (!isAnimating && slides.length > 0) {
@@ -197,11 +157,9 @@ const DiscountSlider: React.FC = () => {
                     key={slide.id}
                     slide={slide}
                     onAddToCart={handleAddToCart}
-                    isLiked={likedItems.includes(slide.id)}
-                    onLikeToggle={handleLikeToggle}
                 />
             )),
-        [slides, likedItems, handleLikeToggle]
+        [slides]
     );
 
     if (isLoading)

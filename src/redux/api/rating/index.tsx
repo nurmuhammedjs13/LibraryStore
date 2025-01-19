@@ -2,7 +2,10 @@ import { api as index } from "..";
 
 const api = index.injectEndpoints({
     endpoints: (build) => ({
-        getRatings: build.query<RATINGS.GetRatingResponse, RATINGS.GetRatingRequest>({
+        getRatings: build.query<
+            RATINGS.GetRatingResponse,
+            RATINGS.GetRatingRequest
+        >({
             query: () => ({
                 url: `ratings-list/`,
                 method: "GET",

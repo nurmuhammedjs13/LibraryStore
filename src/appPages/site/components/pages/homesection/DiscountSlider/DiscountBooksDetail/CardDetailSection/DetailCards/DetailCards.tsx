@@ -105,13 +105,18 @@ const DetailCards = () => {
                                     <div className={scss.rating}>
                                         <Image
                                             width={110}
+                                            height={20}
+                                            className={scss.ratingImage}
                                             src={
-                                                stars[item.average_rating] ||
-                                                star0
+                                                stars[
+                                                    Math.floor(
+                                                        item.average_rating
+                                                    )
+                                                ] || star0
                                             }
-                                            alt={`${
+                                            alt={`Рейтинг: ${
                                                 item.average_rating || 0
-                                            } звезд`}
+                                            } звёзд`}
                                         />
                                     </div>
                                     <h2 className={scss.name}>

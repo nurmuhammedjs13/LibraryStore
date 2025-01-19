@@ -17,7 +17,6 @@ import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import back from "@/assets/Icons/Back.png";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
-import CardComments from "./CardDetailSection/CardComments/CardComments";
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 
@@ -188,7 +187,6 @@ const CardDetail = () => {
                 </div>
             </section>
             <DetailCards />
-            <CardComments />
         </>
     );
 };

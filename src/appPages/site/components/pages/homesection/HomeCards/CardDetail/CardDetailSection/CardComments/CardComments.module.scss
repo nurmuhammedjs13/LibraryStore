@@ -57,13 +57,16 @@
                     }
                     .stars {
                         display: flex;
+                        padding: 0 10px;
+                        gap: 7px;
                         align-items: flex-start;
                         justify-content: flex-start;
                         .starButton {
+                            padding: 10px;
                             background: none;
                             .starIcon {
                                 width: 25px;
-                                height: 100%;
+                                height: 25px;
                             }
                         }
                     }
@@ -88,19 +91,16 @@
 
                 gap: 15px;
 
-                .commenLeft {
+                .commentInfo {
                     display: flex;
-                    align-items: start;
-                    gap: 20px;
+                    flex-direction: column;
                     width: 100%;
-
-                    .commentInfo {
+                    gap: 10px;
+                    justify-content: space-between;
+                    .commentHeader {
                         display: flex;
                         flex-direction: column;
-                        width: 100%;
-                        gap: 10px;
-                        justify-content: space-between;
-
+                        gap: 3px;
                         .commentName {
                             display: flex;
                             flex-direction: row;
@@ -120,25 +120,25 @@
                                 color: #000000;
                             }
                         }
-                        p {
-                            font-size: clamp(7px, 4vw, 16px);
-                            font-weight: 500;
-                            line-height: 20px;
-                            width: 100%;
-                        }
+                    }
+                    p {
+                        font-size: clamp(7px, 4vw, 16px);
+                        font-weight: 500;
+                        line-height: 20px;
+                        width: 100%;
                     }
                 }
             }
         }
+    }
 
-        button {
-            padding: 20px 40px;
-            background-color: #1b295966;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    button {
+        padding: 20px 40px;
+        background-color: #1b295966;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
     }
 }
 
@@ -148,6 +148,48 @@
             .commentSection {
                 padding: 0;
                 width: 100%;
+            }
+        }
+    }
+}
+@media screen and (max-width: 1180px) {
+    .CardComments {
+        .content {
+            .commentSection {
+                .inputSection {
+                    .ratingInput {
+                        .stars {
+                            .starButton {
+                                .starIcon {
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 380px) {
+    .CardComments {
+        .content {
+            .commentSection {
+                .inputSection {
+                    .ratingInput {
+                        .stars {
+                            .starButton {
+                                gap: 5px;
+                                padding: 0 3px;
+                                .starIcon {
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
