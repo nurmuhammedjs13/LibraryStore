@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import scss from "./forgot.module.scss";
-import { useSearchParams } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { usePostResetPasswordMutation } from "@/redux/api/auth";
 import { useRouter } from "next/navigation";
@@ -9,29 +8,32 @@ import Image from "next/image";
 import okuLoginLogo from "@/assets/Снимок экрана 2024-12-01 185323 1.png";
 
 interface IformResetPassword {
-  newPassword: string;
   email: string;
-  resetcode: number;
+  reset_code: string;
+  new_password: string;
 }
+
 const ResetPage = () => {
-  const { register, handleSubmit } = useForm<IformResetPassword>();
-  const [patchResetPassword] = usePostResetPasswordMutation();
-  const searchParams = useSearchParams();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IformResetPassword>();
+  const [postResetPassword] = usePostResetPasswordMutation();
   const router = useRouter();
+
   const onSubmit: SubmitHandler<IformResetPassword> = async (data) => {
-    const newData = {
-      email: data.email,
-      resetcode: data.resetcode,
-      newPassword: data.newPassword,
-    };
-    // @ts-ignore
-    const { data: responseData, error } = await patchResetPassword(newData);
-    if (responseData) {
+    try {
+      const response = await postResetPassword({
+        email: data.email,
+        reset_code: data.reset_code, // Исправлено
+        new_password: data.new_password, // Исправлено
+      }).unwrap(); // Получаем данные ответа напрямую
+      alert(response.message);
       router.push("/");
-      alert(responseData.message);
-    } else {
-      const errorMessage = error as { data: { message: string } };
-      alert(errorMessage.data.message);
+    } catch (error: any) {
+      console.error("Ошибка:", error);
+      alert(error?.data?.message || "Ошибка при сбросе пароля.");
     }
   };
 
@@ -40,24 +42,40 @@ const ResetPage = () => {
       <div className="container">
         <div className={scss.content}>
           <Image src={okuLoginLogo} alt="logo" width={100} height={21} />
-
+          <p>
+            Введите новый пароль и код сброса, которые вы получили на вашу почту.
+            После этого вы сможете войти с новым паролем.
+          </p>
+          
           <form onSubmit={handleSubmit(onSubmit)} className={scss.form}>
             <input
               type="text"
-              placeholder="new password"
-              {...register("newPassword", { required: true })}
+              placeholder="Введите новый пароль"
+              {...register("new_password", { required: "Поле обязательно" })}
             />
+            {errors.new_password && (
+              <p className={scss.error}>{errors.new_password.message}</p>
+            )}
+
             <input
               type="text"
-              placeholder="email"
-              {...register("email", { required: true })}
+              placeholder="Введите email"
+              {...register("email", { required: "Поле обязательно" })}
             />
+            {errors.email && (
+              <p className={scss.error}>{errors.email.message}</p>
+            )}
+
             <input
               type="text"
-              placeholder="resetcode"
-              {...register("resetcode", { required: true })}
+              placeholder="Введите код сброса"
+              {...register("reset_code", { required: "Поле обязательно" })}
             />
-            <button type="submit">reset</button>
+            {errors.reset_code && (
+              <p className={scss.error}>{errors.reset_code.message}</p>
+            )}
+
+            <button type="submit">Сбросить пароль</button>
           </form>
         </div>
       </div>
