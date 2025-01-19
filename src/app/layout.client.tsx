@@ -2,8 +2,8 @@
 import LayoutAuth from "@/appPages/auth/components/layout/LayoutAuth";
 import LayoutSite from "@/appPages/site/components/layout/LayoutSite";
 import ReduxProvider from "@/providers/ReduxProvider";
-import { SessionProvider } from "@/providers/SessionProvider";
 import { FC, ReactNode } from "react";
+import  {SessionProvider} from"@/providers/SessionProvider"
 
 interface LayoutClientProps {
   children: ReactNode;

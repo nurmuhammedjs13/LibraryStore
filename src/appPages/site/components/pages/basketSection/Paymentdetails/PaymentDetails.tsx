@@ -50,12 +50,18 @@ const PaymentDetails = () => {
             <div className={styles.chek}>
               {paymentDetailData.map((el, index) => (
                 <div key={index} className={styles.detailsBox}>
-                  <img src={el.image_name_bank} alt="img" />
+                  <Image
+                    width={100}
+                    height={17}
+                    className={styles.BankName}
+                    src={el.image_name_bank}
+                    alt="img"
+                  />
                   <Image
                     width={100}
                     height={100}
                     className={styles.QrCode}
-                    src={el.image_qr_code }
+                    src={el.image_qr_code}
                     alt="img"
                   />
                   <h2>Счет:{el.cart_number}</h2>

@@ -26,24 +26,23 @@ const baseQueryExtended: BaseQueryFn = async (args, api, extraOptions) => {
 };
 
 export const api = createApi({
-    reducerPath: "api",
-    baseQuery: baseQueryExtended,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-    tagTypes: [
-        "opening",
-        "dostavka",
-        "footer",
-        "books",
-        "ratings",
-        "aksia",
-        "booksDetail",
-        "genre",
-        "paymentdetails",
-        "aboutUs",
-
-        "auth",
-        "favorite",
-    ],
-    endpoints: () => ({}),
+  reducerPath: "api",
+  baseQuery: baseQueryExtended,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
+  tagTypes: [
+    "opening",
+    "footer",
+    "books",
+    "aksia",
+    "booksDetail",
+    "genre",
+    "paymentdetails",
+    "aboutUs",
+    "auth",
+    "favorite",
+    "dostavka",
+    "cart",
+  ],
+  endpoints: () => ({}),
 });

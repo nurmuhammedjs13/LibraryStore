@@ -1,7 +1,4 @@
 namespace FAVORITE {
-
-
-
  
   type GetKatFavoriteItemsRequest = void;
 

@@ -23,7 +23,6 @@ const PlacinganOrder = () => {
   const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
     "delivery"
   );
-
   return (
     <div className={styles.mainBlock}>
       <div className="container">

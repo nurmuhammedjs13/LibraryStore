@@ -21,6 +21,11 @@ import star4 from "@/assets/Icons/star4.png";
 import star5 from "@/assets/Icons/star5.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import Link from "next/link";
+import {
+  useAddToCartMutation,
+  useDeleteCartMutation,
+  useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 const BOOKS_TO_DISPLAY = 12;
@@ -35,12 +40,10 @@ interface Book {
   book_images: { book_images: string }[];
 }
 
-
 const HomeCards: React.FC = () => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState<number[]>([]);
   const [cartModal, setCartModal] = useState<boolean>(false);
-
   const { data: books = [], isLoading: isBooksLoading } = useGetBooksQuery();
   const { data: favoriteData = [], isLoading: isFavLoading } =
     useGetKatFavoriteQuery();
@@ -48,8 +51,14 @@ const HomeCards: React.FC = () => {
   const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
   const userId = meData?.id || null;
 
+  // ADDTOCART
+  const { data: cartData = [], isLoading: isCartLoading } =
+    useGetCartItemsQuery();
+  const [addToCartMutation] = useAddToCartMutation();
+  const [deleteCartItem] = useDeleteCartMutation();
   const [addFavorite] = useAddKatFavoriteItemMutation();
   const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+  // ADDTOCART
 
   const toggleLike = async (bookId: number) => {
     if (!userId) {
@@ -57,9 +66,7 @@ const HomeCards: React.FC = () => {
       return;
     }
 
-    const isLiked = favoriteData.some(
-      (item) => item.books_like.id === bookId
-    );
+    const isLiked = favoriteData.some((item) => item.books_like.id === bookId);
 
     try {
       if (isLiked) {
@@ -93,7 +100,7 @@ const HomeCards: React.FC = () => {
     router.push(`/books/${id}`);
   };
 
-  if (isBooksLoading || isFavLoading || isMeLoading)
+  if (isBooksLoading || isFavLoading || isMeLoading || isCartLoading)
     return (
       <div className={scss.loaderBlock}>
         <div className={scss.loader}></div>
@@ -101,6 +108,36 @@ const HomeCards: React.FC = () => {
     );
 
   const latestBooks: Book[] = books.slice(-BOOKS_TO_DISPLAY);
+
+  // ADDTOCARD
+  const toggleCart = async (bookId: number) => {
+    if (!userId) {
+      alert("Ошибка: Пользователь не авторизован.");
+      return;
+    }
+
+    try {
+      const isInCart = cartData?.some((item) => item?.id === bookId);
+
+      if (isInCart) {
+        const cartItem = cartData?.find((item) => item?.id === bookId);
+        if (cartItem?.id) {
+          await deleteCartItem(cartItem.id).unwrap();
+        }
+      } else {
+        await addToCartMutation({
+          katalog_books_cart: bookId,
+          quantity: 1,
+        }).unwrap();
+        setCartModal(true);
+        setTimeout(() => setCartModal(false), 2000);
+      }
+    } catch (error) {
+      console.error("Ошибка изменения корзины:", error);
+    }
+  };
+
+  // ADDTOCARD
 
   return (
     <section className={scss.HomeCards}>
@@ -155,9 +192,9 @@ const HomeCards: React.FC = () => {
                     <div className={scss.actions}>
                       <button
                         className={scss.button}
-                        onClick={() => addToCart(book.id)}
+                        onClick={() => toggleCart(book.id)}
                       >
-                        {cartItems.includes(book.id)
+                        {cartData?.some((item) => item?.id === book.id)
                           ? "В корзине"
                           : "В корзину"}
                       </button>

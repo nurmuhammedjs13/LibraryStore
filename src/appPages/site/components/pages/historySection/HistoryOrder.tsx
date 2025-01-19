@@ -93,6 +93,14 @@ const HistoryOrder = () => {
           quantity: 3,
           totalSumByQuantity: 2400,
         },
+        {
+          image: img1,
+          bookName: "Мать верующих",
+          author: "Сулейман Ан-Надви",
+          price: 800,
+          quantity: 3,
+          totalSumByQuantity: 2400,
+        },
       ],
     },
   ];
