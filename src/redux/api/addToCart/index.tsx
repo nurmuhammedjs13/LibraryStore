@@ -14,7 +14,7 @@ export const cartApi = api.injectEndpoints({
       providesTags: ["cart"],
     }),
 
-    // Добавление товара в корзину
+    // Обновленная мутация addToCart для включения поля cart
     addToCart: build.mutation<
       ADDTOCART.AddToCardResponse,
       ADDTOCART.AddToCardRequest
@@ -25,12 +25,12 @@ export const cartApi = api.injectEndpoints({
         body: {
           katalog_books: body.katalog_books_cart,
           quantity: body.quantity,
-        }, 
+          cart: body.cart,     // Добавлено поле cart в тело запроса
+        },
       }),
       invalidatesTags: ["cart"],
     }),
 
-    // Удаление товара из корзины
     deleteCart: build.mutation<void, number>({
       query: (id) => ({
         url: `cart_items/${id}/`,
