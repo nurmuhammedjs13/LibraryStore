@@ -58,7 +58,9 @@ const HomeCards: React.FC = () => {
     const [deleteCartItem] = useDeleteCartMutation();
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+    
     // ADDTOCART
+
 
     const toggleLike = async (bookId: number) => {
         if (!userId) {
@@ -129,6 +131,7 @@ const HomeCards: React.FC = () => {
                 await addToCartMutation({
                     katalog_books_cart: bookId,
                     quantity: 1,
+                    cart:0,
                 }).unwrap();
                 setCartModal(true);
                 setTimeout(() => setCartModal(false), 2000);
