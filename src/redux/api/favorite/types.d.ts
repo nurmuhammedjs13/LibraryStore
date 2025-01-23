@@ -1,5 +1,4 @@
 namespace FAVORITE {
- 
   type GetKatFavoriteItemsRequest = void;
 
   type GetKatFavoriteItemsReaponse = {
