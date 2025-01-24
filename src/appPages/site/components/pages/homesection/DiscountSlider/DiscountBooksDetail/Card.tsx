@@ -63,6 +63,7 @@ const CardDetail = () => {
 
     const book = data.find((data) => data.id.toString() === id);
 
+    console.log(JSON.stringify(book, null, 2));
     if (!book) {
         return <div>Книга не найдена.</div>;
     }
@@ -142,7 +143,9 @@ const CardDetail = () => {
                                     </button>
                                     <div className={scss.bookActAndDesBlock}>
                                         <h1 className={scss.description}>
-                                            {book.books.description}
+                                            {book.description ||
+                                                book.books?.description ||
+                                                "Описание отсутствует"}
                                         </h1>
                                         <div className={scss.actions}>
                                             <button

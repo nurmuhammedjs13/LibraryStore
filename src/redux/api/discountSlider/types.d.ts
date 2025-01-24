@@ -2,6 +2,8 @@ namespace Discount {
     type GetDiscountResponse = [
         {
             id: number;
+            description?: string;
+
             books: {
                 book_images: Array<{
                     book_images: string;
@@ -14,7 +16,7 @@ namespace Discount {
                 janre: Array<{
                     janre_name: string;
                 }>;
-                description: string;
+                description?: string;
                 ratings: Array<{
                     id: number;
                     user_rating: {
