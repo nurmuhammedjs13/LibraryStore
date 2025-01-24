@@ -136,65 +136,77 @@ const CardComments: React.FC<CardCommentsProps> = ({ id }) => {
                                     : "Опубликовать"}
                             </button>
                         </div>
-
-                        {isLoading ? (
-                            <p className={scss.loadingMessage}>
-                                Загрузка комментариев...
-                            </p>
-                        ) : isError ? (
-                            <p className={scss.errorMessage}>
-                                Ошибка загрузки комментариев
-                            </p>
-                        ) : filteredComments.length === 0 ? (
-                            <p className={scss.emptyMessage}>
-                                Комментариев пока нет.
-                            </p>
-                        ) : (
-                            filteredComments.map((comment) => (
-                                <div key={comment.id} className={scss.comment}>
-                                    <div className={scss.commentInfo}>
-                                        <div className={scss.commentHeader}>
-                                            <div className={scss.commentName}>
-                                                <h1 className={scss.name}>
-                                                    {
-                                                        comment.user_rating
-                                                            .username
-                                                    }
-                                                </h1>
-                                                <span
-                                                    className={scss.commentDate}
+                        <div className={scss.comments}>
+                            {isLoading ? (
+                                <p className={scss.loadingMessage}>
+                                    Загрузка комментариев...
+                                </p>
+                            ) : isError ? (
+                                <p className={scss.errorMessage}>
+                                    Ошибка загрузки комментариев
+                                </p>
+                            ) : filteredComments.length === 0 ? (
+                                <p className={scss.emptyMessage}>
+                                    Комментариев пока нет.
+                                </p>
+                            ) : (
+                                filteredComments.map((comment) => (
+                                    <div
+                                        key={comment.id}
+                                        className={scss.comment}
+                                    >
+                                        <div className={scss.commentInfo}>
+                                            <div className={scss.commentHeader}>
+                                                <div
+                                                    className={scss.commentName}
                                                 >
-                                                    {formatDate(
-                                                        comment.created_date
+                                                    <h1 className={scss.name}>
+                                                        {
+                                                            comment.user_rating
+                                                                .username
+                                                        }
+                                                    </h1>
+                                                    <span
+                                                        className={
+                                                            scss.commentDate
+                                                        }
+                                                    >
+                                                        {formatDate(
+                                                            comment.created_date
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        scss.commentStars
+                                                    }
+                                                >
+                                                    {[...Array(5)].map(
+                                                        (_, index) => (
+                                                            <Image
+                                                                key={index}
+                                                                width={16}
+                                                                height={16}
+                                                                src={
+                                                                    index <
+                                                                    comment.stars
+                                                                        ? activeStar
+                                                                        : star
+                                                                }
+                                                                alt={`${comment.stars} stars`}
+                                                            />
+                                                        )
                                                     )}
-                                                </span>
+                                                </div>
                                             </div>
-                                            <div className={scss.commentStars}>
-                                                {[...Array(5)].map(
-                                                    (_, index) => (
-                                                        <Image
-                                                            key={index}
-                                                            width={16}
-                                                            height={16}
-                                                            src={
-                                                                index <
-                                                                comment.stars
-                                                                    ? activeStar
-                                                                    : star
-                                                            }
-                                                            alt={`${comment.stars} stars`}
-                                                        />
-                                                    )
-                                                )}
-                                            </div>
+                                            <p className={scss.commentText}>
+                                                {comment.comment}
+                                            </p>
                                         </div>
-                                        <p className={scss.commentText}>
-                                            {comment.comment}
-                                        </p>
                                     </div>
-                                </div>
-                            ))
-                        )}
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
