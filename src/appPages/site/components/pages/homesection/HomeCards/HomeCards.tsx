@@ -40,6 +40,16 @@ interface Book {
     book_images: { book_images: string }[];
 }
 
+type CartItem = {
+    book_name: string;
+    price: number;
+    quantity: number;
+};
+
+type Props = {
+    toggleCart: (item: CartItem | undefined) => void;
+};
+
 const HomeCards: React.FC = () => {
     const router = useRouter();
     const [cartItems, setCartItems] = useState<number[]>([]);
@@ -51,15 +61,12 @@ const HomeCards: React.FC = () => {
     const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
     const userId = meData?.id || null;
 
-    // ADDTOCART
     const { data: cartData = [], isLoading: isCartLoading } =
         useGetCartItemsQuery();
     const [addToCartMutation] = useAddToCartMutation();
     const [deleteCartItem] = useDeleteCartMutation();
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
-
-    // ADDTOCART
 
     const toggleLike = async (bookId: number) => {
         if (!userId) {
@@ -112,31 +119,46 @@ const HomeCards: React.FC = () => {
 
     const latestBooks: Book[] = books.slice(-BOOKS_TO_DISPLAY);
 
-    const toggleCart = async (bookId: number) => {
+    const toggleCart = async (book: Book) => {
         if (!userId) {
             alert("Ошибка: Пользователь не авторизован.");
             return;
         }
 
         try {
-            const isInCart = cartData?.some((item) => item?.id === bookId);
+            const isInCart = cartData?.some(
+                (item) => item?.books_id === book.id
+            );
 
             if (isInCart) {
-                const cartItem = cartData?.find((item) => item?.id === bookId);
-                if (cartItem?.id) {
-                    await deleteCartItem(cartItem.id).unwrap();
+                const cartItem = cartData?.find(
+                    (item) => item?.books_id === book.id
+                );
+
+                if (cartItem?.books.id) {
+                    await deleteCartItem(cartItem.books.id).unwrap();
                 }
             } else {
-                await addToCartMutation({
-                    katalog_books_cart: bookId,
+                const requestBody = {
+                    books: {
+                        book_name: book.book_name,
+                        price: book.price,
+                    },
                     quantity: 1,
-                    cart: 0,
-                }).unwrap();
+                    books_id: book.id,
+                };
+                console.log("успешно добавлен ", requestBody);
+
+                await addToCartMutation(requestBody).unwrap();
                 setCartModal(true);
                 setTimeout(() => setCartModal(false), 2000);
             }
-        } catch (error) {
-            console.error("Ошибка изменения корзины:", error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Ошибка изменения корзины:", error.message);
+            } else {
+                console.error("Unexpected error type:", error);
+            }
         }
     };
 
@@ -212,13 +234,12 @@ const HomeCards: React.FC = () => {
                                         <div className={scss.actions}>
                                             <button
                                                 className={scss.button}
-                                                onClick={() =>
-                                                    toggleCart(book.id)
-                                                }
+                                                onClick={() => toggleCart(book)}
                                             >
                                                 {cartData?.some(
                                                     (item) =>
-                                                        item?.id === book.id
+                                                        item?.books_id ===
+                                                        book.id
                                                 )
                                                     ? "В корзине"
                                                     : "В корзину"}
