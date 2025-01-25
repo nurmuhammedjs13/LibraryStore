@@ -26,7 +26,7 @@ namespace ADDTOCART {
             price: number;
         };
         quantity: number;
-        books_id: number;
+        books_id?: number;
     };
 
     export type AddToCardResponse = {

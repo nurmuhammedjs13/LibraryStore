@@ -40,37 +40,26 @@ interface Book {
     book_images: { book_images: string }[];
 }
 
-type CartItem = {
-    book_name: string;
-    price: number;
-    quantity: number;
-};
-
-type Props = {
-    toggleCart: (item: CartItem | undefined) => void;
-};
-
 const HomeCards: React.FC = () => {
     const router = useRouter();
-    const [cartItems, setCartItems] = useState<number[]>([]);
-    const [cartModal, setCartModal] = useState<boolean>(false);
+    const [cartModal, setCartModal] = useState(false);
     const { data: books = [], isLoading: isBooksLoading } = useGetBooksQuery();
-    const { data: favoriteData = [], isLoading: isFavLoading } =
-        useGetKatFavoriteQuery();
+    const { data: favoriteData = [] } = useGetKatFavoriteQuery();
+    const { data: meData } = useGetMeQuery();
+    const { data: cartData = [] } = useGetCartItemsQuery();
 
-    const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
-    const userId = meData?.id || null;
-
-    const { data: cartData = [], isLoading: isCartLoading } =
-        useGetCartItemsQuery();
-    const [addToCartMutation] = useAddToCartMutation();
-    const [deleteCartItem] = useDeleteCartMutation();
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
 
-    const toggleLike = async (bookId: number) => {
+    const userId = meData?.id || null;
+
+    const handleToggleLike = async (bookId: number) => {
         if (!userId) {
-            alert("Ошибка: Пользователь не авторизован.");
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в избранное."
+            );
             return;
         }
 
@@ -83,9 +72,8 @@ const HomeCards: React.FC = () => {
                 const favoriteItem = favoriteData.find(
                     (item) => item.books_like.id === bookId
                 );
-                if (favoriteItem?.id) {
+                if (favoriteItem?.id)
                     await removeFavorite(favoriteItem.id).unwrap();
-                }
             } else {
                 await addFavorite({
                     books_like: bookId,
@@ -98,69 +86,52 @@ const HomeCards: React.FC = () => {
         }
     };
 
-    const addToCart = (bookId: number) => {
-        if (!cartItems.includes(bookId)) {
-            setCartItems((prev) => [...prev, bookId]);
-            setCartModal(true);
-            setTimeout(() => setCartModal(false), 2000);
-        }
-    };
-
-    const navigateToBook = (id: number) => {
-        router.push(`/books/${id}`);
-    };
-
-    if (isBooksLoading || isFavLoading || isMeLoading || isCartLoading)
-        return (
-            <div className={scss.loaderBlock}>
-                <div className={scss.loader}></div>
-            </div>
-        );
-
-    const latestBooks: Book[] = books.slice(-BOOKS_TO_DISPLAY);
-
-    const toggleCart = async (book: Book) => {
+    const handleToggleCart = async (book: Book) => {
         if (!userId) {
-            alert("Ошибка: Пользователь не авторизован.");
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
             return;
         }
 
+        const isInCart = cartData.some((item) => item.books_id === book.id);
+
         try {
-            const isInCart = cartData?.some(
-                (item) => item?.books_id === book.id
-            );
-
             if (isInCart) {
-                const cartItem = cartData?.find(
-                    (item) => item?.books_id === book.id
+                const cartItem = cartData.find(
+                    (item) => item.books_id === book.id
                 );
-
-                if (cartItem?.books.id) {
-                    await deleteCartItem(cartItem.books.id).unwrap();
-                }
+                if (cartItem?.books_id)
+                    await deleteCartItem(cartItem?.books_id).unwrap();
             } else {
                 const requestBody = {
                     books: {
                         book_name: book.book_name,
                         price: book.price,
                     },
-                    quantity: 1,
+                    quantity: 0,
                     books_id: book.id,
                 };
-                console.log("успешно добавлен ", requestBody);
-
                 await addToCartMutation(requestBody).unwrap();
                 setCartModal(true);
                 setTimeout(() => setCartModal(false), 2000);
             }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.error("Ошибка изменения корзины:", error.message);
-            } else {
-                console.error("Unexpected error type:", error);
-            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
         }
     };
+
+    const navigateToBook = (id: number) => router.push(`/books/${id}`);
+
+    if (isBooksLoading) {
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
+    }
+
+    const latestBooks = books.slice(-BOOKS_TO_DISPLAY);
 
     return (
         <section className={scss.HomeCards}>
@@ -168,7 +139,7 @@ const HomeCards: React.FC = () => {
                 <div className={scss.content}>
                     <h1 className={scss.title}>КАТАЛОГ</h1>
                     <div className={scss.cards}>
-                        {latestBooks.map((book: Book) => (
+                        {latestBooks.map((book) => (
                             <div key={book.id} className={scss.card}>
                                 <Image
                                     onClick={() => navigateToBook(book.id)}
@@ -224,7 +195,6 @@ const HomeCards: React.FC = () => {
                                         <div className={scss.price}>
                                             <Image
                                                 width={20}
-                                                className={scss.priceIcon}
                                                 height={20}
                                                 src={priceIcon}
                                                 alt="Иконка цены"
@@ -234,7 +204,9 @@ const HomeCards: React.FC = () => {
                                         <div className={scss.actions}>
                                             <button
                                                 className={scss.button}
-                                                onClick={() => toggleCart(book)}
+                                                onClick={() =>
+                                                    handleToggleCart(book)
+                                                }
                                             >
                                                 {cartData?.some(
                                                     (item) =>
@@ -247,16 +219,7 @@ const HomeCards: React.FC = () => {
                                             <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>
-                                                    toggleLike(book.id)
-                                                }
-                                                aria-label={
-                                                    favoriteData.some(
-                                                        (item) =>
-                                                            item.books_like
-                                                                .id === book.id
-                                                    )
-                                                        ? "Удалить из избранного"
-                                                        : "Добавить в избранное"
+                                                    handleToggleLike(book.id)
                                                 }
                                             >
                                                 <Image
@@ -296,7 +259,7 @@ const HomeCards: React.FC = () => {
                 </div>
                 {cartModal && (
                     <div className={scss.modal}>
-                        <p>Товар добавлен в корзину✓</p>
+                        <p>Товар добавлен в корзину ✓</p>
                     </div>
                 )}
             </div>

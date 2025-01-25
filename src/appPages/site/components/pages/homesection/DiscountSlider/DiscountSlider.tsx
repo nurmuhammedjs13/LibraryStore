@@ -1,90 +1,164 @@
 "use client";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useGetDiscountQuery } from "@/redux/api/discountSlider";
-import scss from "./DiscountSlider.module.scss";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
+import {
+    useAddToCartMutation,
+    useDeleteCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
+import ReactDOM from "react-dom";
+
+import { useGetMeQuery } from "@/redux/api/auth";
 import nextIcon from "../../../../../../assets/Icons/arrowRight.png";
 import prevIcon from "../../../../../../assets/Icons/arrowLeft.png";
-import { useRouter } from "next/navigation";
+import scss from "./DiscountSlider.module.scss";
+import priceIcon from "../../../../../../assets/Icons/HomePrice.png";
 import defaultBook from "@/assets/Icons/defaultBook.webp";
+import { useGetDiscountQuery } from "@/redux/api/discountSlider";
 
 type BookType = {
+    id?: number;
     book_name: string;
     author: string;
-    price: number | string;
+    price: number;
     book_images?: { book_images: string }[];
-    average_rating?: number;
-    total_ratings?: number;
-    janre?: { janre_name: string }[];
 };
 
 type SlideType = {
-    id: number;
+    id?: number;
     discount: string;
-    discount_book: number | string;
+    discount_book: number;
     books: BookType;
 };
 
-interface SlideComponentProps {
+interface SlideProps {
     slide: SlideType;
-    onAddToCart: () => void;
 }
 
-const Slide: React.FC<SlideComponentProps> = ({ slide, onAddToCart }) => {
+const Slide: React.FC<SlideProps> = ({ slide }) => {
     const router = useRouter();
+    const [isInCart, setIsInCart] = useState(false);
+    const [cartModal, setCartModal] = useState(false);
     const imageUrl = slide.books.book_images?.[0]?.book_images || defaultBook;
+
+    const { data: meData } = useGetMeQuery();
+    const { data: cartData = [] } = useGetCartItemsQuery();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
+
+    const userId = meData?.id || null;
+
+    useEffect(() => {
+        const cartItem = cartData.find(
+            (item) => item.books_id === slide.books.id
+        );
+        setIsInCart(!!cartItem);
+    }, [cartData, slide.books.id]);
 
     const handleClick = () => {
         router.push(`/aksia/${slide.id}`);
     };
 
+    const renderModal = () => (
+        <div className={scss.modal}>
+            <p>Товар добавлен в корзину ✓</p>
+        </div>
+    );
+
+    const handleToggleCart = async () => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
+
+        try {
+            if (isInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === slide.books.id
+                );
+                if (cartItem) {
+                    await deleteCartItem(cartItem.books_id).unwrap();
+                    setIsInCart(false);
+                }
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: slide.books.book_name,
+                        price: slide.discount_book,
+                    },
+                    quantity: 0,
+                    books_id: slide.books.id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setIsInCart(true);
+                setCartModal(true);
+                setTimeout(() => setCartModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
+            alert("Произошла ошибка при работе с корзиной.");
+        }
+    };
+
     return (
-        <div className={scss.slide}>
-            <h1 className={scss.discount_bage}>{slide.discount}</h1>
-            <Image
-                onClick={handleClick}
-                className={scss.bookImg}
-                width={220}
-                height={300}
-                src={imageUrl}
-                alt={`Book: ${slide.books.book_name}`}
-            />
-            <div className={scss.info}>
-                <div className={scss.infoBlock}>
-                    <div className={scss.nameAndAuthor}>
-                        <h1 className={scss.name}>{slide.books.book_name}</h1>
-                        <h1 className={scss.author}>{slide.books.author}</h1>
+        <>
+            <div className={scss.slide}>
+                <h1 className={scss.discount_bage}>{slide.discount}</h1>
+                <Image
+                    onClick={handleClick}
+                    className={scss.bookImg}
+                    width={220}
+                    height={300}
+                    src={imageUrl}
+                    alt={`Book: ${slide.books.book_name}`}
+                />
+                <div className={scss.info}>
+                    <div className={scss.infoBlock}>
+                        <div className={scss.nameAndAuthor}>
+                            <h1 className={scss.name}>
+                                {slide.books.book_name}
+                            </h1>
+                            <h1 className={scss.author}>
+                                {slide.books.author}
+                            </h1>
+                        </div>
+                        <div className={scss.prices}>
+                            <h1 className={scss.discountPrice}>
+                                <Image
+                                    width={20}
+                                    height={20}
+                                    src={priceIcon}
+                                    alt="Discount Icon"
+                                />
+                                {Math.round(slide.discount_book)} c
+                            </h1>
+                            <h1 className={scss.previewPrice}>
+                                {Math.round(slide.books.price)} c
+                            </h1>
+                        </div>
                     </div>
-                    <div className={scss.prices}>
-                        <h1 className={scss.discountPrice}>
-                            <Image
-                                width={20}
-                                height={20}
-                                src={priceIcon}
-                                alt="Discount Icon"
-                            />
-                            {Math.round(Number(slide.discount_book))} c
-                        </h1>
-                        <h1 className={scss.previewPrice}>
-                            {Math.round(Number(slide.books.price))} c
-                        </h1>
+                    <div className={scss.action}>
+                        <button
+                            onClick={handleToggleCart}
+                            className={scss.button}
+                        >
+                            {isInCart ? "В корзине" : "В корзину"}
+                        </button>
                     </div>
-                </div>
-                <div className={scss.action}>
-                    <button onClick={onAddToCart} className={scss.button}>
-                        В корзину
-                    </button>
                 </div>
             </div>
-        </div>
+
+            {cartModal && ReactDOM.createPortal(renderModal(), document.body)}
+        </>
     );
 };
 
 const DiscountSlider: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [showModal, setShowModal] = useState(false);
     const [slideWidth, setSlideWidth] = useState(29.33);
 
     const {
@@ -131,13 +205,6 @@ const DiscountSlider: React.FC = () => {
         }
     }, [isAnimating, slides.length]);
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => {
-            setShowModal(false);
-        }, 2000);
-    };
-
     useEffect(() => {
         const autoSlide = setInterval(nextSlide, 3000);
         return () => clearInterval(autoSlide);
@@ -151,14 +218,7 @@ const DiscountSlider: React.FC = () => {
     }, [currentIndex]);
 
     const memoizedSlides = useMemo(
-        () =>
-            slides.map((slide) => (
-                <Slide
-                    key={slide.id}
-                    slide={slide}
-                    onAddToCart={handleAddToCart}
-                />
-            )),
+        () => slides.map((slide) => <Slide key={slide.id} slide={slide} />),
         [slides]
     );
 
@@ -180,11 +240,6 @@ const DiscountSlider: React.FC = () => {
             <div className="container">
                 <div className={scss.content}>
                     <h1 className={scss.title}>НАШИ СКИДКИ</h1>
-                    {showModal && (
-                        <div className={scss.modal}>
-                            <p>Товар добавлен в корзину✓</p>
-                        </div>
-                    )}
                     <div className={scss.slider}>
                         <button
                             className={scss.prevButton}
