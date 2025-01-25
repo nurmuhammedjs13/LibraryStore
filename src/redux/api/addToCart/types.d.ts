@@ -21,9 +21,9 @@ namespace ADDTOCART {
 
     export type AddToCardRequest = {
         books: {
-            book_name: string;
+            book_name?: string | undefined;
             author?: string;
-            price: number;
+            price?: number;
         };
         quantity: number;
         books_id?: number;
@@ -31,7 +31,7 @@ namespace ADDTOCART {
 
     export type AddToCardResponse = {
         books: {
-            book_name: string;
+            book_name?: string;
             author?: string;
             price: number;
         };

@@ -1,6 +1,6 @@
 "use client";
 import scss from "./Card.module.scss";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useGetBooksDetailQuery } from "@/redux/api/books";
@@ -25,6 +25,21 @@ import {
     useRemoveKatFavoriteItemMutation,
 } from "@/redux/api/favorite";
 import { useGetMeQuery } from "@/redux/api/auth";
+import {
+    useDeleteCartMutation,
+    useAddToCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
+
+interface Book {
+    id: number;
+    book_name: string;
+    author: string;
+    price: number;
+    average_rating: number;
+    janre: { janre_name: string }[];
+    book_images: { book_images: string }[];
+}
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 
@@ -34,8 +49,8 @@ const CardDetail = () => {
     const bookId = typeof id === "string" ? parseInt(id, 10) : undefined;
 
     const [showModal, setShowModal] = useState(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
-
+    const { data: cartData = [] } = useGetCartItemsQuery();
+    const [isInCart, setIsInCart] = useState(false);
     const { data, isLoading, isError } = useGetBooksDetailQuery(bookId ?? -1);
 
     const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
@@ -43,9 +58,17 @@ const CardDetail = () => {
 
     const { data: favoriteData = [], isLoading: isFavLoading } =
         useGetKatFavoriteQuery();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
 
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+
+    useEffect(() => {
+        if (cartData && data) {
+            setIsInCart(cartData.some((item) => item.books_id === data.id));
+        }
+    }, [cartData, data]);
 
     const toggleLike = async (bookId: number) => {
         if (!userId) {
@@ -77,11 +100,45 @@ const CardDetail = () => {
         }
     };
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => {
-            setShowModal(false);
-        }, 2000);
+    const handleToggleCart = async () => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
+
+        try {
+            const isBookInCart = cartData.some(
+                (item) => item.books_id === data?.id
+            );
+
+            if (isBookInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === data?.id
+                );
+                if (cartItem) {
+                    await deleteCartItem(cartItem.books_id).unwrap();
+                    setIsInCart(false);
+                }
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: data?.book_name,
+                        price: data?.price,
+                    },
+                    quantity: 0,
+                    books_id: data?.id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setIsInCart(true);
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
+            alert("Произошла ошибка при работе с корзиной.");
+        }
     };
 
     if (isLoading) {
@@ -169,11 +226,13 @@ const CardDetail = () => {
                                         </h1>
                                         <div className={scss.actions}>
                                             <button
-                                                onClick={handleAddToCart}
+                                                onClick={handleToggleCart}
                                                 className={scss.cardButton}
                                                 aria-label="Add to cart"
                                             >
-                                                В корзину
+                                                {isInCart
+                                                    ? "Убрать из корзины"
+                                                    : "В корзину"}
                                             </button>
                                             {showModal && (
                                                 <div className={scss.modal}>

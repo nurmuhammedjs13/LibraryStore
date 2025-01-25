@@ -16,6 +16,17 @@ import { useRouter } from "next/navigation";
 import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import { useGetBooksQuery } from "@/redux/api/books";
+import {
+    useAddToCartMutation,
+    useDeleteCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
+import { useGetMeQuery } from "@/redux/api/auth";
+import {
+    useAddKatFavoriteItemMutation,
+    useGetKatFavoriteQuery,
+    useRemoveKatFavoriteItemMutation,
+} from "@/redux/api/favorite";
 
 interface Book {
     id: number;
@@ -29,25 +40,83 @@ interface Book {
 
 const DetailCards = () => {
     const router = useRouter();
+    const { data: favoriteData = [], isLoading: isFavLoading } =
+        useGetKatFavoriteQuery();
+    const [addFavorite] = useAddKatFavoriteItemMutation();
+    const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
+    const { data: cartData = [] } = useGetCartItemsQuery();
+    const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
     const [showModal, setShowModal] = useState(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
     const stars = [star0, star1, star2, star3, star4, star5];
+    const userId = meData?.id || null;
 
     const { data = [], isLoading, isError } = useGetBooksQuery();
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => setShowModal(false), 2000);
-    };
+    const handleToggleCart = async (book: Book) => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
 
-    const toggleLike = (id: number) => {
-        setLikedItems((prev) =>
-            prev.includes(id)
-                ? prev.filter((item) => item !== id)
-                : [...prev, id]
+        const isInCart = cartData.some((item) => item.books_id === book.id);
+
+        try {
+            if (isInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === book.id
+                );
+                if (cartItem?.books_id)
+                    await deleteCartItem(cartItem?.books_id).unwrap();
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: book.book_name,
+                        price: book.price,
+                    },
+                    quantity: 0,
+                    books_id: book.id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
+        }
+    };
+    const toggleLike = async (bookId: number) => {
+        if (!userId) {
+            alert("Ошибка: Пользователь не авторизован.");
+            return;
+        }
+
+        const isLiked = favoriteData.some(
+            (item) => item.books_like.id === bookId
         );
-    };
 
+        try {
+            if (isLiked) {
+                const favoriteItem = favoriteData.find(
+                    (item) => item.books_like.id === bookId
+                );
+                if (favoriteItem?.id) {
+                    await removeFavorite(favoriteItem.id).unwrap();
+                }
+            } else {
+                await addFavorite({
+                    books_like: bookId,
+                    user_favorite: userId,
+                    like_favorite: true,
+                }).unwrap();
+            }
+        } catch (error) {
+            console.error("Ошибка изменения избранного:", error);
+        }
+    };
     if (isLoading) {
         return (
             <div className={scss.loaderBlock}>
@@ -150,7 +219,9 @@ const DetailCards = () => {
                                         </h4>
                                         <div className={scss.actions}>
                                             <button
-                                                onClick={handleAddToCart}
+                                                onClick={() =>
+                                                    handleToggleCart(item)
+                                                }
                                                 className={scss.button}
                                             >
                                                 В корзину
@@ -168,18 +239,39 @@ const DetailCards = () => {
                                                 onClick={() =>
                                                     toggleLike(item.id)
                                                 }
+                                                aria-label={
+                                                    favoriteData.some(
+                                                        (book) =>
+                                                            book.books_like
+                                                                .id === item.id
+                                                    )
+                                                        ? "Удалить из избранного"
+                                                        : "Добавить в избранное"
+                                                }
                                             >
                                                 <Image
                                                     width={24}
                                                     height={24}
                                                     src={
-                                                        likedItems.includes(
-                                                            item.id
+                                                        favoriteData.some(
+                                                            (book) =>
+                                                                book.books_like
+                                                                    .id ===
+                                                                item.id
                                                         )
                                                             ? likeActive
                                                             : like
                                                     }
-                                                    alt="Добавить в избранное"
+                                                    alt={
+                                                        favoriteData.some(
+                                                            (book) =>
+                                                                book.books_like
+                                                                    .id ===
+                                                                item.id
+                                                        )
+                                                            ? "Удалить из избранного"
+                                                            : "Добавить в избранное"
+                                                    }
                                                 />
                                             </button>
                                         </div>

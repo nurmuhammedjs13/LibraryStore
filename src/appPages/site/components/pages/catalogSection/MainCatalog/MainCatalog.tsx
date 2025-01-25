@@ -26,6 +26,11 @@ import {
     useRemoveKatFavoriteItemMutation,
 } from "@/redux/api/favorite";
 import { useGetMeQuery } from "@/redux/api/auth";
+import {
+    useAddToCartMutation,
+    useDeleteCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
 
 type Genre = {
     janre_name: string;
@@ -42,7 +47,7 @@ type BaseBookType = {
     author: string;
     price: number;
     discount: number;
-    description: string;
+    description?: string;
     average_rating: number;
     total_ratings: number;
     janre: Genre[];
@@ -82,6 +87,16 @@ type DiscountBookType = {
     discount_book: number;
 };
 
+interface Book {
+    id: number;
+    book_name: string;
+    author: string;
+    price: number;
+    average_rating: number;
+    janre: { janre_name: string }[];
+    book_images: { book_images: string }[];
+}
+
 const ITEMS_PER_PAGE = 24;
 
 const MainCatalog: React.FC = () => {
@@ -89,13 +104,15 @@ const MainCatalog: React.FC = () => {
     const [isFilterActive, setIsFilterActive] = useState(false);
 
     const router = useRouter();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
+    const { data: cartData = [] } = useGetCartItemsQuery();
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
     const [minPrice, setMinPrice] = useState<number | "">("");
     const [maxPrice, setMaxPrice] = useState<number | "">("");
     const [isRatingChecked, setIsRatingChecked] = useState<boolean>(false);
     const [isDiscountChecked, setIsDiscountChecked] = useState<boolean>(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
     const [visibleItems, setVisibleItems] = useState<number>(ITEMS_PER_PAGE);
 
     const {
@@ -255,6 +272,41 @@ const MainCatalog: React.FC = () => {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "auto";
+        }
+    };
+
+    const handleToggleCart = async (book: Book) => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
+
+        const isInCart = cartData.some((item) => item.books_id === book.id);
+
+        try {
+            if (isInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === book.id
+                );
+                if (cartItem?.books_id)
+                    await deleteCartItem(cartItem?.books_id).unwrap();
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: book.book_name,
+                        price: book.price,
+                    },
+                    quantity: 0,
+                    books_id: book.id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
         }
     };
     useEffect(() => {
@@ -541,8 +593,10 @@ const MainCatalog: React.FC = () => {
                                                         className={scss.actions}
                                                     >
                                                         <button
-                                                            onClick={
-                                                                handleAddToCart
+                                                            onClick={() =>
+                                                                handleToggleCart(
+                                                                    item
+                                                                )
                                                             }
                                                             className={
                                                                 scss.button
