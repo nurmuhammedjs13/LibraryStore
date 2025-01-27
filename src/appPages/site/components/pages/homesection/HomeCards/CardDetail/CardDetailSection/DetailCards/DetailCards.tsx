@@ -20,6 +20,11 @@ import {
     useRemoveKatFavoriteItemMutation,
 } from "@/redux/api/favorite";
 import { useGetMeQuery } from "@/redux/api/auth";
+import {
+    useAddToCartMutation,
+    useDeleteCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
 
 interface Book {
     id: number;
@@ -38,18 +43,51 @@ const DetailCards = () => {
     const { data: books = [], isLoading, isError } = useGetBooksQuery();
     const { data: favoriteData = [], isLoading: isFavLoading } =
         useGetKatFavoriteQuery();
+    const { data: cartData = [] } = useGetCartItemsQuery();
+
     const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
 
     const userId = meData?.id || null;
     const stars = [star0, star1, star2, star3, star4, star5];
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => setShowModal(false), 2000);
-    };
+    const handleToggleCart = async (book: Book) => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
 
+        const isInCart = cartData.some((item) => item.books_id === book.id);
+
+        try {
+            if (isInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === book.id
+                );
+                if (cartItem?.books_id)
+                    await deleteCartItem(cartItem?.books_id).unwrap();
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: book.book_name,
+                        price: book.price,
+                    },
+                    quantity: 0,
+                    books_id: book.id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
+        }
+    };
     const toggleLike = async (bookId: number) => {
         if (!userId) {
             alert("Ошибка: Пользователь не авторизован.");
@@ -163,7 +201,9 @@ const DetailCards = () => {
                                             </h1>
                                             <div className={scss.actions}>
                                                 <button
-                                                    onClick={handleAddToCart}
+                                                    onClick={() =>
+                                                        handleToggleCart(item)
+                                                    }
                                                     className={scss.button}
                                                 >
                                                     В корзину

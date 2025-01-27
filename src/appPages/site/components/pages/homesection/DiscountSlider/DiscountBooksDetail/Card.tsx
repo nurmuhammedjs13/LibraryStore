@@ -17,6 +17,12 @@ import like from "@/assets/Icons/like.png";
 import likeActive from "@/assets/Icons/likeActive.png";
 import back from "@/assets/Icons/Back.png";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
+import { useGetMeQuery } from "@/redux/api/auth";
+import {
+    useAddToCartMutation,
+    useDeleteCartMutation,
+    useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 
@@ -25,6 +31,12 @@ const CardDetail = () => {
     const [showModal, setShowModal] = useState(false);
     const [likedItems, setLikedItems] = useState<number[]>([]);
     const { id } = useParams();
+    const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
+    const userId = meData?.id || null;
+    const { data: cartData = [] } = useGetCartItemsQuery();
+    const [isInCart, setIsInCart] = useState(false);
+    const [addToCartMutation] = useAddToCartMutation();
+    const [deleteCartItem] = useDeleteCartMutation();
 
     const { data, isLoading, isError } = useGetDiscountQuery();
 
@@ -48,6 +60,47 @@ const CardDetail = () => {
             </div>
         );
     }
+
+    const handleToggleCart = async () => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
+
+        try {
+            const isBookInCart = cartData.some(
+                (item) => item.books_id === data?.[0].id
+            );
+
+            if (isBookInCart) {
+                const cartItem = cartData.find(
+                    (item) => item.books_id === data?.[0].id
+                );
+                if (cartItem) {
+                    await deleteCartItem(cartItem.books_id).unwrap();
+                    setIsInCart(false);
+                }
+            } else {
+                const requestBody = {
+                    books: {
+                        book_name: data?.[0].books.book_name,
+                        price: data?.[0].books.price,
+                    },
+                    quantity: 0,
+                    books_id: data?.[0].id,
+                };
+                await addToCartMutation(requestBody).unwrap();
+                setIsInCart(true);
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } catch (error) {
+            console.error("Ошибка изменения корзины:", error);
+            alert("Произошла ошибка при работе с корзиной.");
+        }
+    };
 
     if (isError) {
         return (
@@ -149,7 +202,7 @@ const CardDetail = () => {
                                         </h1>
                                         <div className={scss.actions}>
                                             <button
-                                                onClick={handleAddToCart}
+                                                onClick={handleToggleCart}
                                                 className={scss.cardButton}
                                             >
                                                 В корзину

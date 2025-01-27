@@ -21,17 +21,17 @@ namespace ADDTOCART {
 
     export type AddToCardRequest = {
         books: {
-            book_name: string;
+            book_name?: string | undefined;
             author?: string;
-            price: number;
+            price?: number;
         };
         quantity: number;
-        books_id: number;
+        books_id?: number;
     };
 
     export type AddToCardResponse = {
         books: {
-            book_name: string;
+            book_name?: string;
             author?: string;
             price: number;
         };

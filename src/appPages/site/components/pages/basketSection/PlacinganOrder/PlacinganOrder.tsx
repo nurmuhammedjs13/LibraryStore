@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./PlacinganOrder.module.scss";
-import img from "@/assets/welcome/landMark1.png";
 import Image from "next/image";
 import DeleteIcon from "@/assets/Icons/DeleteIcon";
 import Minus from "@/assets/Icons/Minus";

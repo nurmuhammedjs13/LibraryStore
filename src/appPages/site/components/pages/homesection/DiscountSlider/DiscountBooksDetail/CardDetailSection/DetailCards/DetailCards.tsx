@@ -21,6 +21,11 @@ import {
   useGetKatFavoriteQuery,
   useRemoveKatFavoriteItemMutation,
 } from "@/redux/api/favorite";
+import {
+  useAddToCartMutation,
+  useDeleteCartMutation,
+  useGetCartItemsQuery,
+} from "@/redux/api/addToCart";
 import { useGetMeQuery } from "@/redux/api/auth";
 
 interface Book {
@@ -36,19 +41,47 @@ interface Book {
 const DetailCards = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [likedItems, setLikedItems] = useState<number[]>([]);
   const stars = [star0, star1, star2, star3, star4, star5];
-  const { data: favoriteData = [], isLoading: isFavLoading } =
-    useGetKatFavoriteQuery();
+
+  const { data: favoriteData = [], isLoading: isFavLoading } = useGetKatFavoriteQuery();
+  const { data: cartData = [] } = useGetCartItemsQuery();
   const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
   const [addFavorite] = useAddKatFavoriteItemMutation();
   const [removeFavorite] = useRemoveKatFavoriteItemMutation();
+  const [addToCartMutation] = useAddToCartMutation();
+  const [deleteCartItem] = useDeleteCartMutation();
   const { data = [], isLoading, isError } = useGetBooksQuery();
+
   const userId = meData?.id || null;
 
-  const handleAddToCart = () => {
-    setShowModal(true);
-    setTimeout(() => setShowModal(false), 2000);
+  const handleToggleCart = async (book: Book) => {
+    if (!userId) {
+      alert("Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину.");
+      return;
+    }
+
+    const isInCart = cartData.some((item) => item.books_id === book.id);
+
+    try {
+      if (isInCart) {
+        const cartItem = cartData.find((item) => item.books_id === book.id);
+        if (cartItem?.books_id) await deleteCartItem(cartItem?.books_id).unwrap();
+      } else {
+        const requestBody = {
+          books: {
+            book_name: book.book_name,
+            price: book.price,
+          },
+          quantity: 0,
+          books_id: book.id,
+        };
+        await addToCartMutation(requestBody).unwrap();
+        setShowModal(true);
+        setTimeout(() => setShowModal(false), 2000);
+      }
+    } catch (error) {
+      console.error("Ошибка изменения корзины:", error);
+    }
   };
 
   const toggleLike = async (bookId: number) => {
@@ -61,9 +94,7 @@ const DetailCards = () => {
 
     try {
       if (isLiked) {
-        const favoriteItem = favoriteData.find(
-          (item) => item.books_like.id === bookId
-        );
+        const favoriteItem = favoriteData.find((item) => item.books_like.id === bookId);
         if (favoriteItem?.id) {
           await removeFavorite(favoriteItem.id).unwrap();
         }
@@ -90,7 +121,7 @@ const DetailCards = () => {
   if (isError) {
     return (
       <div className={scss.loaderBlock}>
-        <div>Ошибка загрузки данных. Попробуйте позже.</div>;
+        <div>Ошибка загрузки данных. Попробуйте позже.</div>
       </div>
     );
   }
@@ -140,8 +171,7 @@ const DetailCards = () => {
                   <h2 className={scss.name}>{item.book_name}</h2>
                   <h3 className={scss.author}>{item.author}</h3>
                   <p className={scss.genre}>
-                    Жанр:{" "}
-                    {item.janre.map((janre, i) => (
+                    Жанр: {item.janre.map((janre, i) => (
                       <span key={janre.janre_name} className={scss.janre}>
                         {janre.janre_name}
                         {i < item.janre.length - 1 && ", "}
@@ -159,7 +189,10 @@ const DetailCards = () => {
                       {item.price} c
                     </h4>
                     <div className={scss.actions}>
-                      <button onClick={handleAddToCart} className={scss.button}>
+                      <button
+                        onClick={() => handleToggleCart(item)}
+                        className={scss.button}
+                      >
                         В корзину
                       </button>
                       {showModal && (

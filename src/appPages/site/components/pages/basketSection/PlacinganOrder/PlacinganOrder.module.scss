@@ -21,9 +21,9 @@
                 align-items: center;
                 justify-content: space-between;
                 width: 500px;
-                padding-top: 25px;
+                padding: 12px 20px;
                 margin-left: 20px;
-                height: 140px;
+                height: 155px;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
@@ -32,18 +32,26 @@
                 margin: 10px 20px;
                 border-radius: 20px;
                 background: rgb(255, 255, 255);
+                
                 .ImgBlock {
                     display: flex;
+                    gap: 10px;
                     .img {
                         img {
                             width: 90px;
                             height: 120px;
-                        }
+                            border-radius: 12px;
+                            -webkit-border-radius: 12px;
+                            -moz-border-radius: 12px;
+                            -ms-border-radius: 12px;
+                            -o-border-radius: 12px;
+}
                     }
                     .ImgText {
                         display: flex;
                         flex-direction: column;
-                        gap: 8px;
+                        gap: 5px;
+                        width: 60%;
                         h2 {
                             color: rgb(0, 0, 0);
                             font-family: Nunito;
@@ -84,6 +92,7 @@
                     display: flex;
                     align-items: center;
                     gap: 10px;
+                    width: 25%;
                     h5 {
                         color: rgb(38, 82, 176);
                         font-family: Nunito;
