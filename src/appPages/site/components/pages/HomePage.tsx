@@ -5,14 +5,14 @@ import HomeCards from "./homesection/HomeCards/HomeCards";
 import DiscountSlider from "./homesection/DiscountSlider/DiscountSlider";
 
 const HomePage = () => {
-    return (
-        <div>
-            <Welcome />
-            <HomeCards />
-            <DiscountSlider />
-            <AboutUs />
-        </div>
-    );
+  return (
+    <div>
+      <Welcome />
+      <HomeCards />
+      <DiscountSlider />
+      <AboutUs />
+    </div>
+  );
 };
 
 export default HomePage;

@@ -162,7 +162,7 @@ const CardDetail = () => {
                                                     </p>
                                                 </div>
                                             )}
-                                            <button
+                                            {/* <button
                                                 className={scss.buttonLike}
                                                 onClick={() =>
                                                     toggleLike(book.id)
@@ -180,7 +180,7 @@ const CardDetail = () => {
                                                     }
                                                     alt="Toggle favorite"
                                                 />
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
