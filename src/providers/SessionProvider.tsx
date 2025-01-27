@@ -16,7 +16,6 @@ export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
     const token = Cookies.get("token");
     const refreshToken = Cookies.get("refresh");
 
-    // Проверка на наличие токенов
     if (!refreshToken || !token) {
       console.warn("Токен или refresh токен отсутствуют.");
       return;
