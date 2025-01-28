@@ -32,10 +32,8 @@ const PlacinganOrder = () => {
         try {
             setDeleteError(null);
             await deleteCartItem(id).unwrap();
-            // Success notification could be added here
         } catch (error) {
             console.error("Error deleting item:", error);
-            // Error notification could be added here
         }
     };
     const handleQuantityChange = async (

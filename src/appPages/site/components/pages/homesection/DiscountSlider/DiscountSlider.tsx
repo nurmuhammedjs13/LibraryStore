@@ -51,7 +51,7 @@ const Slide: React.FC<SlideProps> = ({ slide }) => {
 
     useEffect(() => {
         const cartItem = cartData.find(
-            (item) => item.books_id === slide.books.id
+            (item) => item.books.id === slide.books.id
         );
         setIsInCart(!!cartItem);
     }, [cartData, slide.books.id]);
@@ -77,10 +77,10 @@ const Slide: React.FC<SlideProps> = ({ slide }) => {
         try {
             if (isInCart) {
                 const cartItem = cartData.find(
-                    (item) => item.books_id === slide.books.id
+                    (item) => item.id === slide.books.id
                 );
                 if (cartItem) {
-                    await deleteCartItem(cartItem.books_id).unwrap();
+                    await deleteCartItem(cartItem.id).unwrap();
                     setIsInCart(false);
                 }
             } else {
