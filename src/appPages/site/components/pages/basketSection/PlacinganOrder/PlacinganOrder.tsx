@@ -7,21 +7,59 @@ import Minus from "@/assets/Icons/Minus";
 import Plus from "@/assets/Icons/Plus";
 import Price from "@/assets/Icons/Price";
 import ImgStop from "@/assets/Icons/imgStop";
-import { useGetCartItemsQuery } from "@/redux/api/addToCart";
+import {
+    useGetCartItemsQuery,
+    useDeleteCartMutation,
+    useUpdateQuantityMutation,
+} from "@/redux/api/addToCart";
 
 const PlacinganOrder = () => {
-    const { data = [], isLoading, isError } = useGetCartItemsQuery();
+    const { data: cartData = [], isLoading } = useGetCartItemsQuery();
+    const [deleteCartItem] = useDeleteCartMutation();
+    const [updateQuantity] = useUpdateQuantityMutation();
+    const [deleteError, setDeleteError] = useState(null);
 
     const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
         "delivery"
     );
+
+    const handleDelete = async (id: number) => {
+        if (!id) {
+            console.error("No item ID provided for deletion");
+            return;
+        }
+
+        try {
+            setDeleteError(null);
+            await deleteCartItem(id).unwrap();
+            // Success notification could be added here
+        } catch (error) {
+            console.error("Error deleting item:", error);
+            // Error notification could be added here
+        }
+    };
+    const handleQuantityChange = async (
+        id: number,
+        currentQuantity: number,
+        increment: boolean
+    ) => {
+        const newQuantity = increment
+            ? currentQuantity + 1
+            : Math.max(1, currentQuantity - 1);
+
+        try {
+            await updateQuantity({ id, quantity: newQuantity });
+        } catch (error) {
+            console.error("Error updating quantity:", error);
+        }
+    };
     return (
         <div className={styles.mainBlock}>
             <div className="container">
                 <div className={styles.block}>
                     <div className={styles.landmark}>
-                        {data.map((item, index) => (
-                            <div className={styles.cardBlock} key={index}>
+                        {cartData.map((item, index) => (
+                            <div className={styles.cardBlock} key={item.id}>
                                 <div className={styles.ImgBlock}>
                                     <div className={styles.img}>
                                         <Image
@@ -37,13 +75,42 @@ const PlacinganOrder = () => {
                                     <div className={styles.ImgText}>
                                         <h2>{item.books.book_name}</h2>
                                         <h3>{item.books.author}</h3>
-                                        <DeleteIcon />
+                                        <div
+                                            onClick={() =>
+                                                handleDelete(item.id)
+                                            }
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <DeleteIcon />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={styles.quantity}>
-                                    <Minus />
+                                    <div
+                                        onClick={() =>
+                                            handleQuantityChange(
+                                                item.books.id,
+                                                item.quantity,
+                                                false
+                                            )
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <Minus />
+                                    </div>
                                     <h1>{item.quantity}</h1>
-                                    <Plus />
+                                    <div
+                                        onClick={() =>
+                                            handleQuantityChange(
+                                                item.books.id,
+                                                item.quantity,
+                                                true
+                                            )
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <Plus />
+                                    </div>
                                 </div>
                                 <div className={styles.price}>
                                     <Price />
@@ -113,8 +180,17 @@ const PlacinganOrder = () => {
                             </div>
                             <div className={styles.uploadFile}>
                                 <div className={styles.text1}>
-                                    <h4>Товары: 4шт</h4>
-                                    <h4>2800 сом</h4>
+                                    <h4>Товары: {cartData.length}шт</h4>
+                                    <h4>
+                                        {cartData.reduce(
+                                            (sum, item) =>
+                                                sum +
+                                                item.books.price *
+                                                    item.quantity,
+                                            0
+                                        )}{" "}
+                                        сом
+                                    </h4>
                                 </div>
                                 <div className={styles.text2}>
                                     <h4>
@@ -124,7 +200,16 @@ const PlacinganOrder = () => {
                                 </div>
                                 <div className={styles.text3}>
                                     <h3>Итого</h3>
-                                    <h3>2800 сом</h3>
+                                    <h3>
+                                        {cartData.reduce(
+                                            (sum, item) =>
+                                                sum +
+                                                item.books.price *
+                                                    item.quantity,
+                                            0
+                                        )}{" "}
+                                        сом
+                                    </h3>
                                 </div>
                                 <div className={styles.text4}>
                                     <h2>Загрузите чек оплаты</h2>

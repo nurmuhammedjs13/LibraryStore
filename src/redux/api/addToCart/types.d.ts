@@ -3,19 +3,17 @@ namespace ADDTOCART {
 
     type GetCartItemsResponse = [
         {
+            id: number;
             books: {
-                id: 0;
-                book_images: [
-                    {
-                        book_images: string;
-                    }
-                ];
+                id: number;
+                book_images: Array<{
+                    book_images: string;
+                }>;
                 book_name: string;
                 author: string;
                 price: number;
             };
             quantity: number;
-            books_id: number;
         }
     ];
 
