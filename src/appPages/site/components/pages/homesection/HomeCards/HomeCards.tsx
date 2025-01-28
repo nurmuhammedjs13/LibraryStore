@@ -68,6 +68,7 @@ const HomeCards: React.FC = () => {
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
 
+
     const toggleLike = async (bookId: number) => {
         if (!userId) {
             alert("Ошибка: Пользователь не авторизован.");
@@ -119,12 +120,16 @@ const HomeCards: React.FC = () => {
 
     const latestBooks: Book[] = books.slice(-BOOKS_TO_DISPLAY);
 
+    
+
     const toggleCart = async (book: Book) => {
         if (!userId) {
             alert("Ошибка: Пользователь не авторизован.");
             return;
         }
 
+      
+      
         try {
             const isInCart = cartData?.some(
                 (item) => item?.books_id === book.id
