@@ -5,6 +5,7 @@ const api = index.injectEndpoints({
             query: () => ({
                 url: `/about_us/`,
                 method: "GET",
+                noAuth: true
             }),
             providesTags: ["aboutUs"],
         })
