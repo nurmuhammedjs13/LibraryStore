@@ -283,15 +283,12 @@ const MainCatalog: React.FC = () => {
             return;
         }
 
-        const isInCart = cartData.some((item) => item.books_id === book.id);
+        const isInCart = cartData.some((item) => item.id === book.id);
 
         try {
             if (isInCart) {
-                const cartItem = cartData.find(
-                    (item) => item.books_id === book.id
-                );
-                if (cartItem?.books_id)
-                    await deleteCartItem(cartItem?.books_id).unwrap();
+                const cartItem = cartData.find((item) => item.id === book.id);
+                if (cartItem?.id) await deleteCartItem(cartItem?.id).unwrap();
             } else {
                 const requestBody = {
                     books: {
