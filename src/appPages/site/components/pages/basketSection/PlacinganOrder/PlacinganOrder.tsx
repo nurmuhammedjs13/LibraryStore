@@ -12,6 +12,8 @@ import {
     useDeleteCartMutation,
     useUpdateQuantityMutation,
 } from "@/redux/api/addToCart";
+import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
+import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
 
 interface OrderFormData {
     firstName: string;
@@ -40,10 +42,14 @@ type CartItem = {
 const PlacinganOrder = () => {
     const { data: cartData = [], isLoading } = useGetCartItemsQuery();
     const [deleteCartItem] = useDeleteCartMutation();
+    const [postRegDelivery] = usePostRegDeliveryMutation();
+    const [postRegPickUp] = usePostRegPickUpMutation();
     const [updateQuantity] = useUpdateQuantityMutation();
     const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
         "delivery"
     );
+    const [validationError, setValidationError] = useState<string>("");
+
     const [formData, setFormData] = useState<OrderFormData>({
         firstName: "",
         lastName: "",
@@ -79,9 +85,30 @@ const PlacinganOrder = () => {
         return uniqueItems;
     }, [cartData, deleteCartItem]);
 
+    const formatPhoneNumber = (phone: string): string => {
+        const cleaned = phone.replace(/\D/g, "");
+
+        if (!cleaned.startsWith("996")) {
+            return `+996${cleaned}`;
+        }
+        return `+${cleaned}`;
+    };
+
+    const validatePhoneNumber = (phone: string): boolean => {
+        const phoneRegex = /^\+996\d{9}$/;
+        return phoneRegex.test(formatPhoneNumber(phone));
+    };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, files } = e.target;
-        if (type === "file" && files) {
+
+        if (name === "phone") {
+            const sanitizedValue = value.replace(/[^\d+\s()-]/g, "");
+            setFormData((prev) => ({
+                ...prev,
+                [name]: sanitizedValue,
+            }));
+        } else if (type === "file" && files) {
             setFormData((prev) => ({
                 ...prev,
                 receipt: files[0],
@@ -92,6 +119,8 @@ const PlacinganOrder = () => {
                 [name]: value,
             }));
         }
+
+        setValidationError("");
     };
 
     const handleDelete = async (id: number) => {
@@ -131,26 +160,78 @@ const PlacinganOrder = () => {
     const handleSubmitOrder = async (e: React.FormEvent) => {
         e.preventDefault();
         if (uniqueCartItems.length === 0) {
-            alert("Корзина пуста!");
+            setValidationError("Корзина пуста!");
             return;
         }
 
+        const formattedPhone = formatPhoneNumber(formData.phone);
+        if (!validatePhoneNumber(formattedPhone)) {
+            setValidationError(
+                "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
+            );
+            return;
+        }
         try {
-            const orderData = {
-                ...formData,
-                items: uniqueCartItems.map((item) => ({
-                    book_id: item.books.id,
-                    quantity: item.quantity,
-                })),
-                delivery_type: activeButton,
-                total_amount: calculateTotal(),
-            };
+            for (const item of uniqueCartItems) {
+                const commonData = {
+                    client: 1,
+                    cart_item: item.id,
+                    client_first_name: formData.firstName,
+                    client_last_name: formData.lastName,
+                    client_email: formData.email,
+                    client_phone_number: formattedPhone,
+                    text: formData.comments,
+                };
 
-            console.log("Order submitted:", orderData);
-            alert("Заказ успешно оформлен!");
-        } catch (error) {
-            console.error("Error submitting order:", error);
-            alert("Ошибка при оформлении заказа");
+                let response;
+                if (activeButton === "delivery") {
+                    const deliveryData = {
+                        ...commonData,
+                        delivery: "доставка",
+                        client_address: formData.address || "",
+                    };
+                    console.log(
+                        "Sending delivery request with data:",
+                        deliveryData
+                    );
+                    response = await postRegDelivery(deliveryData).unwrap();
+                    console.log(
+                        "Delivery order registration successful:",
+                        response
+                    );
+                } else {
+                    const pickupData = {
+                        ...commonData,
+                        delivery: "самовывоз",
+                    };
+                    console.log(
+                        "Sending pickup request with data:",
+                        pickupData
+                    );
+                    response = await postRegPickUp(pickupData).unwrap();
+                    console.log(
+                        "Pickup order registration successful:",
+                        response
+                    );
+                }
+            }
+
+            alert(
+                `Заказ успешно оформлен! Тип: ${
+                    activeButton === "delivery" ? "Доставка" : "Самовывоз"
+                }`
+            );
+
+            setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                address: "",
+                comments: "",
+            });
+        } catch (error: unknown) {
+            console.error("Order submission error:", error);
         }
     };
 
@@ -229,6 +310,11 @@ const PlacinganOrder = () => {
                         className={styles.mainInput}
                     >
                         <h1>Оформление заказа</h1>
+                        {validationError && (
+                            <div className={styles.errorMessage}>
+                                {validationError}
+                            </div>
+                        )}
                         <div className={styles.InputBlock}>
                             <div className={styles.BlockBtn}>
                                 <button
@@ -295,6 +381,7 @@ const PlacinganOrder = () => {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleInputChange}
+                                        placeholder="+996XXXXXXXXX"
                                         required
                                     />
                                     <hr />
