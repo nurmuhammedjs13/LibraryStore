@@ -89,7 +89,7 @@ const Slide: React.FC<SlideProps> = ({ slide }) => {
                         book_name: slide.books.book_name,
                         price: slide.discount_book,
                     },
-                    quantity: 0,
+                    quantity: 1,
                     books_id: slide.books.id,
                 };
                 await addToCartMutation(requestBody).unwrap();

@@ -1,40 +1,18 @@
 namespace REGPICKUP {
-    type GetRegPickUpResponse = [
-        {
-            id: number;
-            client: number;
-            delivery: string;
-            cart_item: number;
-            client_first_name: string;
-            client_last_name: string;
-            client_email: string;
-            client_phone_number: string;
-            text: string;
-            created_at: string;
-        }
-    ];
-
-    type GetRegPickUpRequest = void;
-
-    type PostRegPickUpRequest = {
-        client: number;
+    export interface BasePickupData {
+        client: number | null;
         delivery: string;
-        cart_item: number;
+        cart: number;
         client_first_name: string;
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
         text: string;
-    };
+        cart_id: number;
+    }
 
-    type PostRegPickUpResponse = {
-        client: number;
-        delivery: string;
-        cart_item: number;
-        client_first_name: string;
-        client_last_name: string;
-        client_email: string;
-        client_phone_number: string;
-        text: string;
-    };
+    export type GetRegPickUpResponse = GetPickupItem[];
+    export type GetRegPickUpRequest = void;
+    export type PostRegPickUpRequest = BasePickupData;
+    export type PostRegPickUpResponse = GetPickupItem;
 }

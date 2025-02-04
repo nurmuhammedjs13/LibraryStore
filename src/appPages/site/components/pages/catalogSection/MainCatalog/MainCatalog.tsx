@@ -295,7 +295,7 @@ const MainCatalog: React.FC = () => {
                         book_name: book.book_name,
                         price: book.price,
                     },
-                    quantity: 0,
+                    quantity: 1,
                     books_id: book.id,
                 };
                 await addToCartMutation(requestBody).unwrap();

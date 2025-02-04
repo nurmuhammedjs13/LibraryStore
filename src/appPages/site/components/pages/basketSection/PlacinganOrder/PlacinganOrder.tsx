@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, ChangeEvent, FormEvent } from "react";
 import styles from "./PlacinganOrder.module.scss";
 import Image from "next/image";
 import DeleteIcon from "@/assets/Icons/DeleteIcon";
@@ -14,7 +14,9 @@ import {
 } from "@/redux/api/addToCart";
 import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
 import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
+import { useGetMeQuery } from "@/redux/api/auth";
 
+// Types
 interface OrderFormData {
     firstName: string;
     lastName: string;
@@ -25,7 +27,7 @@ interface OrderFormData {
     receipt?: File;
 }
 
-type CartItem = {
+interface CartItem {
     id: number;
     books: {
         id: number;
@@ -37,19 +39,56 @@ type CartItem = {
         price: number;
     };
     quantity: number;
-};
+}
+
+// Base interface for common order data
+interface CommonOrderData {
+    client: number | null; // Changed from undefined to null
+    cart: number;
+    cart_id: number;
+    client_first_name: string;
+    client_last_name: string;
+    client_email: string;
+    client_phone_number: string;
+    client_address: string; // Made required in base interface
+    text: string;
+}
+
+interface CommonOrderData {
+    client: number | null;
+    cart: number;
+    cart_id: number;
+    client_first_name: string;
+    client_last_name: string;
+    client_email: string;
+    client_phone_number: string;
+    client_address: string;
+    text: string;
+}
+
+interface DeliveryOrderData extends CommonOrderData {
+    delivery: "доставка";
+}
+
+// Pickup specific interface
+interface PickupOrderData extends CommonOrderData {
+    delivery: "самовывоз";
+}
 
 const PlacinganOrder = () => {
+    // Queries and Mutations
     const { data: cartData = [], isLoading } = useGetCartItemsQuery();
     const [deleteCartItem] = useDeleteCartMutation();
     const [postRegDelivery] = usePostRegDeliveryMutation();
+    const { data: meData } = useGetMeQuery();
     const [postRegPickUp] = usePostRegPickUpMutation();
     const [updateQuantity] = useUpdateQuantityMutation();
+
+    // State
     const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
         "delivery"
     );
     const [validationError, setValidationError] = useState<string>("");
-
     const [formData, setFormData] = useState<OrderFormData>({
         firstName: "",
         lastName: "",
@@ -59,6 +98,7 @@ const PlacinganOrder = () => {
         comments: "",
     });
 
+    // Memoized cart items with deduplication
     const uniqueCartItems = useMemo(() => {
         const seen = new Map<string, number>();
         const uniqueItems: CartItem[] = [];
@@ -85,13 +125,10 @@ const PlacinganOrder = () => {
         return uniqueItems;
     }, [cartData, deleteCartItem]);
 
+    // Utility functions
     const formatPhoneNumber = (phone: string): string => {
         const cleaned = phone.replace(/\D/g, "");
-
-        if (!cleaned.startsWith("996")) {
-            return `+996${cleaned}`;
-        }
-        return `+${cleaned}`;
+        return !cleaned.startsWith("996") ? `+996${cleaned}` : `+${cleaned}`;
     };
 
     const validatePhoneNumber = (phone: string): boolean => {
@@ -99,25 +136,16 @@ const PlacinganOrder = () => {
         return phoneRegex.test(formatPhoneNumber(phone));
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, files } = e.target;
 
         if (name === "phone") {
             const sanitizedValue = value.replace(/[^\d+\s()-]/g, "");
-            setFormData((prev) => ({
-                ...prev,
-                [name]: sanitizedValue,
-            }));
+            setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
         } else if (type === "file" && files) {
-            setFormData((prev) => ({
-                ...prev,
-                receipt: files[0],
-            }));
+            setFormData((prev) => ({ ...prev, receipt: files[0] }));
         } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
+            setFormData((prev) => ({ ...prev, [name]: value }));
         }
 
         setValidationError("");
@@ -128,6 +156,7 @@ const PlacinganOrder = () => {
             await deleteCartItem(id).unwrap();
         } catch (error) {
             console.error("Error deleting item:", error);
+            setValidationError("Ошибка при удалении товара");
         }
     };
 
@@ -143,6 +172,7 @@ const PlacinganOrder = () => {
             await updateQuantity({ id, quantity: newQuantity }).unwrap();
         } catch (error) {
             console.error("Error updating quantity:", error);
+            setValidationError("Ошибка при обновлении количества");
         }
     };
 
@@ -157,13 +187,34 @@ const PlacinganOrder = () => {
         );
     };
 
-    const handleSubmitOrder = async (e: React.FormEvent) => {
+    const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
+
+        // Validate cart is not empty
         if (uniqueCartItems.length === 0) {
             setValidationError("Корзина пуста!");
             return;
         }
 
+        // Validate form fields
+        if (
+            !formData.firstName ||
+            !formData.lastName ||
+            !formData.email ||
+            !formData.phone
+        ) {
+            setValidationError("Пожалуйста, заполните все обязательные поля");
+            return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setValidationError("Пожалуйста, введите корректный email адрес");
+            return;
+        }
+
+        // Validate and format phone number
         const formattedPhone = formatPhoneNumber(formData.phone);
         if (!validatePhoneNumber(formattedPhone)) {
             setValidationError(
@@ -171,48 +222,55 @@ const PlacinganOrder = () => {
             );
             return;
         }
+
+        // Validate address for delivery option
+        if (activeButton === "delivery" && !formData.address) {
+            setValidationError("Пожалуйста, укажите адрес доставки");
+            return;
+        }
+
         try {
+            // Process each cart item
             for (const item of uniqueCartItems) {
-                const commonData = {
-                    client: 1,
-                    cart_item: item.id,
-                    client_first_name: formData.firstName,
-                    client_last_name: formData.lastName,
-                    client_email: formData.email,
+                const commonOrderData = {
+                    client: meData?.id ?? null,
+                    cart: item.id,
+                    cart_id: item.id,
+                    client_first_name: formData.firstName.trim(),
+                    client_last_name: formData.lastName.trim(),
+                    client_email: formData.email.trim(),
                     client_phone_number: formattedPhone,
-                    text: formData.comments,
+                    text: formData.comments.trim(),
                 };
 
-                let response;
                 if (activeButton === "delivery") {
-                    const deliveryData = {
-                        ...commonData,
+                    const deliveryData: DeliveryOrderData = {
+                        ...commonOrderData,
                         delivery: "доставка",
-                        client_address: formData.address || "",
+                        client_address: formData.address?.trim() || "",
                     };
-                    console.log(
-                        "Sending delivery request with data:",
-                        deliveryData
-                    );
-                    response = await postRegDelivery(deliveryData).unwrap();
-                    console.log(
-                        "Delivery order registration successful:",
-                        response
-                    );
+
+                    try {
+                        await postRegDelivery(deliveryData).unwrap();
+                    } catch (error) {
+                        throw new Error(
+                            `Ошибка при оформлении доставки: ${error}`
+                        );
+                    }
                 } else {
-                    const pickupData = {
-                        ...commonData,
+                    const pickupData: PickupOrderData = {
+                        ...commonOrderData,
                         delivery: "самовывоз",
+                        client_address: "самовывоз",
                     };
-                    console.log(
-                        "Sending pickup request with data:",
-                        pickupData
-                    );
-                    response = await postRegPickUp(pickupData).unwrap();
-                    console.log(
-                        "Pickup order registration successful:",
-                        response
-                    );
+
+                    try {
+                        await postRegPickUp(pickupData).unwrap();
+                    } catch (error) {
+                        throw new Error(
+                            `Ошибка при оформлении самовывоза: ${error}`
+                        );
+                    }
                 }
             }
 
@@ -230,8 +288,16 @@ const PlacinganOrder = () => {
                 address: "",
                 comments: "",
             });
-        } catch (error: unknown) {
+
+            // Clear validation errors
+            setValidationError("");
+        } catch (error) {
             console.error("Order submission error:", error);
+            setValidationError(
+                error instanceof Error
+                    ? error.message
+                    : "Ошибка при оформлении заказа"
+            );
         }
     };
 
