@@ -28,7 +28,7 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
   const [postLogin] = usePostLoginMutation();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const nav =useRouter()
+  const nav = useRouter();
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
     try {
       const { data: responseData, error } = await postLogin(data);
@@ -39,7 +39,7 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
         Cookies.set("user", JSON.stringify(responseData.user), {
           expires: 360,
         });
-        window.location.reload()
+        window.location.reload();
       } else {
         setLoginError("Ошибка входа, попробуйте еще раз.");
         console.error("Ошибка:", error);
@@ -87,11 +87,11 @@ const Login: FC<IIsopen> = ({ setIsOpenAuth }) => {
             <button type="submit">Войти</button>
           </form>
           {loginError && <div className={scss.loginError}>{loginError}</div>}
-          <a>
-            У вас нет аккаунта?{" "}
-            <span onClick={() => setIsOpenAuth(true)}>Зарегистрироваться</span>
+          <a onClick={() => setIsOpenAuth(true)}>
+            <span> У вас нет аккаунта? </span>
+            Зарегистрироваться
           </a>
-          <a onClick={()=>nav.push('/forgot')}>Забыли пароль</a>
+          <a onClick={() => nav.push("/forgot")}>Забыли пароль</a>
         </div>
       </div>
     </div>
