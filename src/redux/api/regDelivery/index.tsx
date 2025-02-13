@@ -7,17 +7,17 @@ const api = index.injectEndpoints({
             REGDELIVERY.GetRegDeliveryRequest
         >({
             query: () => ({
-                url: `delivery-list`,
+                url: `/delivery-list/`,
                 method: "GET",
             }),
             providesTags: ["regdelivery"],
         }),
         postRegDelivery: build.mutation<
-            REGDELIVERY.PostRegDeliveryResponse,
-            REGDELIVERY.PostRegDeliveryResponse
+            REGDELIVERY.PostRatingResponse,
+            REGDELIVERY.PostRegDeliveryRequest
         >({
             query: (request) => ({
-                url: `create_delivery`,
+                url: `/create_delivery/`,
                 method: "POST",
                 body: request,
             }),

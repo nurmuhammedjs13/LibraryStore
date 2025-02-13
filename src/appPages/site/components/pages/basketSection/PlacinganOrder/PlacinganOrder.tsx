@@ -257,7 +257,6 @@ const PlacinganOrder = () => {
                         const pickupData = {
                             ...commonOrderData,
                             delivery: "самовывоз",
-                            client_address: "самовывоз",
                         };
 
                         console.log("Sending pickup order:", pickupData);
@@ -266,22 +265,36 @@ const PlacinganOrder = () => {
                         ).unwrap();
                         console.log("Pickup response:", response);
                     }
-                } catch (error: any) {
-                    console.error("API Error:", {
-                        status: error.status,
-                        data: error.data,
-                        error: error,
-                    });
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("API Error:", error.message);
+                        throw new Error(error.message);
+                    } else if (
+                        typeof error === "object" &&
+                        error !== null &&
+                        "status" in error
+                    ) {
+                        const apiError = error as {
+                            status: number;
+                            data?: { message?: string };
+                        };
 
-                    if (error.data?.message) {
-                        throw new Error(error.data.message);
-                    } else if (error.status === 500) {
-                        throw new Error(
-                            "Ошибка сервера. Пожалуйста, попробуйте позже."
-                        );
+                        console.error("API Error:", apiError);
+
+                        if (apiError.data?.message) {
+                            throw new Error(apiError.data.message);
+                        } else if (apiError.status === 500) {
+                            throw new Error(
+                                "Ошибка сервера. Пожалуйста, попробуйте позже."
+                            );
+                        } else {
+                            throw new Error(
+                                "Ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
+                            );
+                        }
                     } else {
                         throw new Error(
-                            "Ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
+                            "Произошла неизвестная ошибка при оформлении заказа."
                         );
                     }
                 }
@@ -300,11 +313,12 @@ const PlacinganOrder = () => {
                 setValidationError(error.message);
             } else {
                 setValidationError(
-                    "Произошла неизвестная ошибка при оформлении заказа"
+                    "Произошла неизвестная ошибка при оформлении заказа."
                 );
             }
         }
     };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
