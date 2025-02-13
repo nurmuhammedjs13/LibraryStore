@@ -41,7 +41,7 @@ interface CartItem {
     quantity: number;
 }
 
-// Base interface for common order data
+// Базовый интерфейс для общих данных заказа
 interface CommonOrderData {
     client: number | null; // Changed from undefined to null
     cart: number;
