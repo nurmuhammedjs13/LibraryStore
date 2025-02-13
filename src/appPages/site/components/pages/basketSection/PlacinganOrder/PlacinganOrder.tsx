@@ -50,19 +50,7 @@ interface CommonOrderData {
     client_last_name: string;
     client_email: string;
     client_phone_number: string;
-    client_address: string; // Made required in base interface
-    text: string;
-}
-
-interface CommonOrderData {
-    client: number | null;
-    cart: number;
-    cart_id: number;
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    client_address: string;
+    client_address?: string; // Made required in base interface
     text: string;
 }
 
@@ -73,6 +61,12 @@ interface DeliveryOrderData extends CommonOrderData {
 // Pickup specific interface
 interface PickupOrderData extends CommonOrderData {
     delivery: "самовывоз";
+}
+interface ApiError {
+    status?: number;
+    data?: {
+        message?: string;
+    };
 }
 
 const PlacinganOrder = () => {
@@ -190,52 +184,55 @@ const PlacinganOrder = () => {
     const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
 
-        // Validate cart is not empty
-        if (uniqueCartItems.length === 0) {
-            setValidationError("Корзина пуста!");
-            return;
-        }
-
-        // Validate form fields
-        if (
-            !formData.firstName ||
-            !formData.lastName ||
-            !formData.email ||
-            !formData.phone
-        ) {
-            setValidationError("Пожалуйста, заполните все обязательные поля");
-            return;
-        }
-
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            setValidationError("Пожалуйста, введите корректный email адрес");
-            return;
-        }
-
-        // Validate and format phone number
-        const formattedPhone = formatPhoneNumber(formData.phone);
-        if (!validatePhoneNumber(formattedPhone)) {
-            setValidationError(
-                "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
-            );
-            return;
-        }
-
-        // Validate address for delivery option
-        if (activeButton === "delivery" && !formData.address) {
-            setValidationError("Пожалуйста, укажите адрес доставки");
-            return;
-        }
-
         try {
+            // Validate cart is not empty
+            if (uniqueCartItems.length === 0) {
+                throw new Error("Корзина пуста!");
+            }
+
+            // Validate form fields first
+            const validationErrors: string[] = [];
+
+            if (!formData.firstName) validationErrors.push("Имя обязательно");
+            if (!formData.lastName)
+                validationErrors.push("Фамилия обязательна");
+            if (!formData.email) validationErrors.push("Email обязателен");
+            if (!formData.phone)
+                validationErrors.push("Номер телефона обязателен");
+            if (activeButton === "delivery" && !formData.address) {
+                validationErrors.push("Адрес доставки обязателен");
+            }
+
+            if (validationErrors.length > 0) {
+                throw new Error(validationErrors.join(", "));
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                throw new Error("Пожалуйста, введите корректный email адрес");
+            }
+
+            // Format and validate phone number
+            let formattedPhone = formData.phone;
+            if (!formattedPhone.startsWith("+996")) {
+                formattedPhone = `+996${formattedPhone.replace(/\D/g, "")}`;
+            }
+
+            // Validate phone number format
+            const phoneRegex = /^\+996\d{9}$/;
+            if (!phoneRegex.test(formattedPhone)) {
+                throw new Error(
+                    "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
+                );
+            }
+
             // Process each cart item
             for (const item of uniqueCartItems) {
                 const commonOrderData = {
-                    client: meData?.id ?? null,
-                    cart: item.id,
-                    cart_id: item.id,
+                    client: meData?.id ? Number(meData.id) : 0,
+                    cart: Number(item.id),
+                    cart_id: Number(item.id),
                     client_first_name: formData.firstName.trim(),
                     client_last_name: formData.lastName.trim(),
                     client_email: formData.email.trim(),
@@ -243,64 +240,71 @@ const PlacinganOrder = () => {
                     text: formData.comments.trim(),
                 };
 
-                if (activeButton === "delivery") {
-                    const deliveryData: DeliveryOrderData = {
-                        ...commonOrderData,
-                        delivery: "доставка",
-                        client_address: formData.address?.trim() || "",
-                    };
+                try {
+                    if (activeButton === "delivery") {
+                        const deliveryData = {
+                            ...commonOrderData,
+                            delivery: "доставка",
+                            client_address: formData.address?.trim() || "",
+                        };
 
-                    try {
-                        await postRegDelivery(deliveryData).unwrap();
-                    } catch (error) {
-                        throw new Error(
-                            `Ошибка при оформлении доставки: ${error}`
-                        );
+                        console.log("Sending delivery order:", deliveryData);
+                        const response = await postRegDelivery(
+                            deliveryData
+                        ).unwrap();
+                        console.log("Delivery response:", response);
+                    } else {
+                        const pickupData = {
+                            ...commonOrderData,
+                            delivery: "самовывоз",
+                            client_address: "самовывоз",
+                        };
+
+                        console.log("Sending pickup order:", pickupData);
+                        const response = await postRegPickUp(
+                            pickupData
+                        ).unwrap();
+                        console.log("Pickup response:", response);
                     }
-                } else {
-                    const pickupData: PickupOrderData = {
-                        ...commonOrderData,
-                        delivery: "самовывоз",
-                        client_address: "самовывоз",
-                    };
+                } catch (error: any) {
+                    console.error("API Error:", {
+                        status: error.status,
+                        data: error.data,
+                        error: error,
+                    });
 
-                    try {
-                        await postRegPickUp(pickupData).unwrap();
-                    } catch (error) {
+                    if (error.data?.message) {
+                        throw new Error(error.data.message);
+                    } else if (error.status === 500) {
                         throw new Error(
-                            `Ошибка при оформлении самовывоза: ${error}`
+                            "Ошибка сервера. Пожалуйста, попробуйте позже."
+                        );
+                    } else {
+                        throw new Error(
+                            "Ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
                         );
                     }
                 }
             }
 
+            // Success handling
             alert(
                 `Заказ успешно оформлен! Тип: ${
                     activeButton === "delivery" ? "Доставка" : "Самовывоз"
                 }`
             );
-
-            setFormData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                phone: "",
-                address: "",
-                comments: "",
-            });
-
-            // Clear validation errors
             setValidationError("");
         } catch (error) {
             console.error("Order submission error:", error);
-            setValidationError(
-                error instanceof Error
-                    ? error.message
-                    : "Ошибка при оформлении заказа"
-            );
+            if (error instanceof Error) {
+                setValidationError(error.message);
+            } else {
+                setValidationError(
+                    "Произошла неизвестная ошибка при оформлении заказа"
+                );
+            }
         }
     };
-
     if (isLoading) {
         return <div>Loading...</div>;
     }

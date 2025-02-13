@@ -6,9 +6,8 @@ namespace REGDELIVERY {
         client_first_name: string;
         client_last_name: string;
         client_email: string;
-        client_address?: string | undefined;
-
         client_phone_number: string;
+        client_address?: string | undefined;
         text: string;
         cart_id: number;
     }
