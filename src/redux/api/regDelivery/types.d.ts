@@ -3,7 +3,7 @@ namespace REGDELIVERY {
         id: number;
         client: number;
         delivery: string;
-        cart: Array<{
+        cart: {
             items: {
                 id: number;
                 books: {
@@ -19,7 +19,7 @@ namespace REGDELIVERY {
                 books_id: number;
             };
             total_price: string;
-        }>;
+        };
         client_first_name: string;
         client_last_name: string;
         client_email: string;
@@ -38,7 +38,7 @@ namespace REGDELIVERY {
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
-        client_address?: string | undefined;
+        client_address: string | undefined;
         text: string;
         cart_id: number;
     };
@@ -51,7 +51,7 @@ namespace REGDELIVERY {
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
-        client_address?: string | undefined;
+        client_address: string | undefined;
         text: string;
         cart_id: number;
     };

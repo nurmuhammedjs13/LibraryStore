@@ -7,7 +7,7 @@ const api = index.injectEndpoints({
             REGPICKUP.GetRegPickUpRequest
         >({
             query: () => ({
-                url: `/pickup-list/`,
+                url: `pickup-list`,
                 method: "GET",
             }),
             providesTags: ["pickup"],
@@ -17,7 +17,7 @@ const api = index.injectEndpoints({
             REGPICKUP.PostRegPickUpRequest
         >({
             query: (request) => ({
-                url: `/create_pickup/`,
+                url: `create_pickup`,
                 method: "POST",
                 body: request,
             }),
