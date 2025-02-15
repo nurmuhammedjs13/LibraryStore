@@ -7,8 +7,12 @@ const api = index.injectEndpoints({
             REGDELIVERY.GetRegDeliveryRequest
         >({
             query: () => ({
-                url: `/delivery-list`,
+                url: `/delivery-list/`,
                 method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
             }),
             providesTags: ["regdelivery"],
         }),
@@ -16,11 +20,19 @@ const api = index.injectEndpoints({
             REGDELIVERY.PostRatingResponse,
             REGDELIVERY.PostRegDeliveryRequest
         >({
-            query: (request) => ({
-                url: `/create_delivery`,
-                method: "POST",
-                body: request,
-            }),
+            query: (request) => {
+                console.log("Отправка запроса:", request);
+
+                return {
+                    url: `/create_delivery/`,
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                    body: JSON.stringify(request),
+                };
+            },
             invalidatesTags: ["regdelivery"],
         }),
     }),

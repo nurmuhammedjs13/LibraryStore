@@ -2,7 +2,8 @@ namespace REGPICKUP {
     type GetRegPickUpResponse = {
         id: number;
         client: number;
-        cart: Array<{
+        delivery: string;
+        cart: {
             items: {
                 id: number;
                 books: {
@@ -18,7 +19,7 @@ namespace REGPICKUP {
                 books_id: number;
             };
             total_price: string;
-        }>;
+        };
         client_first_name: string;
         client_last_name: string;
         client_email: string;

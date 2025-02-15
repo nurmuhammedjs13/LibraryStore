@@ -15,12 +15,11 @@ import {
 import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
 import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
 import { useGetMeQuery } from "@/redux/api/auth";
-
 interface OrderFormData {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phone: number;
     address?: string;
     comments: string;
     receipt?: File;
@@ -48,7 +47,7 @@ interface PostRegDeliveryRequest {
     client_first_name: string;
     client_last_name: string;
     client_email: string;
-    client_phone_number: string;
+    client_phone_number: number;
     client_address: string;
     text: string;
 }
@@ -61,7 +60,7 @@ interface PostRegPickUpRequest {
     client_first_name: string;
     client_last_name: string;
     client_email: string;
-    client_phone_number: string;
+    client_phone_number: number;
     text: string;
 }
 
@@ -73,7 +72,7 @@ interface CommonOrderData {
     client_first_name: string;
     client_last_name: string;
     client_email: string;
-    client_phone_number: string;
+    client_phone_number: number;
     client_address?: string;
     text: string;
 }
@@ -113,7 +112,7 @@ const PlacinganOrder = () => {
         firstName: "",
         lastName: "",
         email: "",
-        phone: "",
+        phone: 0,
         address: "",
         comments: "",
         receipt: undefined,
@@ -150,8 +149,12 @@ const PlacinganOrder = () => {
         const { name, value, type, files } = e.target;
 
         if (name === "phone") {
-            const sanitizedValue = value.replace(/[^\d+\s()-]/g, "");
-            setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+            // Очищаем строку телефона от всех символов, кроме цифр
+            const sanitizedValue = value.replace(/[^\d]/g, "");
+            setFormData((prev) => ({
+                ...prev,
+                [name]: sanitizedValue ? parseInt(sanitizedValue, 10) : 0,
+            }));
         } else if (type === "file" && files) {
             setFormData((prev) => ({ ...prev, receipt: files[0] }));
         } else {
@@ -196,7 +199,6 @@ const PlacinganOrder = () => {
             0
         );
     };
-
     const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
         if (isSubmitting) return;
@@ -249,20 +251,40 @@ const PlacinganOrder = () => {
             }
 
             // Format and validate phone number
-            const phoneDigits = formData.phone.replace(/\D/g, "");
+            const phoneStr = formData.phone.toString();
+            const phoneDigits = phoneStr.replace(/\D/g, "");
             let formattedPhone = phoneDigits;
             if (!phoneDigits.startsWith("996")) {
                 formattedPhone = `996${phoneDigits}`;
             }
-            formattedPhone = `+${formattedPhone}`;
 
             // Validate phone number format
-            const phoneRegex = /^\+996\d{9}$/;
+            const phoneRegex = /^996\d{9}$/;
             if (!phoneRegex.test(formattedPhone)) {
                 throw new Error(
-                    "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
+                    "Пожалуйста, введите действительный номер телефона в формате 996XXXXXXXXX"
                 );
             }
+
+            // Преобразуем обратно в число для отправки
+            const phoneNumber = parseInt(formattedPhone, 10);
+
+            // Проверяем GET-запрос перед отправкой
+            console.log("🔍 Проверка GET-запроса перед отправкой...");
+            const getResponse = await fetch(`/delivery-list/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            });
+
+            if (!getResponse.ok) {
+                throw new Error(`Ошибка GET-запроса: ${getResponse.status}`);
+            }
+
+            const getData = await getResponse.json();
+            console.log("✅ GET-запрос успешен:", getData);
 
             // Process each cart item
             for (const item of uniqueCartItems) {
@@ -272,12 +294,12 @@ const PlacinganOrder = () => {
 
                 const commonOrderData = {
                     client: Number(meData.id),
-                    cart: Number(meData.id),
-                    cart_id: Number(meData.id),
+                    cart: Number(item.id),
+                    cart_id: Number(item.id),
                     client_first_name: formData.firstName.trim(),
                     client_last_name: formData.lastName.trim(),
                     client_email: formData.email.trim(),
-                    client_phone_number: formattedPhone,
+                    client_phone_number: phoneNumber,
                     text: formData.comments.trim(),
                     client_address:
                         activeButton === "delivery"
@@ -286,34 +308,36 @@ const PlacinganOrder = () => {
                 };
 
                 try {
-                    console.log("Common order data:", commonOrderData);
+                    console.log(
+                        "🛒 Данные заказа:",
+                        commonOrderData.client_phone_number
+                    );
 
-                    if (activeButton === "delivery") {
-                        const deliveryData: PostRegDeliveryRequest = {
-                            ...commonOrderData,
-                            delivery: "доставка",
-                        };
+                    // Закомментировал POST-запросы для проверки GET
+                    /*
+                if (activeButton === "delivery") {
+                    const deliveryData: PostRegDeliveryRequest = {
+                        ...commonOrderData,
+                        delivery: "доставка",
+                    };
 
-                        console.log("Sending delivery order:", deliveryData);
-                        const response = await postRegDelivery(
-                            deliveryData
-                        ).unwrap();
-                        console.log("Delivery response:", response);
-                    } else {
-                        const pickupData: PostRegPickUpRequest = {
-                            ...commonOrderData,
-                            delivery: "самовывоз",
-                        };
+                    console.log("🚀 Отправка POST-запроса на доставку:", deliveryData);
+                    const response = await postRegDelivery(deliveryData).unwrap();
+                    console.log("✅ Успешный ответ на доставку:", response);
+                } else {
+                    const pickupData: PostRegPickUpRequest = {
+                        ...commonOrderData,
+                        delivery: "самовывоз",
+                    };
 
-                        console.log("Sending pickup order:", pickupData);
-                        const response = await postRegPickUp(
-                            pickupData
-                        ).unwrap();
-                        console.log("Pickup response:", response);
-                    }
+                    console.log("🚀 Отправка POST-запроса на самовывоз:", pickupData);
+                    const response = await postRegPickUp(pickupData).unwrap();
+                    console.log("✅ Успешный ответ на самовывоз:", response);
+                }
+                */
                 } catch (error) {
                     if (error instanceof Error) {
-                        console.error("API Error:", error.message);
+                        console.error("🚨 Ошибка API:", error.message);
                         throw new Error(error.message);
                     } else if (
                         typeof error === "object" &&
@@ -326,7 +350,7 @@ const PlacinganOrder = () => {
                             originalStatus?: number;
                         };
 
-                        console.error("API Error:", apiError);
+                        console.error("🚨 Ошибка API:", apiError);
 
                         if (apiError.data?.message) {
                             throw new Error(apiError.data.message);
@@ -367,7 +391,7 @@ const PlacinganOrder = () => {
                 firstName: "",
                 lastName: "",
                 email: "",
-                phone: "",
+                phone: 0,
                 address: "",
                 comments: "",
                 receipt: undefined,
@@ -375,7 +399,7 @@ const PlacinganOrder = () => {
 
             setValidationError("");
         } catch (error) {
-            console.error("Order submission error:", error);
+            console.error("🚨 Ошибка при оформлении заказа:", error);
             if (error instanceof Error) {
                 setValidationError(error.message);
             } else {
@@ -387,7 +411,6 @@ const PlacinganOrder = () => {
             setIsSubmitting(false);
         }
     };
-
     if (isLoading) {
         return <div>Loading...</div>;
     }
