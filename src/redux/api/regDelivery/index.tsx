@@ -9,10 +9,6 @@ const api = index.injectEndpoints({
             query: () => ({
                 url: `/delivery-list/`,
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
             }),
             providesTags: ["regdelivery"],
         }),
@@ -21,16 +17,11 @@ const api = index.injectEndpoints({
             REGDELIVERY.PostRegDeliveryRequest
         >({
             query: (request) => {
-                console.log("Отправка запроса:", request);
-
+                console.log("Тело запроса:", request);
                 return {
                     url: `/create_delivery/`,
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    body: JSON.stringify(request),
+                    body: request, // Проверьте, добавлено ли тело запроса
                 };
             },
             invalidatesTags: ["regdelivery"],

@@ -1,32 +1,34 @@
 namespace REGPICKUP {
-    type GetRegPickUpResponse = {
-        id: number;
-        client: number;
-        delivery: string;
-        cart: {
-            items: {
-                id: number;
-                books: {
+    type GetRegPickUpResponse = [
+        {
+            id: number;
+            client: number;
+            delivery: string;
+            cart: {
+                items: {
                     id: number;
-                    book_images: Array<{
-                        book_images: string;
-                    }>;
-                    book_name: string;
-                    author: string;
-                    price: number;
+                    books: {
+                        id: number;
+                        book_images: Array<{
+                            book_images: string;
+                        }>;
+                        book_name: string;
+                        author: string;
+                        price: number;
+                    };
+                    quantity: number;
+                    books_id: number;
                 };
-                quantity: number;
-                books_id: number;
+                total_price: string;
             };
-            total_price: string;
-        };
-        client_first_name: string;
-        client_last_name: string;
-        client_email: string;
-        client_phone_number: string;
-        text: string;
-        created_at: string;
-    }[];
+            client_first_name: string;
+            client_last_name: string;
+            client_email: string;
+            client_phone_number: string;
+            text: string;
+            created_at: string;
+        }
+    ];
 
     type GetRegPickUpRequest = void;
 

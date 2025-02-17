@@ -15,11 +15,13 @@ import {
 import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
 import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
 import { useGetMeQuery } from "@/redux/api/auth";
+import { useGetRegDeliveryQuery } from "@/redux/api/regDelivery";
+
 interface OrderFormData {
     firstName: string;
     lastName: string;
     email: string;
-    phone: number;
+    phone: string;
     address?: string;
     comments: string;
     receipt?: File;
@@ -37,6 +39,23 @@ interface CartItem {
         price: number;
     };
     quantity: number;
+    books_id?: number;
+}
+
+interface DeliveryListItem {
+    id: number;
+    client: number;
+    delivery: string;
+    cart: {
+        items: CartItem;
+        total_price: string;
+    };
+    client_first_name: string;
+    client_last_name: string;
+    client_email: string;
+    client_phone_number: string;
+    text: string;
+    created_at: string;
 }
 
 interface PostRegDeliveryRequest {
@@ -47,7 +66,7 @@ interface PostRegDeliveryRequest {
     client_first_name: string;
     client_last_name: string;
     client_email: string;
-    client_phone_number: number;
+    client_phone_number: string;
     client_address: string;
     text: string;
 }
@@ -60,49 +79,28 @@ interface PostRegPickUpRequest {
     client_first_name: string;
     client_last_name: string;
     client_email: string;
-    client_phone_number: number;
+    client_phone_number: string;
     text: string;
 }
 
-// Base interface for common order data
-interface CommonOrderData {
-    client: number;
-    cart: number;
-    cart_id: number;
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: number;
-    client_address?: string;
-    text: string;
-}
-
-interface DeliveryOrderData extends CommonOrderData {
-    delivery: "доставка";
-}
-
-// Pickup specific interface
-interface PickupOrderData extends CommonOrderData {
-    delivery: "самовывоз";
-}
-
-interface ApiError {
+interface ValidationErrorResponse {
+    cart?: string[];
+    cart_id?: string[];
+    client_phone_number?: string[];
     status?: number;
-    data?: {
-        message?: string;
-    };
+    [key: string]: string[] | number | undefined;
 }
 
 const PlacinganOrder = () => {
-    // Queries and Mutations
     const { data: cartData = [], isLoading } = useGetCartItemsQuery();
     const [deleteCartItem] = useDeleteCartMutation();
     const [postRegDelivery] = usePostRegDeliveryMutation();
     const { data: meData } = useGetMeQuery();
     const [postRegPickUp] = usePostRegPickUpMutation();
     const [updateQuantity] = useUpdateQuantityMutation();
+    const { data: deliveryList, error: deliveryError } =
+        useGetRegDeliveryQuery();
 
-    // State
     const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
         "delivery"
     );
@@ -112,13 +110,12 @@ const PlacinganOrder = () => {
         firstName: "",
         lastName: "",
         email: "",
-        phone: 0,
+        phone: "",
         address: "",
         comments: "",
         receipt: undefined,
     });
 
-    // Memoized cart items with deduplication
     const uniqueCartItems = useMemo(() => {
         const seen = new Map<string, number>();
         const uniqueItems: CartItem[] = [];
@@ -138,7 +135,10 @@ const PlacinganOrder = () => {
                 deleteCartItem(item.id);
             } else {
                 seen.set(key, uniqueItems.length);
-                uniqueItems.push({ ...item });
+                uniqueItems.push({
+                    ...item,
+                    books_id: item.books.id,
+                });
             }
         });
 
@@ -146,17 +146,21 @@ const PlacinganOrder = () => {
     }, [cartData, deleteCartItem]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, files } = e.target;
+        const { name, value } = e.target;
 
         if (name === "phone") {
-            // Очищаем строку телефона от всех символов, кроме цифр
-            const sanitizedValue = value.replace(/[^\d]/g, "");
-            setFormData((prev) => ({
-                ...prev,
-                [name]: sanitizedValue ? parseInt(sanitizedValue, 10) : 0,
-            }));
-        } else if (type === "file" && files) {
-            setFormData((prev) => ({ ...prev, receipt: files[0] }));
+            let sanitizedValue = value.replace(/[^\d+]/g, "");
+
+            if (!sanitizedValue.startsWith("+996")) {
+                sanitizedValue =
+                    "+996" + sanitizedValue.replace(/^\+?996?/, "");
+            }
+
+            if (sanitizedValue.length > 13) {
+                sanitizedValue = sanitizedValue.slice(0, 13);
+            }
+
+            setFormData((prev) => ({ ...prev, phone: sanitizedValue }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
@@ -199,18 +203,17 @@ const PlacinganOrder = () => {
             0
         );
     };
+
     const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
         if (isSubmitting) return;
 
         setIsSubmitting(true);
         try {
-            // Validate cart is not empty
             if (uniqueCartItems.length === 0) {
                 throw new Error("Корзина пуста!");
             }
 
-            // Validate form fields first
             const validationErrors: string[] = [];
 
             if (!formData.firstName) validationErrors.push("Имя обязательно");
@@ -226,67 +229,36 @@ const PlacinganOrder = () => {
                 validationErrors.push("Чек оплаты обязателен");
             }
 
-            // Validate field lengths
-            if (formData.firstName.trim().length > 32)
-                validationErrors.push(
-                    "Имя должно содержать не более 32 символов"
-                );
-            if (formData.lastName.trim().length > 32)
-                validationErrors.push(
-                    "Фамилия должна содержать не более 32 символов"
-                );
-            if (formData.address && formData.address.trim().length > 255)
-                validationErrors.push(
-                    "Адрес должен содержать не более 255 символов"
-                );
-
             if (validationErrors.length > 0) {
                 throw new Error(validationErrors.join(", "));
             }
 
-            // Validate email format
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formData.email)) {
                 throw new Error("Пожалуйста, введите корректный email адрес");
             }
 
-            // Format and validate phone number
-            const phoneStr = formData.phone.toString();
-            const phoneDigits = phoneStr.replace(/\D/g, "");
-            let formattedPhone = phoneDigits;
-            if (!phoneDigits.startsWith("996")) {
-                formattedPhone = `996${phoneDigits}`;
+            let phoneNumber = formData.phone;
+            if (!phoneNumber.startsWith("+996")) {
+                phoneNumber = `+996${phoneNumber}`;
             }
 
-            // Validate phone number format
-            const phoneRegex = /^996\d{9}$/;
-            if (!phoneRegex.test(formattedPhone)) {
+            const phoneRegex = /^\+996\d{9}$/;
+            if (!phoneRegex.test(phoneNumber)) {
                 throw new Error(
-                    "Пожалуйста, введите действительный номер телефона в формате 996XXXXXXXXX"
+                    "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
                 );
             }
 
-            // Преобразуем обратно в число для отправки
-            const phoneNumber = parseInt(formattedPhone, 10);
-
-            // Проверяем GET-запрос перед отправкой
-            console.log("🔍 Проверка GET-запроса перед отправкой...");
-            const getResponse = await fetch(`/delivery-list/`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-            });
-
-            if (!getResponse.ok) {
-                throw new Error(`Ошибка GET-запроса: ${getResponse.status}`);
+            // Check delivery list using RTK Query data
+            const deliveryListExists = !!deliveryList;
+            if (deliveryError) {
+                console.warn(
+                    "Ошибка при получении списка доставок:",
+                    deliveryError
+                );
             }
 
-            const getData = await getResponse.json();
-            console.log("✅ GET-запрос успешен:", getData);
-
-            // Process each cart item
             for (const item of uniqueCartItems) {
                 if (!meData?.id) {
                     throw new Error("Пользователь не авторизован");
@@ -294,8 +266,8 @@ const PlacinganOrder = () => {
 
                 const commonOrderData = {
                     client: Number(meData.id),
-                    cart: Number(item.id),
-                    cart_id: Number(item.id),
+                    cart: 4,
+                    cart_id: 4,
                     client_first_name: formData.firstName.trim(),
                     client_last_name: formData.lastName.trim(),
                     client_email: formData.email.trim(),
@@ -308,112 +280,100 @@ const PlacinganOrder = () => {
                 };
 
                 try {
-                    console.log(
-                        "🛒 Данные заказа:",
-                        commonOrderData.client_phone_number
-                    );
-
-                    // Закомментировал POST-запросы для проверки GET
-                    /*
-                if (activeButton === "delivery") {
-                    const deliveryData: PostRegDeliveryRequest = {
-                        ...commonOrderData,
-                        delivery: "доставка",
-                    };
-
-                    console.log("🚀 Отправка POST-запроса на доставку:", deliveryData);
-                    const response = await postRegDelivery(deliveryData).unwrap();
-                    console.log("✅ Успешный ответ на доставку:", response);
-                } else {
-                    const pickupData: PostRegPickUpRequest = {
-                        ...commonOrderData,
-                        delivery: "самовывоз",
-                    };
-
-                    console.log("🚀 Отправка POST-запроса на самовывоз:", pickupData);
-                    const response = await postRegPickUp(pickupData).unwrap();
-                    console.log("✅ Успешный ответ на самовывоз:", response);
-                }
-                */
-                } catch (error) {
-                    if (error instanceof Error) {
-                        console.error("🚨 Ошибка API:", error.message);
-                        throw new Error(error.message);
-                    } else if (
-                        typeof error === "object" &&
-                        error !== null &&
-                        "status" in error
-                    ) {
-                        const apiError = error as {
-                            status: number;
-                            data?: { message?: string };
-                            originalStatus?: number;
+                    if (activeButton === "delivery") {
+                        const deliveryData: PostRegDeliveryRequest = {
+                            ...commonOrderData,
+                            delivery: "доставка",
                         };
 
-                        console.error("🚨 Ошибка API:", apiError);
-
-                        if (apiError.data?.message) {
-                            throw new Error(apiError.data.message);
-                        } else if (
-                            apiError.status === 500 ||
-                            apiError.originalStatus === 500
-                        ) {
-                            throw new Error(
-                                "Ошибка сервера. Пожалуйста, попробуйте позже."
-                            );
-                        } else {
-                            throw new Error(
-                                "Ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
-                            );
-                        }
+                        console.log(
+                            "🚀 Отправка заказа на доставку:",
+                            deliveryData
+                        );
+                        const response = await postRegDelivery(
+                            deliveryData
+                        ).unwrap();
+                        console.log("✅ Заказ на доставку оформлен:", response);
                     } else {
-                        throw new Error(
-                            "Произошла неизвестная ошибка при оформлении заказа."
+                        const pickupData: PostRegPickUpRequest = {
+                            ...commonOrderData,
+                            delivery: "самовывоз",
+                        };
+
+                        console.log(
+                            "🚀 Отправка заказа на самовывоз:",
+                            pickupData
+                        );
+                        const response = await postRegPickUp(
+                            pickupData
+                        ).unwrap();
+                        console.log(
+                            "✅ Заказ на самовывоз оформлен:",
+                            response
                         );
                     }
+                } catch (error) {
+                    console.error("🚨 Ошибка при оформлении заказа:", error);
+                    handleOrderError(error);
+                    throw error;
                 }
             }
 
-            // Clear cart after successful order
-            for (const item of uniqueCartItems) {
-                await deleteCartItem(item.id).unwrap();
-            }
-
-            // Success handling
             alert(
                 `Заказ успешно оформлен! Тип: ${
                     activeButton === "delivery" ? "Доставка" : "Самовывоз"
                 }`
             );
-
-            // Reset form
-            setFormData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                phone: 0,
-                address: "",
-                comments: "",
-                receipt: undefined,
-            });
-
             setValidationError("");
         } catch (error) {
             console.error("🚨 Ошибка при оформлении заказа:", error);
             if (error instanceof Error) {
                 setValidationError(error.message);
-            } else {
-                setValidationError(
-                    "Произошла неизвестная ошибка при оформлении заказа."
-                );
             }
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    const handleOrderError = (error: unknown) => {
+        if (error instanceof Error) {
+            setValidationError(error.message);
+        } else if (typeof error === "object" && error !== null) {
+            const apiError = error as ValidationErrorResponse;
+
+            if (apiError.status === 400) {
+                const errorMessages: string[] = [];
+                Object.entries(apiError).forEach(([key, value]) => {
+                    if (Array.isArray(value)) {
+                        errorMessages.push(...value);
+                    }
+                });
+
+                setValidationError(
+                    errorMessages.length > 0
+                        ? errorMessages.join(", ")
+                        : "Ошибка валидации данных. Пожалуйста, проверьте введенные данные."
+                );
+            } else if (apiError.status === 500) {
+                setValidationError(
+                    "Ошибка сервера. Пожалуйста, попробуйте позже."
+                );
+            } else {
+                setValidationError(
+                    "Произошла ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
+                );
+            }
+        } else {
+            setValidationError(
+                "Произошла неизвестная ошибка при оформлении заказа."
+            );
+        }
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
     return (
         <div className={styles.mainBlock}>
             <div className="container">
@@ -552,7 +512,7 @@ const PlacinganOrder = () => {
                                 <div className={styles.Input}>
                                     <h6>Добавьте номер телефона</h6>
                                     <input
-                                        type="tel"
+                                        type="text"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleInputChange}
