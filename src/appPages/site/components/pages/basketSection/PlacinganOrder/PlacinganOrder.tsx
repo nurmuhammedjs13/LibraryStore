@@ -16,6 +16,7 @@ import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
 import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
 import { useGetMeQuery } from "@/redux/api/auth";
 import { useGetRegDeliveryQuery } from "@/redux/api/regDelivery";
+import axios from "axios";
 
 interface OrderFormData {
     firstName: string;
@@ -83,6 +84,22 @@ interface PostRegPickUpRequest {
     text: string;
 }
 
+interface IFormTelegram {
+    id: number;
+    client: number;
+    delivery: string;
+    cart: {
+        items: CartItem;
+        total_price: string;
+    };
+    client_first_name: string;
+    client_last_name: string;
+    client_email: string;
+    client_phone_number: string;
+    text: string;
+    created_at: string;
+}
+
 interface ValidationErrorResponse {
     cart?: string[];
     cart_id?: string[];
@@ -104,6 +121,20 @@ const PlacinganOrder = () => {
     const [activeButton, setActiveButton] = useState<"delivery" | "pickup">(
         "delivery"
     );
+
+    const TOKEN = process.env.NEXT_PUBLIC_OKUKG_TELEGRAM_BOT;
+    const CHAT_ID = process.env.NEXT_PUBLIC_OKUKG_CHAT_ID;
+    const formatDate = (isoString: string): string => {
+        const date = new Date(isoString);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} - ${day}-${month}-${year}`;
+    };
+
     const [validationError, setValidationError] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [formData, setFormData] = useState<OrderFormData>({
@@ -193,6 +224,70 @@ const PlacinganOrder = () => {
         }
     };
 
+    const sendToTelegram = async (orderData: {
+        client_first_name: string;
+        client_last_name: string;
+        client_email: string;
+        client_phone_number: string;
+        delivery: string;
+        created_at: string;
+        text: string;
+        client_address?: string;
+        total_price: number;
+        total_items: number;
+    }) => {
+        try {
+            // Очищаем текст от специальных символов
+            const sanitizeText = (text: string) => {
+                return text.trim().replace(/[<>]/g, "");
+            };
+
+            // Форматируем сообщение для Telegram используя markdown
+            const messageTG = `
+🛍 *НОВЫЙ ЗАКАЗ*
+
+👤 *Информация о клиенте*
+• Имя: ${sanitizeText(orderData.client_first_name)}
+• Фамилия: ${sanitizeText(orderData.client_last_name)}
+• Email: ${sanitizeText(orderData.client_email)}
+• Телефон: ${sanitizeText(orderData.client_phone_number)}
+
+📦 *Детали заказа*
+• Тип доставки: ${orderData.delivery}
+${
+    orderData.client_address
+        ? `• Адрес: ${sanitizeText(orderData.client_address)}\n`
+        : ""
+}
+• Время заказа: ${formatDate(orderData.created_at)}
+• Количество товаров: ${orderData.total_items}
+• Общая сумма: ${orderData.total_price} сом
+
+💭 *Комментарий*: ${
+                orderData.text
+                    ? sanitizeText(orderData.text)
+                    : "Нет комментария"
+            }`;
+
+            // Отправляем запрос в Telegram
+            await axios.post(
+                `https://api.telegram.org/bot${TOKEN}/sendMessage`,
+                {
+                    chat_id: CHAT_ID,
+                    parse_mode: "MarkdownV2", // Используем MarkdownV2 вместо HTML
+                    text: messageTG.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\\$&"), // Экранируем специальные символы
+                }
+            );
+
+            console.log("✅ Уведомление успешно отправлено в Telegram");
+        } catch (error) {
+            console.error("❌ Ошибка отправки в Telegram:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Детали ошибки:", error.response?.data);
+            }
+        }
+    };
+
     const calculateTotalQuantity = () => {
         return uniqueCartItems.reduce((sum, item) => sum + item.quantity, 0);
     };
@@ -259,19 +354,22 @@ const PlacinganOrder = () => {
                 );
             }
 
+            // Сохраняем все ID товаров для последующего удаления
+            const itemsToDelete = uniqueCartItems.map((item) => item.id);
+
             for (const item of uniqueCartItems) {
                 if (!meData?.id) {
                     throw new Error("Пользователь не авторизован");
                 }
 
-                const commonOrderData = {
+                const orderData = {
                     client: Number(meData.id),
-                    cart: 4,
-                    cart_id: 4,
+                    cart: item.id,
+                    cart_id: item.id,
                     client_first_name: formData.firstName.trim(),
                     client_last_name: formData.lastName.trim(),
                     client_email: formData.email.trim(),
-                    client_phone_number: phoneNumber,
+                    client_phone_number: formData.phone,
                     text: formData.comments.trim(),
                     client_address:
                         activeButton === "delivery"
@@ -280,43 +378,65 @@ const PlacinganOrder = () => {
                 };
 
                 try {
+                    // Отправляем заказ на бэкенд
                     if (activeButton === "delivery") {
-                        const deliveryData: PostRegDeliveryRequest = {
-                            ...commonOrderData,
+                        await postRegDelivery({
+                            ...orderData,
                             delivery: "доставка",
-                        };
-
-                        console.log(
-                            "🚀 Отправка заказа на доставку:",
-                            deliveryData
-                        );
-                        const response = await postRegDelivery(
-                            deliveryData
-                        ).unwrap();
-                        console.log("✅ Заказ на доставку оформлен:", response);
+                        }).unwrap();
                     } else {
-                        const pickupData: PostRegPickUpRequest = {
-                            ...commonOrderData,
+                        await postRegPickUp({
+                            ...orderData,
                             delivery: "самовывоз",
-                        };
-
-                        console.log(
-                            "🚀 Отправка заказа на самовывоз:",
-                            pickupData
-                        );
-                        const response = await postRegPickUp(
-                            pickupData
-                        ).unwrap();
-                        console.log(
-                            "✅ Заказ на самовывоз оформлен:",
-                            response
-                        );
+                        }).unwrap();
                     }
+
+                    // Отправляем уведомление в Telegram
+                    await sendToTelegram({
+                        ...orderData,
+                        delivery:
+                            activeButton === "delivery"
+                                ? "доставка"
+                                : "самовывоз",
+                        created_at: new Date().toISOString(),
+                        total_price: calculateTotal(),
+                        total_items: calculateTotalQuantity(),
+                    });
                 } catch (error) {
-                    console.error("🚨 Ошибка при оформлении заказа:", error);
+                    console.error("🚨 Ошибка оформления заказа:", error);
                     handleOrderError(error);
                     throw error;
                 }
+            }
+
+            // После успешного оформления заказа:
+
+            // 1. Очищаем корзину
+            for (const itemId of itemsToDelete) {
+                try {
+                    await deleteCartItem(itemId).unwrap();
+                } catch (error) {
+                    console.error("Ошибка при очистке корзины:", error);
+                }
+            }
+
+            // 2. Очищаем форму
+            setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                address: "",
+                comments: "",
+                receipt: undefined,
+            });
+
+            // 3. Сбрасываем файл чека
+            const fileInput = document.querySelector(
+                'input[type="file"]'
+            ) as HTMLInputElement;
+            if (fileInput) {
+                fileInput.value = "";
             }
 
             alert(
@@ -326,7 +446,7 @@ const PlacinganOrder = () => {
             );
             setValidationError("");
         } catch (error) {
-            console.error("🚨 Ошибка при оформлении заказа:", error);
+            console.error("🚨 Ошибка оформления заказа:", error);
             if (error instanceof Error) {
                 setValidationError(error.message);
             }
@@ -334,7 +454,6 @@ const PlacinganOrder = () => {
             setIsSubmitting(false);
         }
     };
-
     const handleOrderError = (error: unknown) => {
         if (error instanceof Error) {
             setValidationError(error.message);
