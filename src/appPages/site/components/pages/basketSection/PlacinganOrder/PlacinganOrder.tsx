@@ -43,63 +43,6 @@ interface CartItem {
     books_id?: number;
 }
 
-interface DeliveryListItem {
-    id: number;
-    client: number;
-    delivery: string;
-    cart: {
-        items: CartItem;
-        total_price: string;
-    };
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    text: string;
-    created_at: string;
-}
-
-interface PostRegDeliveryRequest {
-    delivery: "доставка";
-    client: number;
-    cart: number;
-    cart_id: number;
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    client_address: string;
-    text: string;
-}
-
-interface PostRegPickUpRequest {
-    delivery: "самовывоз";
-    client: number;
-    cart: number;
-    cart_id: number;
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    text: string;
-}
-
-interface IFormTelegram {
-    id: number;
-    client: number;
-    delivery: string;
-    cart: {
-        items: CartItem;
-        total_price: string;
-    };
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    text: string;
-    created_at: string;
-}
-
 interface ValidationErrorResponse {
     cart?: string[];
     cart_id?: string[];
@@ -237,12 +180,10 @@ const PlacinganOrder = () => {
         total_items: number;
     }) => {
         try {
-            // Очищаем текст от специальных символов
             const sanitizeText = (text: string) => {
                 return text.trim().replace(/[<>]/g, "");
             };
 
-            // Форматируем сообщение для Telegram используя markdown
             const messageTG = `
 🛍 *НОВЫЙ ЗАКАЗ*
 
@@ -269,13 +210,12 @@ ${
                     : "Нет комментария"
             }`;
 
-            // Отправляем запрос в Telegram
             await axios.post(
                 `https://api.telegram.org/bot${TOKEN}/sendMessage`,
                 {
                     chat_id: CHAT_ID,
-                    parse_mode: "MarkdownV2", // Используем MarkdownV2 вместо HTML
-                    text: messageTG.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\\$&"), // Экранируем специальные символы
+                    parse_mode: "MarkdownV2",
+                    text: messageTG.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\\$&"),
                 }
             );
 
@@ -345,7 +285,6 @@ ${
                 );
             }
 
-            // Check delivery list using RTK Query data
             const deliveryListExists = !!deliveryList;
             if (deliveryError) {
                 console.warn(
@@ -378,7 +317,6 @@ ${
                 };
 
                 try {
-                    // Отправляем заказ на бэкенд
                     if (activeButton === "delivery") {
                         await postRegDelivery({
                             ...orderData,
@@ -391,7 +329,6 @@ ${
                         }).unwrap();
                     }
 
-                    // Отправляем уведомление в Telegram
                     await sendToTelegram({
                         ...orderData,
                         delivery:
@@ -409,9 +346,6 @@ ${
                 }
             }
 
-            // После успешного оформления заказа:
-
-            // 1. Очищаем корзину
             for (const itemId of itemsToDelete) {
                 try {
                     await deleteCartItem(itemId).unwrap();
@@ -420,7 +354,6 @@ ${
                 }
             }
 
-            // 2. Очищаем форму
             setFormData({
                 firstName: "",
                 lastName: "",
@@ -431,7 +364,6 @@ ${
                 receipt: undefined,
             });
 
-            // 3. Сбрасываем файл чека
             const fileInput = document.querySelector(
                 'input[type="file"]'
             ) as HTMLInputElement;
