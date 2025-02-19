@@ -364,8 +364,8 @@ ${
 
                 const orderData = {
                     client: Number(meData.id),
-                    cart: item.id,
-                    cart_id: item.id,
+                    cart: Number(meData.id),
+                    cart_id: Number(meData.id),
                     client_first_name: formData.firstName.trim(),
                     client_last_name: formData.lastName.trim(),
                     client_email: formData.email.trim(),
