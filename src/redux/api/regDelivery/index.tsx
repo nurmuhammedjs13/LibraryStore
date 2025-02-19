@@ -13,7 +13,7 @@ const api = index.injectEndpoints({
             providesTags: ["regdelivery"],
         }),
         postRegDelivery: build.mutation<
-            REGDELIVERY.PostRatingResponse,
+            REGDELIVERY.PostRegDeliveryResponse,
             REGDELIVERY.PostRegDeliveryRequest
         >({
             query: (request) => ({

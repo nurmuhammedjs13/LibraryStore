@@ -4,7 +4,7 @@ namespace REGDELIVERY {
         client: number;
         delivery: string;
         cart: {
-            items: {
+            items: Array<{
                 id: number;
                 books: {
                     id: number;
@@ -17,7 +17,7 @@ namespace REGDELIVERY {
                 };
                 quantity: number;
                 books_id: number;
-            };
+            }>;
             total_price: string;
         };
         client_first_name: string;
@@ -27,9 +27,22 @@ namespace REGDELIVERY {
         text: string;
         created_at: string;
     }[];
-
     type GetRegDeliveryRequest = void;
 
+
+    type PostRegDeliveryResponse = {
+        id: number;
+        client: number;
+        delivery: string;
+        cart: number;
+        client_first_name: string;
+        client_last_name: string;
+        client_email: string;
+        client_phone_number: string;
+        client_address: string;
+        text: string;
+        created_at: string;
+    };
     type PostRegDeliveryRequest = {
         client: number;
         delivery: string;
@@ -38,20 +51,7 @@ namespace REGDELIVERY {
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
-        client_address: string | undefined;
-        text: string;
-        cart_id: number;
-    };
-
-    type PostRatingResponse = {
-        client: number;
-        delivery: string;
-        cart: number;
-        client_first_name: string;
-        client_last_name: string;
-        client_email: string;
-        client_phone_number: string;
-        client_address: string | undefined;
+        client_address: string;
         text: string;
         cart_id: number;
     };
