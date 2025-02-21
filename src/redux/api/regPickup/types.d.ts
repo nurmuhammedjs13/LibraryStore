@@ -26,6 +26,7 @@ namespace REGPICKUP {
             client_email: string;
             client_phone_number: string;
             text: string;
+            check_order: string | File; // URL or base64 string of the image
             created_at: string;
         }
     ];
@@ -53,6 +54,7 @@ namespace REGPICKUP {
         client_email: string;
         client_phone_number: string;
         text: string;
+        check_order: string | File; // URL or base64 string of the uploaded image
         cart_id: number;
     };
 }

@@ -6,6 +6,8 @@ import img1 from "@/assets/welcome/history.png";
 import Image from "next/image";
 import Price from "@/assets/Icons/Price";
 const HistoryOrder = () => {
+    // const { data: history = [], isLoading, isError } = useGetOpeningQuery();
+
     const history = [
         {
             delivery: "Самовывоз",
