@@ -24,10 +24,13 @@ const PaymentDetails = () => {
         }),
     });
 
-    if (isGlobalLoading || isLocalLoading) {
-        return <>Loading...</>;
+    if (isGlobalLoading) {
+        return (
+            <div className={styles.loaderBlock}>
+                <div className={styles.loader}></div>
+            </div>
+        );
     }
-
     if (isGlobalError || isLocalError) {
         return <>Error</>;
     }

@@ -1,113 +1,137 @@
-.deliveryMain {
-  margin-bottom: 6%;
-  .delivery {
-    .breatCrums {
-      margin: 5% 0;
-      h1 {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        color: rgba(0, 0, 0, 0.5);
-        font-family: Nunito;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 22px;
-        span {
-          color: rgb(38, 82, 176);
-          font-family: Nunito;
-          font-size: 16px;
-          font-weight: 500;
-          line-height: 22px;
-        }
-      }
+.loaderBlock {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: white;
+    z-index: 1;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    .loader {
+        width: 35px;
+        aspect-ratio: 1;
+        --_g: no-repeat radial-gradient(farthest-side, #3d57a4 94%, #0000);
+        background: var(--_g) 0 0, var(--_g) 100% 0, var(--_g) 100% 100%,
+            var(--_g) 0 100%;
+        background-size: 40% 40%;
+        animation: l38 0.5s infinite;
     }
-    .deliveryBlock {
-      .truck {
-        position: absolute;
-        left: 10;
-      }
-      .imgBlock {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-      
-      }
+    @keyframes l38 {
+        100% {
+            background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+        }
+    }
+}
 
-      h1 {
-        color: rgb(38, 82, 176);
-        font-family: Nunito;
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 33px;
-        text-align: center;
-      }
-      .text {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        position: relative;
-        h2 {
-          color: rgb(38, 82, 176);
-          font-family: Nunito;
-          font-size: 20px;
-          font-weight: 500;
-          line-height: 27px;
-          margin-top: 2%;
+.deliveryMain {
+    margin-bottom: 6%;
+    .delivery {
+        .breatCrums {
+            margin: 5% 0;
+            h1 {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                color: rgba(0, 0, 0, 0.5);
+                font-family: Nunito;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 22px;
+                span {
+                    color: rgb(38, 82, 176);
+                    font-family: Nunito;
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 22px;
+                }
+            }
         }
-        p {
-          color: rgb(0, 0, 0);
-          font-family: Nunito;
-          font-size: 18px;
-          font-weight: 500;
-          line-height: 25px;
+        .deliveryBlock {
+            .truck {
+                position: absolute;
+                left: 10;
+            }
+            .imgBlock {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            h1 {
+                color: rgb(38, 82, 176);
+                font-family: Nunito;
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 33px;
+                text-align: center;
+            }
+            .text {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                position: relative;
+                h2 {
+                    color: rgb(38, 82, 176);
+                    font-family: Nunito;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: 27px;
+                    margin-top: 2%;
+                }
+                p {
+                    color: rgb(0, 0, 0);
+                    font-family: Nunito;
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 25px;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 @media (max-width: 1190px) {
-  .deliveryMain {
-    margin-bottom: 20%;
-  }
-}
-
-@media (max-width: 744px) {
-  .deliveryMain {
-    .delivery {
-      .deliveryBlock {
-        .truck {
-          display: none;
-        }
-        .imgBlock {
-          .bigBox {
-            display: none;
-          }
-          .smallBox {
-            display: none;
-          }
-        }
-      }
+    .deliveryMain {
+        margin-bottom: 20%;
     }
-  }
 }
 
 @media (max-width: 744px) {
-  .deliveryMain {
-    margin-bottom: 30%;
-  }
+    .deliveryMain {
+        .delivery {
+            .deliveryBlock {
+                .truck {
+                    display: none;
+                }
+                .imgBlock {
+                    .bigBox {
+                        display: none;
+                    }
+                    .smallBox {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 744px) {
+    .deliveryMain {
+        margin-bottom: 30%;
+    }
 }
 
 @media (max-width: 548px) {
-  .deliveryMain {
-    margin-top: 10%;
-    .delivery {
-      .breatCrums {
-        display: none;
-      }
+    .deliveryMain {
+        margin-top: 10%;
+        .delivery {
+            .breatCrums {
+                display: none;
+            }
+        }
     }
-  }
 }

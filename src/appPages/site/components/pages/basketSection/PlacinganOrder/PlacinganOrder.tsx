@@ -459,9 +459,12 @@ ${
 
         setValidationError("");
     };
-
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className={styles.loaderBlock}>
+                <div className={styles.loader}></div>
+            </div>
+        );
     }
 
     return (
