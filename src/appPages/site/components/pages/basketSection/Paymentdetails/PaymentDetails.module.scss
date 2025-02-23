@@ -1,73 +1,97 @@
+.loaderBlock {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: white;
+    z-index: 1;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    .loader {
+        width: 35px;
+        aspect-ratio: 1;
+        --_g: no-repeat radial-gradient(farthest-side, #3d57a4 94%, #0000);
+        background: var(--_g) 0 0, var(--_g) 100% 0, var(--_g) 100% 100%,
+            var(--_g) 0 100%;
+        background-size: 40% 40%;
+        animation: l38 0.5s infinite;
+    }
+    @keyframes l38 {
+        100% {
+            background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+        }
+    }
+}
+
 .detailsMain {
-  .details {
-    .breatCrums {
-      margin: 4% 0;
-      h3 {
-        color: rgba(0, 0, 0, 0.5);
-        font-family: Nunito;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 22px;
-        letter-spacing: 0%;
-        text-align: left;
-        span {
-          color: rgb(38, 82, 176);
-          font-family: Nunito;
-          font-size: 16px;
-          font-weight: 500;
-          line-height: 22px;
+    .details {
+        .breatCrums {
+            margin: 4% 0;
+            h3 {
+                color: rgba(0, 0, 0, 0.5);
+                font-family: Nunito;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 22px;
+                letter-spacing: 0%;
+                text-align: left;
+                span {
+                    color: rgb(38, 82, 176);
+                    font-family: Nunito;
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 22px;
+                }
+            }
         }
-      }
+        .detailsBlock {
+            background: linear-gradient(45deg, #a3b18a80, #a2baeb);
+            width: 100%;
+            height: 250px;
+            margin-bottom: 7%;
+            border-radius: 40px;
+            -webkit-border-radius: 40px;
+            -moz-border-radius: 40px;
+            -ms-border-radius: 40px;
+            -o-border-radius: 40px;
+            padding: 20px 0;
+
+            h2 {
+                color: rgb(38, 82, 176);
+                font-family: Nunito;
+                font-size: 20px;
+                font-weight: 800;
+            }
+
+            .chek {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+            .detailsBox {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                gap: 20px;
+                .QrCode {
+                    width: 100px;
+                    height: 100px;
+                }
+                .BankName {
+                    width: 100px;
+                    height: 17px;
+                }
+
+                h2 {
+                    color: rgb(0, 0, 0);
+                    font-family: Nunito;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: 27px;
+                    letter-spacing: 0%;
+                    text-align: left;
+                }
+            }
+        }
     }
-    .detailsBlock {
-      background: linear-gradient(45deg, #a3b18a80, #a2baeb);
-      width: 100%;
-      height: 250px;
-      margin-bottom: 7%;
-      border-radius: 40px;
-      -webkit-border-radius: 40px;
-      -moz-border-radius: 40px;
-      -ms-border-radius: 40px;
-      -o-border-radius: 40px;
-      padding: 20px 0;
-
-      h2 {
-        color: rgb(38, 82, 176);
-        font-family: Nunito;
-        font-size: 20px;
-        font-weight: 800;
-      }
-
-      .chek {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-      }
-      .detailsBox {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        gap: 20px;
-        .QrCode {
-          width: 100px;
-          height: 100px;
-        }
-        .BankName {
-          width: 100px;
-          height: 17px;
-        }
-      
-
-        h2 {
-          color: rgb(0, 0, 0);
-          font-family: Nunito;
-          font-size: 20px;
-          font-weight: 500;
-          line-height: 27px;
-          letter-spacing: 0%;
-          text-align: left;
-        }
-      }
-    }
-  }
 }

@@ -340,11 +340,13 @@ const MainCatalog: React.FC = () => {
             </div>
         );
     }
-
-    if (isBooksLoading || isGenresLoading) {
-        return <div className={scss.loading}>Загрузка...</div>;
+    if (isGenresLoading) {
+        return (
+            <div className={scss.loaderBlock}>
+                <div className={scss.loader}></div>
+            </div>
+        );
     }
-
     return (
         <section className={scss.MainCatalog}>
             <div className="container">
