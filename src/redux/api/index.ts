@@ -39,6 +39,7 @@ export const api = createApi({
         "paymentdetails",
         "aboutUs",
         "auth",
+        "history",
         "favorite",
         "dostavka",
         "cart",

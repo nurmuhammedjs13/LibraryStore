@@ -57,6 +57,7 @@ namespace REGDELIVERY {
         client_address: string;
         text: string;
         cart_id: number;
+        check_order: string | File;
         created_at: string;
     };
 }
