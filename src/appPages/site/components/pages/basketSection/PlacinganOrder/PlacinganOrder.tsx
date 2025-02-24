@@ -18,16 +18,6 @@ import { useGetMeQuery } from "@/redux/api/auth";
 import { useGetRegDeliveryQuery } from "@/redux/api/regDelivery";
 import axios from "axios";
 
-interface OrderFormData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    address?: string;
-    comments: string;
-    receipt?: File;
-}
-
 interface CartItem {
     id: number;
     books: {
@@ -42,13 +32,35 @@ interface CartItem {
     quantity: number;
     books_id?: number;
 }
+interface FormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address?: string;
+    comments: string;
+    receipt?: File;
+}
 
 interface ValidationErrorResponse {
-    cart?: string[];
-    cart_id?: string[];
-    client_phone_number?: string[];
-    status?: number;
-    [key: string]: string[] | number | undefined;
+    status: number;
+    data: {
+        detail?: string;
+        [key: string]: any;
+    };
+}
+interface PostRegDeliveryRequest {
+    client: number;
+    delivery: string;
+    cart: number;
+    client_first_name: string;
+    client_last_name: string;
+    client_email: string;
+    client_phone_number: string;
+    client_address: string | undefined;
+    text: string;
+    cart_id: number;
+    check_order: File; // Add check_order field
 }
 
 const PlacinganOrder = () => {
@@ -66,7 +78,7 @@ const PlacinganOrder = () => {
     );
     const [validationError, setValidationError] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [formData, setFormData] = useState<OrderFormData>({
+    const [formData, setFormData] = useState<FormData>({
         firstName: "",
         lastName: "",
         email: "",
@@ -299,46 +311,51 @@ ${
 
             const itemsToDelete = uniqueCartItems.map((item) => item.id);
 
-            // Создаем базовый объект данных
-            const baseOrderData = {
-                client: Number(meData.id),
-                cart: 8,
-                cart_id: 8,
-                client_first_name: formData.firstName.trim(),
-                client_last_name: formData.lastName.trim(),
-                client_email: formData.email.trim(),
-                client_phone_number: formData.phone,
-                text: formData.comments.trim(),
-                client_address:
-                    activeButton === "delivery"
-                        ? formData.address?.trim() || "Адрес не указан"
-                        : "Самовывоз",
-            };
+            // Create FormData for submission
+            const orderFormData = new FormData();
+            orderFormData.append("client", String(meData.id));
+            orderFormData.append("cart", "8");
+            orderFormData.append("cart_id", "8");
+            orderFormData.append(
+                "client_first_name",
+                formData.firstName.trim()
+            );
+            orderFormData.append("client_last_name", formData.lastName.trim());
+            orderFormData.append("client_email", formData.email.trim());
+            orderFormData.append("client_phone_number", formData.phone);
+            orderFormData.append("text", formData.comments.trim());
+
+            if (formData.receipt instanceof File) {
+                orderFormData.append("check_order", formData.receipt);
+            }
+
+            const deliveryType =
+                activeButton === "delivery" ? "доставка" : "самовывоз";
+            const clientAddress =
+                activeButton === "delivery"
+                    ? formData.address?.trim() || "Адрес не указан"
+                    : "Самовывоз";
+
+            orderFormData.append("delivery", deliveryType);
+            orderFormData.append("client_address", clientAddress);
 
             try {
                 if (activeButton === "delivery") {
-                    const deliveryData = {
-                        ...baseOrderData,
-                        delivery: "доставка",
-                    };
-                    // await postRegDelivery(deliveryData).unwrap();
+                    await postRegDelivery(orderFormData).unwrap();
                 } else {
-                    const pickupData = {
-                        ...baseOrderData,
-                        delivery: "самовывоз",
-                    };
-
-                    console.log(pickupData);
-
-                    await postRegPickUp(pickupData).unwrap();
+                    await postRegPickUp(orderFormData).unwrap();
                 }
 
                 // Отправка уведомления в Telegram
                 await sendToTelegram({
-                    ...baseOrderData,
-                    delivery:
-                        activeButton === "delivery" ? "доставка" : "самовывоз",
+                    client_first_name: formData.firstName.trim(),
+                    client_last_name: formData.lastName.trim(),
+                    client_email: formData.email.trim(),
+                    client_phone_number: formData.phone,
+                    delivery: deliveryType,
                     created_at: new Date().toISOString(),
+                    text: formData.comments.trim(),
+                    client_address: clientAddress,
                     total_price: calculateTotal(),
                     total_items: calculateTotalQuantity(),
                     receipt: formData.receipt,
@@ -384,7 +401,11 @@ ${
                     setValidationError(error.message);
                 } else if (typeof error === "object" && error !== null) {
                     const apiError = error as ValidationErrorResponse;
-                    if (apiError.status === 400) {
+                    if (apiError.status === 415) {
+                        setValidationError(
+                            "Ошибка формата данных. Пожалуйста, проверьте формат загружаемых файлов."
+                        );
+                    } else if (apiError.status === 400) {
                         const errorMessages: string[] = [];
                         Object.entries(apiError).forEach(([key, value]) => {
                             if (Array.isArray(value)) {
@@ -420,7 +441,6 @@ ${
             setIsSubmitting(false);
         }
     };
-
     const handleInputChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {

@@ -26,7 +26,7 @@ namespace REGPICKUP {
             client_email: string;
             client_phone_number: string;
             text: string;
-            check_order: string | File; // URL or base64 string of the image
+            check_order: string | File;
             created_at: string;
         }
     ];
@@ -41,11 +41,13 @@ namespace REGPICKUP {
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
+        check_order: string | File;
         text: string;
         cart_id: number;
     };
 
-    type PostRegPickUpResponse = {
+    export type PostRegPickUpResponse = {
+        id: number;
         client: number;
         delivery: string;
         cart: number;
@@ -53,8 +55,10 @@ namespace REGPICKUP {
         client_last_name: string;
         client_email: string;
         client_phone_number: string;
+        client_address: string;
         text: string;
-        check_order: string | File; // URL or base64 string of the uploaded image
         cart_id: number;
+        check_order: string;
+        created_at: string;
     };
 }

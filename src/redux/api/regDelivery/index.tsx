@@ -14,17 +14,17 @@ const api = index.injectEndpoints({
         }),
         postRegDelivery: build.mutation<
             REGDELIVERY.PostRatingResponse,
-            REGDELIVERY.PostRegDeliveryRequest
+            FormData
         >({
-            query: (request) => {
-                console.log("Тело запроса:", request);
-                return {
-                    url: `/create_delivery/`,
-                    method: "POST",
-                    body: request, // Проверьте, добавлено ли тело запроса
-                };
-            },
-            invalidatesTags: ["regdelivery"],
+            query: (formData) => ({
+                url: "/create_delivery/",
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Content-Type": undefined,
+                },
+                formData: true,
+            }),
         }),
     }),
 });
