@@ -46,21 +46,8 @@ interface ValidationErrorResponse {
     status: number;
     data: {
         detail?: string;
-        [key: string]: any;
+        [key: string]: unknown;
     };
-}
-interface PostRegDeliveryRequest {
-    client: number;
-    delivery: string;
-    cart: number;
-    client_first_name: string;
-    client_last_name: string;
-    client_email: string;
-    client_phone_number: string;
-    client_address: string | undefined;
-    text: string;
-    cart_id: number;
-    check_order: File; // Add check_order field
 }
 
 const PlacinganOrder = () => {
