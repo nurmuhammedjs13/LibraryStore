@@ -349,13 +349,13 @@ ${
                 });
 
                 // Очистка корзины после успешного заказа
-                for (const itemId of itemsToDelete) {
-                    try {
-                        await deleteCartItem(itemId).unwrap();
-                    } catch (error) {
-                        console.error("Ошибка при очистке корзины:", error);
-                    }
-                }
+                // for (const itemId of itemsToDelete) {
+                //     try {
+                //         await deleteCartItem(itemId).unwrap();
+                //     } catch (error) {
+                //         console.error("Ошибка при очистке корзины:", error);
+                //     }
+                // }
 
                 // Сброс формы
                 setFormData({
