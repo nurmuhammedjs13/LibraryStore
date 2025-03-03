@@ -1,6 +1,7 @@
 namespace HISTORY {
-    type GetHistoryReaponse = [
-        {
+    type GetHistoryReaponse = Array<{
+        order: {
+            delivery: string;
             cart: {
                 id: number;
                 items: Array<{
@@ -21,7 +22,7 @@ namespace HISTORY {
                 total_price: string;
             };
             created_at: string;
-        }
-    ];
+        };
+    }>;
     type GetHistoryRequest = void;
 }

@@ -24,6 +24,7 @@ namespace REGDELIVERY {
             client_first_name: string;
             client_last_name: string;
             client_email: string;
+            check_order: string | File;
             client_phone_number: string;
             text: string;
             created_at: string;
@@ -57,7 +58,7 @@ namespace REGDELIVERY {
         client_address: string;
         text: string;
         cart_id: number;
-        check_order: string | File;
+        check_order: string;
         created_at: string;
     };
 }

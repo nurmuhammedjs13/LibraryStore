@@ -1,11 +1,8 @@
 import { api as index } from "..";
 
-const api = index.injectEndpoints({
+export const api = index.injectEndpoints({
     endpoints: (build) => ({
-        getRegPickUp: build.query<
-            REGPICKUP.GetRegPickUpResponse,
-            REGPICKUP.GetRegPickUpRequest
-        >({
+        getRegPickUp: build.query<REGPICKUP.GetRegPickUpResponse, void>({
             query: () => ({
                 url: `/pickup-list/`,
                 method: "GET",
@@ -14,14 +11,17 @@ const api = index.injectEndpoints({
         }),
         postRegPickUp: build.mutation<
             REGPICKUP.PostRegPickUpResponse,
-            REGPICKUP.PostRegPickUpRequest
+            FormData
         >({
-            query: (request) => ({
-                url: `/create_pickup/`,
+            query: (formData) => ({
+                url: "/create_pickup/",
                 method: "POST",
-                body: request,
+                body: formData,
+                headers: {
+                    "Content-Type": undefined,
+                },
+                formData: true,
             }),
-            invalidatesTags: ["pickup"],
         }),
     }),
 });
