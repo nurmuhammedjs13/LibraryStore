@@ -10,7 +10,6 @@ import { useGetHistoryQuery } from "@/redux/api/history";
 
 const HistoryOrder = () => {
     const { data: history = [], isLoading, isError } = useGetHistoryQuery();
-
     console.log(history, "history");
 
     return (
