@@ -78,7 +78,6 @@
                         width: 60%;
                         h2 {
                             color: rgb(0, 0, 0);
-                            font-family: Nunito;
                             font-size: 14px;
                             font-weight: 600;
                             line-height: 19px;
@@ -86,14 +85,12 @@
                         }
                         h3 {
                             color: rgba(0, 0, 0, 0.6);
-                            font-family: Nunito;
                             font-size: 12px;
                             font-weight: 500;
                             line-height: 16px;
                         }
                         h4 {
                             color: rgba(0, 0, 0, 0.5);
-                            font-family: Nunito;
                             font-size: 12px;
                             font-weight: 500;
                             line-height: 16px;
@@ -106,7 +103,6 @@
                     gap: 10px;
                     h1 {
                         color: rgb(0, 0, 0);
-                        font-family: Nunito;
                         font-size: 20px;
                         font-weight: 500;
                         line-height: 27px;
@@ -119,7 +115,6 @@
                     width: 25%;
                     h5 {
                         color: rgb(38, 82, 176);
-                        font-family: Nunito;
                         font-size: 15px;
                         font-weight: 500;
                         line-height: 20px;
@@ -137,7 +132,6 @@
             width: 522px;
             h1 {
                 color: rgb(38, 82, 176);
-                font-family: Nunito;
                 font-size: 32px;
                 font-weight: 800;
                 line-height: 44px;
@@ -207,7 +201,6 @@
                         justify-content: center;
                         h6 {
                             color: rgba(0, 0, 0, 0.5);
-                            font-family: Nunito;
                             font-size: 14px;
                             font-weight: 600;
                         }
@@ -241,7 +234,6 @@
                     .text2 {
                         h4 {
                             color: rgba(0, 0, 0, 0.7);
-                            font-family: Nunito;
                             font-size: 16px;
                             font-weight: 600;
                             line-height: 22px;
@@ -254,7 +246,6 @@
                         margin: 2% 0;
                         h3 {
                             color: rgb(0, 0, 0);
-                            font-family: Nunito;
                             font-size: 18px;
                             font-weight: 600;
                             line-height: 25px;
@@ -263,7 +254,6 @@
                     .text4 {
                         h2 {
                             color: rgb(0, 0, 0);
-                            font-family: Nunito;
                             font-size: 16px;
                             font-weight: 600;
                             line-height: 22px;
@@ -274,7 +264,6 @@
                         gap: 15px;
                         p {
                             color: rgba(0, 0, 0, 0.5);
-                            font-family: Nunito;
                             font-size: 14px;
                             font-weight: 600;
                             line-height: 19px;
@@ -296,7 +285,6 @@
                                 height: 42px;
                                 border-radius: 10px;
                                 background: rgb(38, 82, 176);
-
                                 border-radius: 10px;
                                 padding: 10px 15px;
                                 cursor: pointer;
@@ -309,13 +297,337 @@
                             width: 100%;
                             height: 42px;
                             color: rgb(255, 255, 255);
-                            font-family: Nunito;
                             font-size: 16px;
                             font-weight: 600;
                             line-height: 22px;
                             border: none;
                             margin: 10px 0;
                             cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1360px) {
+    .mainBlock {
+        .block {
+            .landmark {
+                width: 50.9%;
+                height: 767px;
+                background: rgba(0, 0, 0, 0.05);
+                padding: 18px 13px;
+                .cardBlock {
+                    padding: 10px 18px;
+                    height: 175px;
+                    gap: 27px;
+                    margin: 10px 20px;
+                    .ImgBlock {
+                        display: flex;
+                        gap: 10px;
+                        .img {
+                            img {
+                                width: 80px;
+                                height: 110px;
+                                border-radius: 6px;
+                                -webkit-border-radius: 6px;
+                            }
+                        }
+                        .ImgText {
+                            width: 50%;
+                            h2 {
+                                font-size: 13px;
+                            }
+                            h3 {
+                                font-size: 11px;
+                                font-weight: 400;
+                            }
+                            h4 {
+                                font-size: 11px;
+                                font-weight: 400;
+                            }
+                        }
+                    }
+                    .quantity {
+                        gap: 8px;
+                        h1 {
+                            font-size: 18px;
+                            font-weight: 400;
+                        }
+                    }
+                    .price {
+                        gap: 8px;
+                        h5 {
+                            font-size: 14px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1160px) {
+    .mainBlock {
+        .block {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            .landmark {
+                height: 700px;
+                width: 100%;
+                padding: 20px 15px;
+                .cardBlock {
+                    display: flex;
+                    width: 100%;
+                    height: 195px;
+                    align-items: center;
+                    gap: 37px;
+                    justify-content: space-between;
+                    margin: 10px 20px;
+                    border-radius: 20px;
+                    background: rgb(255, 255, 255);
+
+                    .ImgBlock {
+                        width: 50%;
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 10px;
+                        .img {
+                            img {
+                                width: 120px;
+                                height: 150px;
+                            }
+                        }
+                        .ImgText {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+                            width: 100%;
+                            h2 {
+                                color: rgb(0, 0, 0);
+                                font-size: 20px;
+                            }
+                            h3 {
+                                color: rgba(0, 0, 0, 0.6);
+                                font-size: 18px;
+                            }
+                            h4 {
+                                color: rgba(0, 0, 0, 0.5);
+                                font-size: 18px;
+                            }
+                        }
+                    }
+                    .quantity {
+                        display: flex;
+                        gap: 10px;
+                        width: 25;
+                        h1 {
+                            color: rgb(0, 0, 0);
+                            font-size: 26px;
+                        }
+                    }
+                    .price {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        justify-content: flex-end;
+                        width: 25%;
+                        h5 {
+                            color: rgb(38, 82, 176);
+                            font-size: 21px;
+                        }
+                    }
+                }
+            }
+
+            .mainInput {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px 0 0 0;
+                width: 100%;
+                h1 {
+                    color: rgb(38, 82, 176);
+                    font-size: 38px;
+                    font-weight: 800;
+                    line-height: 44px;
+                }
+                .InputBlock {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    .BlockBtn {
+                        display: flex;
+                        justify-content: center;
+                        width: 50%;
+                        height: 61px;
+                        gap: 10;
+                        padding: 10px 13px 10px 13px;
+                        box-sizing: border-box;
+                        border: 1px solid rgb(38, 82, 176);
+                        border-radius: 10px;
+                        background: rgb(255, 255, 255);
+                        .delivery,
+                        .pickup {
+                            width: 100%;
+                            height: 41px;
+                            display: flex;
+                            justify-content: center;
+                            padding: 7px 10px;
+                            border-radius: 10px;
+                            border: 0;
+                            font-size: 26px;
+                            font-weight: 600;
+                            line-height: 27px;
+                            cursor: pointer;
+                            transition: background 0.3s, color 0.3s;
+                            -webkit-transition: background 0.3s, color 0.3s;
+                            -moz-transition: background 0.3s, color 0.3s;
+                            -ms-transition: background 0.3s, color 0.3s;
+                            -o-transition: background 0.3s, color 0.3s;
+                        }
+
+                        .delivery {
+                            background: rgb(255, 255, 255);
+                            color: rgb(38, 82, 176);
+                        }
+
+                        .pickup {
+                            background: rgb(255, 255, 255);
+                            color: rgb(38, 82, 176);
+                        }
+
+                        .activeDelivery {
+                            background: rgb(38, 82, 176);
+                            color: rgb(255, 255, 255);
+                        }
+
+                        .activePickup {
+                            background: rgb(38, 82, 176);
+                            color: rgb(255, 255, 255);
+                        }
+                    }
+                    .Inputs {
+                        margin: 10% 0;
+                        display: flex;
+                        width: 80%;
+                        justify-content: center;
+                        flex-direction: column;
+                        gap: 12px;
+                        .Input {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            h6 {
+                                color: rgba(0, 0, 0, 0.5);
+                                font-size: 20px;
+                                font-weight: 600;
+                            }
+                            hr {
+                                margin-top: -15px;
+                            }
+
+                            input {
+                                border: 1px solid rgba(0, 0, 0, 0.7);
+                                width: 100%;
+                                padding: 20px;
+                                margin-top: 10px;
+                                border: 0;
+                                outline: none;
+                            }
+                        }
+                    }
+                    .uploadFile {
+                        width: 80%;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                        .text1 {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            h4 {
+                                color: rgba(0, 0, 0, 0.7);
+                                font-family: Nunito;
+                                font-size: 20px;
+                                font-weight: 600;
+                                line-height: 22px;
+                            }
+                        }
+                        .text2 {
+                            h4 {
+                                color: rgba(0, 0, 0, 0.7);
+                                font-size: 22px;
+                                font-weight: 600;
+                                line-height: 22px;
+                            }
+                        }
+                        .text3 {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            margin: 2% 0;
+                            h3 {
+                                color: rgb(0, 0, 0);
+                                font-size: 24px;
+                                font-weight: 600;
+                                line-height: 25px;
+                            }
+                        }
+                        .text4 {
+                            h2 {
+                                color: rgb(0, 0, 0);
+                                font-size: 22px;
+                                font-weight: 600;
+                                line-height: 22px;
+                            }
+                        }
+                        .text5 {
+                            display: flex;
+                            gap: 15px;
+                            p {
+                                color: rgba(0, 0, 0, 0.5);
+                                font-size: 20px;
+                                font-weight: 600;
+                                line-height: 19px;
+                            }
+                        }
+                        .upload {
+                            .selectFile {
+                                width: 100%;
+                                height: 90px;
+                                box-sizing: border-box;
+                                border: 1px dashed rgb(38, 82, 176);
+                                border-radius: 20px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-top: 20px;
+                                input {
+                                    width: 63%;
+                                    height: 50px;
+                                    font-size: 20px;
+                                }
+                            }
+                            button {
+                                border-radius: 10px;
+                                background: rgb(38, 82, 176);
+                                width: 100%;
+                                height: 60px;
+                                color: rgb(255, 255, 255);
+                                font-size: 22px;
+                                font-weight: 600;
+                                line-height: 22px;
+                                border: none;
+                                margin: 10px 0;
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
