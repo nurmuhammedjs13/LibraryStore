@@ -780,108 +780,125 @@
         }
     }
 }
-// @media screen and (max-width: 600px) {
-//     .mainBlock {
-//         .block {
-//             padding: 0 0 40px 0;
-//             .landmark {
-//                 .cardBlock {
-//                     .ImgBlock {
-//                         .img {
-//                             img {
-//                                 width: 80px;
-//                                 height: 110px;
-//                             }
-//                         }
-//                         .ImgText {
-//                             h2 {
-//                                 font-size: 14px;
-//                             }
-//                             h3 {
-//                                 font-size: 14px;
-//                             }
-//                             h4 {
-//                                 font-size: 14px;
-//                             }
-//                         }
-//                     }
-//                     .quantity {
-//                         h1 {
-//                             font-size: 16px;
-//                         }
-//                     }
-//                     .price {
-//                         h5 {
-//                             font-size: 14px;
-//                         }
-//                     }
-//                 }
-//             }
+@media screen and (max-width: 560px) {
+    .mainBlock {
+        .block {
+            padding: 0 0 40px 0;
+            .landmark {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                .cardBlock {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                    margin: 0;
+                    height: 100%;
+                    width: 100%;
+                    .ImgBlock {
+                        width: 100%;
+                        .img {
+                            img {
+                                width: 80px;
+                                height: 110px;
+                            }
+                        }
+                        .ImgText {
+                            h2 {
+                                font-size: 14px;
+                            }
+                            h3 {
+                                font-size: 14px;
+                            }
+                            h4 {
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                    .quantity {
+                        width: 100%;
 
-//             .mainInput {
-//                 h1 {
-//                     font-size: 30px;
-//                 }
-//                 .InputBlock {
-//                     .BlockBtn {
-//                         .delivery,
-//                         .pickup {
-//                             font-size: 18px;
-//                         }
-//                         width: 80%;
-//                     }
-//                     .Inputs {
-//                         .Input {
-//                             h6 {
-//                                 font-size: 14px;
-//                             }
+                        h1 {
+                            font-size: 16px;
+                        }
+                    }
 
-//                             input {
-//                                 font-size: 12px;
-//                             }
-//                         }
-//                     }
-//                     .uploadFile {
-//                         width: 80%;
-//                         gap: 5px;
-//                         .text1 {
-//                             h4 {
-//                                 font-size: 14px;
-//                             }
-//                         }
-//                         .text2 {
-//                             h4 {
-//                                 font-size: 16px;
-//                             }
-//                         }
-//                         .text3 {
-//                             h3 {
-//                                 font-size: 18px;
-//                             }
-//                         }
-//                         .text4 {
-//                             h2 {
-//                                 font-size: 18px;
-//                             }
-//                         }
-//                         .text5 {
-//                             p {
-//                                 font-size: 14px;
-//                             }
-//                         }
-//                         .upload {
-//                             .selectFile {
-//                                 input {
-//                                     font-size: 12px;
-//                                 }
-//                             }
-//                             button {
-//                                 font-size: 16px;
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
+                    .price {
+                        justify-content: flex-start;
+                        width: 100%;
+
+                        h5 {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+
+            .mainInput {
+                h1 {
+                    font-size: 30px;
+                }
+                .InputBlock {
+                    .BlockBtn {
+                        .delivery,
+                        .pickup {
+                            font-size: 18px;
+                        }
+                        width: 80%;
+                    }
+                    .Inputs {
+                        .Input {
+                            h6 {
+                                font-size: 14px;
+                            }
+
+                            input {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                    .uploadFile {
+                        width: 80%;
+                        gap: 5px;
+                        .text1 {
+                            h4 {
+                                font-size: 14px;
+                            }
+                        }
+                        .text2 {
+                            h4 {
+                                font-size: 16px;
+                            }
+                        }
+                        .text3 {
+                            h3 {
+                                font-size: 18px;
+                            }
+                        }
+                        .text4 {
+                            h2 {
+                                font-size: 18px;
+                            }
+                        }
+                        .text5 {
+                            p {
+                                font-size: 14px;
+                            }
+                        }
+                        .upload {
+                            .selectFile {
+                                input {
+                                    font-size: 12px;
+                                }
+                            }
+                            button {
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
