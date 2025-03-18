@@ -243,186 +243,238 @@ ${
             }
         }
     };
-
     const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
         if (isSubmitting) return;
 
         setIsSubmitting(true);
+        setValidationError("");
+
         try {
             if (uniqueCartItems.length === 0) {
                 throw new Error("Корзина пуста!");
             }
 
-            const validationErrors: string[] = [];
+            // Базовая валидация
+            if (
+                !formData.firstName ||
+                !formData.lastName ||
+                !formData.email ||
+                !formData.phone
+            ) {
+                throw new Error("Пожалуйста, заполните все обязательные поля");
+            }
 
-            if (!formData.firstName) validationErrors.push("Имя обязательно");
-            if (!formData.lastName)
-                validationErrors.push("Фамилия обязательна");
-            if (!formData.email) validationErrors.push("Email обязателен");
-            if (!formData.phone)
-                validationErrors.push("Номер телефона обязателен");
             if (activeButton === "delivery" && !formData.address) {
-                validationErrors.push("Адрес доставки обязателен");
+                throw new Error("Адрес доставки обязателен");
             }
+
             if (!formData.receipt) {
-                validationErrors.push("Чек оплаты обязателен");
+                throw new Error("Чек оплаты обязателен");
             }
 
-            if (validationErrors.length > 0) {
-                throw new Error(validationErrors.join(", "));
-            }
-
-            // Валидация email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.email)) {
-                throw new Error("Пожалуйста, введите корректный email адрес");
-            }
-
-            // Валидация телефона
-            let phoneNumber = formData.phone;
-            if (!phoneNumber.startsWith("+996")) {
-                phoneNumber = `+996${phoneNumber}`;
-            }
-
-            const phoneRegex = /^\+996\d{9}$/;
-            if (!phoneRegex.test(phoneNumber)) {
-                throw new Error(
-                    "Пожалуйста, введите действительный номер телефона в формате +996XXXXXXXXX"
-                );
-            }
-
+            // Проверка авторизации
             if (!meData?.id) {
                 throw new Error("Пользователь не авторизован");
             }
 
-            const itemsToDelete = uniqueCartItems.map((item) => item.id);
+            // Подготовка общих данных формы
+            const commonFormData = new FormData();
 
-            // Create FormData for submission
-            const orderFormData = new FormData();
-            orderFormData.append("client", String(meData.id));
-            orderFormData.append("cart", "8");
-            orderFormData.append("cart_id", "8");
-            orderFormData.append(
+            // Добавляем ID пользователя и корзины
+            commonFormData.append("client", String(Number(meData.id)));
+            commonFormData.append("cart_id", String(Number(meData.id)));
+
+            // Персональные данные клиента
+            commonFormData.append(
                 "client_first_name",
                 formData.firstName.trim()
             );
-            orderFormData.append("client_last_name", formData.lastName.trim());
-            orderFormData.append("client_email", formData.email.trim());
-            orderFormData.append("client_phone_number", formData.phone);
-            orderFormData.append("text", formData.comments.trim());
+            commonFormData.append("client_last_name", formData.lastName.trim());
+            commonFormData.append("client_email", formData.email.trim());
+            commonFormData.append("client_phone_number", formData.phone);
 
-            if (formData.receipt instanceof File) {
-                orderFormData.append("check_order", formData.receipt);
+            // Добавляем комментарий если он есть
+            if (formData.comments) {
+                commonFormData.append("text", formData.comments.trim());
             }
 
-            const deliveryType =
-                activeButton === "delivery" ? "доставка" : "самовывоз";
-            const clientAddress =
-                activeButton === "delivery"
-                    ? formData.address?.trim() || "Адрес не указан"
-                    : "Самовывоз";
+            // Добавляем чек об оплате
+            if (formData.receipt instanceof File) {
+                commonFormData.append("check_order", formData.receipt);
+            }
 
-            orderFormData.append("delivery", deliveryType);
-            orderFormData.append("client_address", clientAddress);
+            let response;
+            // Разделяем логику для доставки и самовывоза
+            if (activeButton === "delivery") {
+                // Для доставки
+                commonFormData.append("delivery", "доставка");
 
-            try {
-                if (activeButton === "delivery") {
-                    await postRegDelivery(orderFormData).unwrap();
-                } else {
-                    await postRegPickUp(orderFormData).unwrap();
+                // Адрес только для доставки
+                if (formData.address) {
+                    commonFormData.append(
+                        "client_address",
+                        formData.address.trim()
+                    );
                 }
 
-                // Отправка уведомления в Telegram
+                // Отладочный вывод для доставки
+                console.log(
+                    "Отправляем данные для доставки:",
+                    Object.fromEntries(commonFormData)
+                );
+
+                response = await postRegDelivery(commonFormData).unwrap();
+                console.log("Успешный ответ (доставка):", response);
+
+                // Отправка уведомления в Telegram для доставки
                 await sendToTelegram({
-                    client_first_name: formData.firstName.trim(),
-                    client_last_name: formData.lastName.trim(),
-                    client_email: formData.email.trim(),
+                    client_first_name: formData.firstName,
+                    client_last_name: formData.lastName,
+                    client_email: formData.email,
                     client_phone_number: formData.phone,
-                    delivery: deliveryType,
+                    delivery: "доставка",
                     created_at: new Date().toISOString(),
-                    text: formData.comments.trim(),
-                    client_address: clientAddress,
+                    text: formData.comments,
+                    client_address: formData.address,
                     total_price: calculateTotal(),
                     total_items: calculateTotalQuantity(),
                     receipt: formData.receipt,
                 });
 
-                // Очистка корзины после успешного заказа
-                // for (const itemId of itemsToDelete) {
-                //     try {
-                //         await deleteCartItem(itemId).unwrap();
-                //     } catch (error) {
-                //         console.error("Ошибка при очистке корзины:", error);
-                //     }
-                // }
+                alert("Заказ с доставкой успешно оформлен!");
+            } else {
+                // Для самовывоза используем тот же FormData как для доставки,
+                // но с другим типом доставки и без адреса
 
-                // Сброс формы
-                setFormData({
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    phone: "",
-                    address: "",
-                    comments: "",
-                    receipt: undefined,
-                });
+                // Создаем копию общих данных
+                const pickupFormData = new FormData();
 
-                // Очистка поля файла
-                const fileInput = document.querySelector(
-                    'input[type="file"]'
-                ) as HTMLInputElement;
-                if (fileInput) {
-                    fileInput.value = "";
+                // Копируем все общие поля
+                for (const [key, value] of commonFormData.entries()) {
+                    pickupFormData.append(key, value);
                 }
 
-                alert(
-                    `Заказ успешно оформлен! Тип: ${
-                        activeButton === "delivery" ? "Доставка" : "Самовывоз"
-                    }`
+                // Устанавливаем тип "самовывоз"
+                pickupFormData.append("delivery", "самовывоз");
+
+                // На всякий случай добавляем поле cart, которое может ожидать API
+                pickupFormData.append("cart", String(Number(meData.id)));
+
+                // Отладочный вывод для самовывоза
+                console.log(
+                    "Отправляем данные для самовывоза:",
+                    Object.fromEntries(pickupFormData)
                 );
-                setValidationError("");
-            } catch (error) {
-                console.error("🚨 Ошибка оформления заказа:", error);
-                if (error instanceof Error) {
-                    setValidationError(error.message);
-                } else if (typeof error === "object" && error !== null) {
-                    const apiError = error as ValidationErrorResponse;
-                    if (apiError.status === 415) {
-                        setValidationError(
-                            "Ошибка формата данных. Пожалуйста, проверьте формат загружаемых файлов."
-                        );
-                    } else if (apiError.status === 400) {
-                        const errorMessages: string[] = [];
-                        Object.entries(apiError).forEach(([key, value]) => {
-                            if (Array.isArray(value)) {
-                                errorMessages.push(...value);
+
+                try {
+                    response = await postRegPickUp(pickupFormData).unwrap();
+                    console.log("Успешный ответ (самовывоз):", response);
+
+                    // Отправка уведомления в Telegram для самовывоза
+                    await sendToTelegram({
+                        client_first_name: formData.firstName,
+                        client_last_name: formData.lastName,
+                        client_email: formData.email,
+                        client_phone_number: formData.phone,
+                        delivery: "самовывоз",
+                        created_at: new Date().toISOString(),
+                        text: formData.comments,
+                        total_price: calculateTotal(),
+                        total_items: calculateTotalQuantity(),
+                        receipt: formData.receipt,
+                    });
+
+                    alert("Заказ с самовывозом успешно оформлен!");
+                } catch (pickupError) {
+                    console.error(
+                        "Детальная ошибка при оформлении самовывоза:",
+                        pickupError
+                    );
+
+                    console.log(
+                        "Пробуем фиксированный формат для API самовывоза..."
+                    );
+
+                    // Создаем новый объект с фиксированной структурой
+                    // Исключаем FormData, пробуем обычный JSON
+                    const pickupData = {
+                        client: Number(meData.id),
+                        cart_id: Number(meData.id),
+                        cart: Number(meData.id),
+                        client_first_name: formData.firstName.trim(),
+                        client_last_name: formData.lastName.trim(),
+                        client_email: formData.email.trim(),
+                        client_phone_number: formData.phone,
+                        delivery: "самовывоз",
+                        text: formData.comments || "",
+                    };
+
+                    console.log(
+                        "Пробуем отправить JSON для самовывоза:",
+                        pickupData
+                    );
+
+                    // Используем обычный fetch для большего контроля
+                    try {
+                        const rawResponse = await fetch(
+                            "http://13.61.153.85/create_pickup/",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(pickupData),
                             }
-                        });
-                        setValidationError(
-                            errorMessages.length > 0
-                                ? errorMessages.join(", ")
-                                : "Ошибка валидации данных. Пожалуйста, проверьте введенные данные."
                         );
-                    } else if (apiError.status === 500) {
-                        setValidationError(
-                            "Ошибка сервера. Пожалуйста, попробуйте позже."
+
+                        if (rawResponse.ok) {
+                            const jsonResponse = await rawResponse.json();
+                            console.log("JSON запрос успешен:", jsonResponse);
+
+                            await sendToTelegram({
+                                client_first_name: formData.firstName,
+                                client_last_name: formData.lastName,
+                                client_email: formData.email,
+                                client_phone_number: formData.phone,
+                                delivery: "самовывоз",
+                                created_at: new Date().toISOString(),
+                                text: formData.comments,
+                                total_price: calculateTotal(),
+                                total_items: calculateTotalQuantity(),
+                                receipt: formData.receipt,
+                            });
+
+                            alert("Заказ с самовывозом успешно оформлен!");
+                        } else {
+                            console.error(
+                                "Ошибка при отправке JSON:",
+                                await rawResponse.text()
+                            );
+                            throw new Error(
+                                `Ошибка при отправке JSON: ${rawResponse.status}`
+                            );
+                        }
+                    } catch (jsonError) {
+                        console.error(
+                            "Ошибка при использовании JSON:",
+                            jsonError
                         );
-                    } else {
                         setValidationError(
-                            "Произошла ошибка при оформлении заказа. Пожалуйста, проверьте данные и попробуйте снова."
+                            "Не удалось оформить заказ с самовывозом. Пожалуйста, свяжитесь с администратором."
                         );
                     }
-                } else {
-                    setValidationError(
-                        "Произошла неизвестная ошибка при оформлении заказа."
-                    );
                 }
             }
         } catch (error) {
             console.error("🚨 Ошибка оформления заказа:", error);
+
             if (error instanceof Error) {
                 setValidationError(error.message);
+            } else if (typeof error === "object" && error !== null) {
+                setValidationError(
+                    "Произошла ошибка при оформлении заказа. Проверьте правильность введенных данных."
+                );
             }
         } finally {
             setIsSubmitting(false);
@@ -466,6 +518,7 @@ ${
 
         setValidationError("");
     };
+
     if (isLoading) {
         return (
             <div className={styles.loaderBlock}>
