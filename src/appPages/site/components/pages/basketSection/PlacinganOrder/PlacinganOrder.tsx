@@ -243,7 +243,6 @@ ${
             }
         }
     };
-
     const handleSubmitOrder = async (e: FormEvent) => {
         e.preventDefault();
         if (isSubmitting) return;
@@ -279,62 +278,194 @@ ${
                 throw new Error("Пользователь не авторизован");
             }
 
-            // Подготовка данных формы
-            const orderFormData = new FormData();
-            orderFormData.append("client", String(Number(meData.id)));
-            orderFormData.append("cart_id", String(Number(meData.id)));
-            orderFormData.append("cart", String(Number(meData.id)));
-            orderFormData.append(
+            // Подготовка общих данных формы
+            const commonFormData = new FormData();
+
+            // Добавляем ID пользователя и корзины
+            commonFormData.append("client", String(Number(meData.id)));
+            commonFormData.append("cart_id", String(Number(meData.id)));
+
+            // Персональные данные клиента
+            commonFormData.append(
                 "client_first_name",
                 formData.firstName.trim()
             );
-            orderFormData.append("client_last_name", formData.lastName.trim());
-            orderFormData.append("client_email", formData.email.trim());
-            orderFormData.append("client_phone_number", formData.phone);
+            commonFormData.append("client_last_name", formData.lastName.trim());
+            commonFormData.append("client_email", formData.email.trim());
+            commonFormData.append("client_phone_number", formData.phone);
 
             // Добавляем комментарий если он есть
             if (formData.comments) {
-                orderFormData.append("text", formData.comments.trim());
+                commonFormData.append("text", formData.comments.trim());
             }
 
-            // Тип доставки
-            const deliveryType =
-                activeButton === "delivery" ? "доставка" : "самовывоз";
-            orderFormData.append("delivery", deliveryType);
-
-            // Адрес (только для доставки)
-            if (activeButton === "delivery" && formData.address) {
-                orderFormData.append("client_address", formData.address.trim());
-            }
-
-            // Чек об оплате
+            // Добавляем чек об оплате
             if (formData.receipt instanceof File) {
-                orderFormData.append("check_order", formData.receipt);
+                commonFormData.append("check_order", formData.receipt);
             }
 
-            console.log(
-                "Отправляем данные:",
-                Object.fromEntries(orderFormData)
-            );
-            console.log("form data", formData);
-
-            // Отправка запроса
+            let response;
+            // Разделяем логику для доставки и самовывоза
             if (activeButton === "delivery") {
-                const response = await postRegDelivery(orderFormData).unwrap();
-                console.log("Успешный ответ (доставка):", response);
-            } else {
-                const response = await postRegPickUp(orderFormData).unwrap();
+                // Для доставки
+                commonFormData.append("delivery", "доставка");
+
+                // Адрес только для доставки
+                if (formData.address) {
+                    commonFormData.append(
+                        "client_address",
+                        formData.address.trim()
+                    );
+                }
+
+                // Отладочный вывод для доставки
                 console.log(
-                    "Успешный ответ (самовывоз):",
-                    Object.fromEntries(orderFormData.entries())
+                    "Отправляем данные для доставки:",
+                    Object.fromEntries(commonFormData)
                 );
-                console.log("Успешный ответ (самовывез):", response);
+
+                response = await postRegDelivery(commonFormData).unwrap();
+                console.log("Успешный ответ (доставка):", response);
+
+                // Отправка уведомления в Telegram для доставки
+                await sendToTelegram({
+                    client_first_name: formData.firstName,
+                    client_last_name: formData.lastName,
+                    client_email: formData.email,
+                    client_phone_number: formData.phone,
+                    delivery: "доставка",
+                    created_at: new Date().toISOString(),
+                    text: formData.comments,
+                    client_address: formData.address,
+                    total_price: calculateTotal(),
+                    total_items: calculateTotalQuantity(),
+                    receipt: formData.receipt,
+                });
+
+                alert("Заказ с доставкой успешно оформлен!");
+            } else {
+                // Для самовывоза используем тот же FormData как для доставки,
+                // но с другим типом доставки и без адреса
+
+                // Создаем копию общих данных
+                const pickupFormData = new FormData();
+
+                // Копируем все общие поля
+                for (const [key, value] of commonFormData.entries()) {
+                    pickupFormData.append(key, value);
+                }
+
+                // Устанавливаем тип "самовывоз"
+                pickupFormData.append("delivery", "самовывоз");
+
+                // На всякий случай добавляем поле cart, которое может ожидать API
+                pickupFormData.append("cart", String(Number(meData.id)));
+
+                // Отладочный вывод для самовывоза
+                console.log(
+                    "Отправляем данные для самовывоза:",
+                    Object.fromEntries(pickupFormData)
+                );
+
+                try {
+                    response = await postRegPickUp(pickupFormData).unwrap();
+                    console.log("Успешный ответ (самовывоз):", response);
+
+                    // Отправка уведомления в Telegram для самовывоза
+                    await sendToTelegram({
+                        client_first_name: formData.firstName,
+                        client_last_name: formData.lastName,
+                        client_email: formData.email,
+                        client_phone_number: formData.phone,
+                        delivery: "самовывоз",
+                        created_at: new Date().toISOString(),
+                        text: formData.comments,
+                        total_price: calculateTotal(),
+                        total_items: calculateTotalQuantity(),
+                        receipt: formData.receipt,
+                    });
+
+                    alert("Заказ с самовывозом успешно оформлен!");
+                } catch (pickupError) {
+                    console.error(
+                        "Детальная ошибка при оформлении самовывоза:",
+                        pickupError
+                    );
+
+                    console.log(
+                        "Пробуем фиксированный формат для API самовывоза..."
+                    );
+
+                    // Создаем новый объект с фиксированной структурой
+                    // Исключаем FormData, пробуем обычный JSON
+                    const pickupData = {
+                        client: Number(meData.id),
+                        cart_id: Number(meData.id),
+                        cart: Number(meData.id),
+                        client_first_name: formData.firstName.trim(),
+                        client_last_name: formData.lastName.trim(),
+                        client_email: formData.email.trim(),
+                        client_phone_number: formData.phone,
+                        delivery: "самовывоз",
+                        text: formData.comments || "",
+                    };
+
+                    console.log(
+                        "Пробуем отправить JSON для самовывоза:",
+                        pickupData
+                    );
+
+                    // Используем обычный fetch для большего контроля
+                    try {
+                        const rawResponse = await fetch(
+                            "http://13.61.153.85/create_pickup/",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(pickupData),
+                            }
+                        );
+
+                        if (rawResponse.ok) {
+                            const jsonResponse = await rawResponse.json();
+                            console.log("JSON запрос успешен:", jsonResponse);
+
+                            await sendToTelegram({
+                                client_first_name: formData.firstName,
+                                client_last_name: formData.lastName,
+                                client_email: formData.email,
+                                client_phone_number: formData.phone,
+                                delivery: "самовывоз",
+                                created_at: new Date().toISOString(),
+                                text: formData.comments,
+                                total_price: calculateTotal(),
+                                total_items: calculateTotalQuantity(),
+                                receipt: formData.receipt,
+                            });
+
+                            alert("Заказ с самовывозом успешно оформлен!");
+                        } else {
+                            console.error(
+                                "Ошибка при отправке JSON:",
+                                await rawResponse.text()
+                            );
+                            throw new Error(
+                                `Ошибка при отправке JSON: ${rawResponse.status}`
+                            );
+                        }
+                    } catch (jsonError) {
+                        console.error(
+                            "Ошибка при использовании JSON:",
+                            jsonError
+                        );
+                        setValidationError(
+                            "Не удалось оформить заказ с самовывозом. Пожалуйста, свяжитесь с администратором."
+                        );
+                    }
+                }
             }
-
-            // Очистка корзины и сброс формы после успешного заказа
-            alert("Заказ успешно оформлен!");
-
-            // Здесь добавьте очистку корзины и сброс формы
         } catch (error) {
             console.error("🚨 Ошибка оформления заказа:", error);
 
@@ -387,6 +518,7 @@ ${
 
         setValidationError("");
     };
+
     if (isLoading) {
         return (
             <div className={styles.loaderBlock}>
