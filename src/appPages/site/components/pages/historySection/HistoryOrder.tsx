@@ -35,7 +35,7 @@ const HistoryOrder = () => {
                                         <h3>{item.order.delivery}</h3>
                                         <h3>{item.order.created_at}</h3>
                                     </div>
-                                    {item.order.cart.items.map((el, idx) => (
+                                    {item.order.books.map((el, idx) => (
                                         <div
                                             className={styles.cardMain}
                                             key={idx}
@@ -44,35 +44,13 @@ const HistoryOrder = () => {
                                                 <div className={styles.cardImg}>
                                                     <div
                                                         className={
-                                                            styles.imageInfo
-                                                        }
-                                                    >
-                                                        <Image
-                                                            src={
-                                                                el.books
-                                                                    .book_images[0]
-                                                                    ?.book_images ||
-                                                                "/placeholder.jpg"
-                                                            }
-                                                            alt="book cover"
-                                                            width={100}
-                                                            height={150}
-                                                        />
-                                                    </div>
-                                                    <div
-                                                        className={
                                                             styles.textImg
                                                         }
                                                     >
-                                                        <h2>
-                                                            {el.books.book_name}
-                                                        </h2>
-                                                        <h3>
-                                                            {el.books.author}
-                                                        </h3>
+                                                        <h2>{el.book_name}</h2>
+                                                        <h3>{el.author}</h3>
                                                         <h4>
-                                                            <Price />{" "}
-                                                            {el.books.price}
+                                                            <Price /> {el.price}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -85,7 +63,8 @@ const HistoryOrder = () => {
                                                         Кол-во: {el.quantity} шт
                                                     </h5>
                                                     <h6>
-                                                        Итого: {el.total_price}{" "}
+                                                        Итого:{" "}
+                                                        {el.price * el.quantity}{" "}
                                                         сом
                                                     </h6>
                                                 </div>
@@ -97,7 +76,7 @@ const HistoryOrder = () => {
                                     ))}
                                     <div className={styles.TotalPrice}>
                                         <h1>Итого</h1>
-                                        <p>{item.order.cart.total_price} сом</p>
+                                        <p>{item.order.total_price} сом</p>
                                     </div>
                                 </div>
                             ))}

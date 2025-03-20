@@ -1,28 +1,22 @@
 namespace HISTORY {
-    type GetHistoryReaponse = Array<{
-        order: {
-            delivery: string;
-            cart: {
-                id: number;
-                items: Array<{
-                    id: number;
-                    books: {
-                        id: number;
-                        book_images: Array<{
-                            book_images: string;
-                        }>;
-                        book_name: string;
+    type GetHistoryReaponse = [
+        {
+            order: {
+                delivery: string;
+                books: [
+                    {
                         author: string;
+                        book_name: string;
+                        full_book_name: string;
+                        id: number;
                         price: number;
-                    };
-                    quantity: number;
-                    books_id: number;
-                    total_price: string;
-                }>;
+                        quantity: number;
+                    }
+                ];
                 total_price: string;
+                created_at: string;
             };
-            created_at: string;
-        };
-    }>;
+        }
+    ];
     type GetHistoryRequest = void;
 }
