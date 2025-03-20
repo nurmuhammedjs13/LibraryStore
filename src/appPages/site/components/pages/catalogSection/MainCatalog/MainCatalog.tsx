@@ -135,13 +135,6 @@ const MainCatalog: React.FC = () => {
 
     const stars = [star0, star1, star2, star3, star4, star5];
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => {
-            setShowModal(false);
-        }, 2000);
-    };
-
     const calculateDiscountedPrice = (
         price: number,
         discount: number
@@ -301,6 +294,7 @@ const MainCatalog: React.FC = () => {
                 await addToCartMutation(requestBody).unwrap();
                 setShowModal(true);
                 setTimeout(() => setShowModal(false), 2000);
+                console.log(requestBody, "req body");
             }
         } catch (error) {
             console.error("Ошибка изменения корзины:", error);

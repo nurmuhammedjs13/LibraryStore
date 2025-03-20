@@ -96,6 +96,7 @@ const Slide: React.FC<SlideProps> = ({ slide }) => {
                 setIsInCart(true);
                 setCartModal(true);
                 setTimeout(() => setCartModal(false), 2000);
+                console.log(requestBody, "req body");
             }
         } catch (error) {
             console.error("Ошибка изменения корзины:", error);
