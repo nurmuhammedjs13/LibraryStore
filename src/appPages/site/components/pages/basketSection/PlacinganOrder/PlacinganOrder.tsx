@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useMemo, ChangeEvent, FormEvent } from "react";
+import React, {
+    useState,
+    useMemo,
+    ChangeEvent,
+    FormEvent,
+    useEffect,
+} from "react";
 import Image from "next/image";
 import DeleteIcon from "@/assets/Icons/DeleteIcon";
 import Minus from "@/assets/Icons/Minus";
@@ -40,14 +46,6 @@ interface FormData {
     address?: string;
     comments: string;
     receipt?: File;
-}
-
-interface ValidationErrorResponse {
-    status: number;
-    data: {
-        detail?: string;
-        [key: string]: unknown;
-    };
 }
 
 const PlacinganOrder = () => {
@@ -122,6 +120,18 @@ const PlacinganOrder = () => {
         return uniqueItems;
     }, [cartData, deleteCartItem]);
 
+    useEffect(() => {
+        const duplicateItems = cartData.filter(
+            (item, index, self) =>
+                self.findIndex((i) => i.books.id === item.books.id) !== index
+        );
+        duplicateItems.forEach(async (item) => {
+            if (item.id) {
+                await deleteCartItem(item.id).unwrap();
+            }
+        });
+    }, [cartData, deleteCartItem]);
+
     const handleDelete = async (id: number) => {
         try {
             await deleteCartItem(id).unwrap();
@@ -158,6 +168,57 @@ const PlacinganOrder = () => {
         );
     };
 
+    const resetForm = () => {
+        setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            address: "",
+            comments: "",
+            receipt: undefined,
+        });
+
+        const fileInput = document.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = "";
+        }
+    };
+    const clearCartItems = async () => {
+        try {
+            if (meData?.id) {
+                for (const item of uniqueCartItems) {
+                    if (item && item.id) {
+                        try {
+                            await deleteCartItem(item.id).unwrap();
+                        } catch (error) {
+                            if (
+                                typeof error === "object" &&
+                                error !== null &&
+                                "status" in error &&
+                                error.status === 404
+                            ) {
+                                console.warn(
+                                    `Товар с id ${item.id} уже удалён.`
+                                );
+                            } else {
+                                throw error;
+                            }
+                        }
+                    }
+                }
+            } else {
+                console.log(
+                    "Пользователь не авторизован, корзина не может быть очищена"
+                );
+            }
+        } catch (error) {
+            console.error("Ошибка при очистке корзины:", error);
+        }
+    };
+
     const sendToTelegram = async (orderData: {
         client_first_name: string;
         client_last_name: string;
@@ -181,7 +242,6 @@ const PlacinganOrder = () => {
                 return text.trim().replace(/[<>]/g, "");
             };
 
-            // Сначала отправляем текстовое сообщение
             const messageTG = `
 🛍 *НОВЫЙ ЗАКАЗ*
 
@@ -217,7 +277,6 @@ ${
                 }
             );
 
-            // Затем отправляем изображение чека, если оно есть
             if (orderData.receipt) {
                 const formData = new FormData();
                 formData.append("photo", orderData.receipt);
@@ -255,7 +314,6 @@ ${
                 throw new Error("Корзина пуста!");
             }
 
-            // Базовая валидация
             if (
                 !formData.firstName ||
                 !formData.lastName ||
@@ -273,19 +331,15 @@ ${
                 throw new Error("Чек оплаты обязателен");
             }
 
-            // Проверка авторизации
             if (!meData?.id) {
                 throw new Error("Пользователь не авторизован");
             }
 
-            // Подготовка общих данных формы
             const commonFormData = new FormData();
 
-            // Добавляем ID пользователя и корзины
             commonFormData.append("client", String(Number(meData.id)));
             commonFormData.append("cart_id", String(Number(meData.id)));
 
-            // Персональные данные клиента
             commonFormData.append(
                 "client_first_name",
                 formData.firstName.trim()
@@ -294,23 +348,18 @@ ${
             commonFormData.append("client_email", formData.email.trim());
             commonFormData.append("client_phone_number", formData.phone);
 
-            // Добавляем комментарий если он есть
             if (formData.comments) {
                 commonFormData.append("text", formData.comments.trim());
             }
 
-            // Добавляем чек об оплате
             if (formData.receipt instanceof File) {
                 commonFormData.append("check_order", formData.receipt);
             }
 
             let response;
-            // Разделяем логику для доставки и самовывоза
             if (activeButton === "delivery") {
-                // Для доставки
                 commonFormData.append("delivery", "доставка");
 
-                // Адрес только для доставки
                 if (formData.address) {
                     commonFormData.append(
                         "client_address",
@@ -318,7 +367,6 @@ ${
                     );
                 }
 
-                // Отладочный вывод для доставки
                 console.log(
                     "Отправляем данные для доставки:",
                     Object.fromEntries(commonFormData)
@@ -327,7 +375,6 @@ ${
                 response = await postRegDelivery(commonFormData).unwrap();
                 console.log("Успешный ответ (доставка):", response);
 
-                // Отправка уведомления в Telegram для доставки
                 await sendToTelegram({
                     client_first_name: formData.firstName,
                     client_last_name: formData.lastName,
@@ -342,26 +389,21 @@ ${
                     receipt: formData.receipt,
                 });
 
+                await clearCartItems();
+                resetForm();
+
                 alert("Заказ с доставкой успешно оформлен!");
             } else {
-                // Для самовывоза используем тот же FormData как для доставки,
-                // но с другим типом доставки и без адреса
-
-                // Создаем копию общих данных
                 const pickupFormData = new FormData();
 
-                // Копируем все общие поля
                 for (const [key, value] of commonFormData.entries()) {
                     pickupFormData.append(key, value);
                 }
 
-                // Устанавливаем тип "самовывоз"
                 pickupFormData.append("delivery", "самовывоз");
 
-                // На всякий случай добавляем поле cart, которое может ожидать API
                 pickupFormData.append("cart", String(Number(meData.id)));
 
-                // Отладочный вывод для самовывоза
                 console.log(
                     "Отправляем данные для самовывоза:",
                     Object.fromEntries(pickupFormData)
@@ -371,7 +413,6 @@ ${
                     response = await postRegPickUp(pickupFormData).unwrap();
                     console.log("Успешный ответ (самовывоз):", response);
 
-                    // Отправка уведомления в Telegram для самовывоза
                     await sendToTelegram({
                         client_first_name: formData.firstName,
                         client_last_name: formData.lastName,
@@ -385,6 +426,9 @@ ${
                         receipt: formData.receipt,
                     });
 
+                    await clearCartItems();
+                    resetForm();
+
                     alert("Заказ с самовывозом успешно оформлен!");
                 } catch (pickupError) {
                     console.error(
@@ -396,8 +440,6 @@ ${
                         "Пробуем фиксированный формат для API самовывоза..."
                     );
 
-                    // Создаем новый объект с фиксированной структурой
-                    // Исключаем FormData, пробуем обычный JSON
                     const pickupData = {
                         client: Number(meData.id),
                         cart_id: Number(meData.id),
@@ -415,7 +457,6 @@ ${
                         pickupData
                     );
 
-                    // Используем обычный fetch для большего контроля
                     try {
                         const rawResponse = await fetch(
                             "http://13.61.153.85/create_pickup/",
@@ -444,6 +485,8 @@ ${
                                 total_items: calculateTotalQuantity(),
                                 receipt: formData.receipt,
                             });
+
+                            resetForm();
 
                             alert("Заказ с самовывозом успешно оформлен!");
                         } else {
@@ -518,7 +561,6 @@ ${
 
         setValidationError("");
     };
-
     if (isLoading) {
         return (
             <div className={styles.loaderBlock}>
