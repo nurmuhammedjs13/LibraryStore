@@ -16,7 +16,7 @@ namespace Discount {
                 janre: Array<{
                     janre_name: string;
                 }>;
-                description?: string;
+                description: string;
                 ratings: Array<{
                     id: number;
                     user_rating: {
