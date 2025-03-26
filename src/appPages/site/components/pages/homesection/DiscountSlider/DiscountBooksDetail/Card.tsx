@@ -13,8 +13,6 @@ import star2 from "@/assets/Icons/star2.png";
 import star3 from "@/assets/Icons/star3.png";
 import star4 from "@/assets/Icons/star4.png";
 import star5 from "@/assets/Icons/star5.png";
-import like from "@/assets/Icons/like.png";
-import likeActive from "@/assets/Icons/likeActive.png";
 import back from "@/assets/Icons/Back.png";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import { useGetMeQuery } from "@/redux/api/auth";
@@ -40,19 +38,6 @@ const CardDetail = () => {
 
     const { data, isLoading, isError } = useGetDiscountQuery();
 
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => setShowModal(false), 2000);
-    };
-
-    const toggleLike = (bookId: number) => {
-        setLikedItems((prev) =>
-            prev.includes(bookId)
-                ? prev.filter((item) => item !== bookId)
-                : [...prev, bookId]
-        );
-    };
-
     if (isLoading) {
         return (
             <div className={scss.loaderBlock}>
@@ -71,15 +56,15 @@ const CardDetail = () => {
 
         try {
             const isBookInCart = cartData.some(
-                (item) => item.books_id === data?.[0].id
+                (item) => item.books.id === data?.[0].id
             );
 
             if (isBookInCart) {
                 const cartItem = cartData.find(
-                    (item) => item.books_id === data?.[0].id
+                    (item) => item.books.id === data?.[0].id
                 );
                 if (cartItem) {
-                    await deleteCartItem(cartItem.books_id).unwrap();
+                    await deleteCartItem(cartItem.books.id).unwrap();
                     setIsInCart(false);
                 }
             } else {

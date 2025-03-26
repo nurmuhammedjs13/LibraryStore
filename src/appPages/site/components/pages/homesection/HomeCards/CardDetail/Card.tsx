@@ -4,10 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useGetBooksDetailQuery } from "@/redux/api/books";
-import star from "@/assets/Icons/star.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import star0 from "@/assets/Icons/star0.png";
-import activeStar from "@/assets/Icons/activeStar.png";
 import star1 from "@/assets/Icons/star1.png";
 import star2 from "@/assets/Icons/star2.png";
 import star3 from "@/assets/Icons/star3.png";
@@ -66,7 +64,7 @@ const CardDetail = () => {
 
     useEffect(() => {
         if (cartData && data) {
-            setIsInCart(cartData.some((item) => item.books_id === data.id));
+            setIsInCart(cartData.some((item) => item.books.id === data.id));
         }
     }, [cartData, data]);
 
@@ -110,15 +108,15 @@ const CardDetail = () => {
 
         try {
             const isBookInCart = cartData.some(
-                (item) => item.books_id === data?.id
+                (item) => item.books.id === data?.id
             );
 
             if (isBookInCart) {
                 const cartItem = cartData.find(
-                    (item) => item.books_id === data?.id
+                    (item) => item.books.id === data?.id
                 );
                 if (cartItem) {
-                    await deleteCartItem(cartItem.books_id).unwrap();
+                    await deleteCartItem(cartItem.books.id).unwrap();
                     setIsInCart(false);
                 }
             } else {
