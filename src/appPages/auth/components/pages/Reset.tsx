@@ -31,9 +31,9 @@ const ResetPage = () => {
       }).unwrap(); // Получаем данные ответа напрямую
       alert(response.message);
       router.push("/");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Ошибка:", error);
-      alert(error?.data?.message || "Ошибка при сбросе пароля.");
+      alert("Ошибка при сбросе пароля.");
     }
   };
 
@@ -43,10 +43,10 @@ const ResetPage = () => {
         <div className={scss.content}>
           <Image src={okuLoginLogo} alt="logo" width={100} height={21} />
           <p>
-            Введите новый пароль и код сброса, которые вы получили на вашу почту.
-            После этого вы сможете войти с новым паролем.
+            Введите новый пароль и код сброса, которые вы получили на вашу
+            почту. После этого вы сможете войти с новым паролем.
           </p>
-          
+
           <form onSubmit={handleSubmit(onSubmit)} className={scss.form}>
             <input
               type="text"

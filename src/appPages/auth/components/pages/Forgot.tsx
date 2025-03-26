@@ -21,18 +21,20 @@ const ForgotPage = () => {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<IFormForgotPassword> = async (data) => {
-    console.log("🚀 ~ constonSubmit:SubmitHandler<IFormForgotPassword>= ~ data:", data)
-    
+    console.log(
+      "🚀 ~ constonSubmit:SubmitHandler<IFormForgotPassword>= ~ data:",
+      data
+    );
+
     try {
       const response = await postForgotPassword(data).unwrap();
       alert(response.status); // Сообщение об успешном выполнении
       router.push("/reset"); // Переход на страницу сброса
-    } catch (error: any) {
+    } catch (error) {
       console.error("Ошибка запроса:", error);
-      alert(error?.data?.data?.email?.[0] || "Ошибка при отправке запроса."); // Вывод сообщения об ошибке
+      alert("Ошибка при отправке запроса."); // Вывод сообщения об ошибке
     }
   };
-  
 
   return (
     <div className={scss.Login}>
