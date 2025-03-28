@@ -61,6 +61,7 @@ type BookType = BaseBookType & {
 type DiscountBookType = {
     id: number;
     books: {
+        id: number;
         book_images: BookImage[];
         book_name: string;
         author: string;
