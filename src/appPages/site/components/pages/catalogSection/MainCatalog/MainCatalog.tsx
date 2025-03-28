@@ -87,15 +87,51 @@ type DiscountBookType = {
     discount: string;
     discount_book: number;
 };
+type UnifiedBookType = {
+    id?: number;
+    books?: {
+        id?: number;
+        book_name?: string;
+        price?: number;
+    };
+    book_name?: string;
+    price?: number;
+    discount_book?: number;
+} & Record<string, any>;
 
 interface Book {
     id: number;
-    book_name: string;
-    author: string;
-    price: number;
-    average_rating: number;
-    janre: { janre_name: string }[];
-    book_images: { book_images: string }[];
+    description?: string;
+    books: {
+        id: number;
+        book_images: Array<{
+            book_images: string;
+        }>;
+        book_name: string;
+        author: string;
+        price: number;
+        average_rating: number;
+        total_ratings: number;
+        janre: Array<{
+            janre_name: string;
+        }>;
+        description: string;
+        ratings: Array<{
+            id: number;
+            user_rating: {
+                username: string;
+            };
+            book: number;
+            aksia_books: unknown;
+            katalog_books: unknown;
+            katalog_aksia_books: unknown;
+            stars: number;
+            comment: string;
+            created_date: string;
+        }>;
+    };
+    discount: string;
+    discount_book: number;
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -268,8 +304,7 @@ const MainCatalog: React.FC = () => {
             document.body.style.overflow = "auto";
         }
     };
-
-    const handleToggleCart = async (book: Book) => {
+    const handleToggleCart = async (book: UnifiedBookType) => {
         if (!userId) {
             alert(
                 "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
@@ -277,30 +312,54 @@ const MainCatalog: React.FC = () => {
             return;
         }
 
-        const isInCart = cartData.some((item) => item.id === book.id);
+        // Проверяем, есть ли books и содержит ли он id (если это акционная книга)
+        const bookId =
+            book.discount_book && book.books?.id ? book.books.id : book.id;
+
+        if (!bookId) {
+            console.error("Не удалось определить ID книги", book);
+            return;
+        }
+
+        // Определяем актуальные данные книги
+        const bookData = book.books || book;
+
+        console.log("Книга:", book);
+        console.log("ID книги:", bookId);
+        console.log("Данные книги:", bookData);
+
+        const isInCart = cartData.some((item) => item.books.id === bookId);
 
         try {
             if (isInCart) {
-                const cartItem = cartData.find((item) => item.id === book.id);
-                if (cartItem?.id) await deleteCartItem(cartItem?.id).unwrap();
+                const cartItem = cartData.find(
+                    (item) => item.books.id === bookId
+                );
+                if (cartItem?.id) await deleteCartItem(cartItem.id).unwrap();
             } else {
                 const requestBody = {
                     books: {
-                        book_name: book.book_name,
-                        price: book.price,
+                        book_name: bookData.book_name || book.book_name,
+                        price: bookData.price || book.price,
                     },
                     quantity: 1,
-                    books_id: book.id,
+                    books_id: bookId, // Ключ books_id, если API ожидает books_id
                 };
-                await addToCartMutation(requestBody).unwrap();
-                setShowModal(true);
-                setTimeout(() => setShowModal(false), 2000);
-                console.log(requestBody, "req body");
+
+                console.log("Тело запроса:", requestBody);
+
+                // await addToCartMutation(requestBody).unwrap();
+                // setShowModal(true);
+                // setTimeout(() => setShowModal(false), 2000);
             }
         } catch (error) {
             console.error("Ошибка изменения корзины:", error);
+            if (error instanceof Error) {
+                console.error("Детали ошибки:", JSON.stringify(error, null, 2));
+            }
         }
     };
+
     useEffect(() => {
         return () => {
             document.body.style.overflow = "auto";

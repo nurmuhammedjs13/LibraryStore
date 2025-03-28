@@ -76,7 +76,7 @@ const CardDetail = () => {
                 alert("Книга удалена из корзины");
             } else {
                 const requestBody = {
-                    books_id: currentBook.id,
+                    books_id: currentBook.books.id,
                     books: {
                         book_name: currentBook.books.book_name,
                         price: currentBook.books.price,
