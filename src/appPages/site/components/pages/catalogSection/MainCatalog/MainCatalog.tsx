@@ -87,51 +87,12 @@ type DiscountBookType = {
     discount: string;
     discount_book: number;
 };
-type UnifiedBookType = {
-    id?: number;
-    books?: {
-        id?: number;
-        book_name?: string;
-        price?: number;
-    };
-    book_name?: string;
-    price?: number;
-    discount_book?: number;
-} & Record<string, any>;
 
-interface Book {
-    id: number;
-    description?: string;
-    books: {
-        id: number;
-        book_images: Array<{
-            book_images: string;
-        }>;
-        book_name: string;
-        author: string;
-        price: number;
-        average_rating: number;
-        total_ratings: number;
-        janre: Array<{
-            janre_name: string;
-        }>;
-        description: string;
-        ratings: Array<{
-            id: number;
-            user_rating: {
-                username: string;
-            };
-            book: number;
-            aksia_books: unknown;
-            katalog_books: unknown;
-            katalog_aksia_books: unknown;
-            stars: number;
-            comment: string;
-            created_date: string;
-        }>;
+interface ErrorWithStatus {
+    status?: number;
+    data?: {
+        detail?: string;
     };
-    discount: string;
-    discount_book: number;
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -143,7 +104,8 @@ const MainCatalog: React.FC = () => {
     const router = useRouter();
     const [addToCartMutation] = useAddToCartMutation();
     const [deleteCartItem] = useDeleteCartMutation();
-    const { data: cartData = [] } = useGetCartItemsQuery();
+    const { data: cartData = [], refetch: refetchCart } =
+        useGetCartItemsQuery();
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
     const [minPrice, setMinPrice] = useState<number | "">("");
@@ -151,6 +113,8 @@ const MainCatalog: React.FC = () => {
     const [isRatingChecked, setIsRatingChecked] = useState<boolean>(false);
     const [isDiscountChecked, setIsDiscountChecked] = useState<boolean>(false);
     const [visibleItems, setVisibleItems] = useState<number>(ITEMS_PER_PAGE);
+    const [addFavorite] = useAddKatFavoriteItemMutation();
+    const [removeFavorite] = useRemoveKatFavoriteItemMutation();
 
     const {
         data: books = [] as BookType[],
@@ -221,9 +185,6 @@ const MainCatalog: React.FC = () => {
     const userId = meData?.id || null;
     const { data: favoriteData = [], isLoading: isFavLoading } =
         useGetKatFavoriteQuery();
-
-    const [addFavorite] = useAddKatFavoriteItemMutation();
-    const [removeFavorite] = useRemoveKatFavoriteItemMutation();
 
     const toggleLike = async (bookId: number) => {
         if (!userId) {
@@ -304,7 +265,7 @@ const MainCatalog: React.FC = () => {
             document.body.style.overflow = "auto";
         }
     };
-    const handleToggleCart = async (book: UnifiedBookType) => {
+    const handleAddRegularBookToCart = async (book: BookType) => {
         if (!userId) {
             alert(
                 "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
@@ -312,54 +273,110 @@ const MainCatalog: React.FC = () => {
             return;
         }
 
-        // Проверяем, есть ли books и содержит ли он id (если это акционная книга)
-        const bookId =
-            book.discount_book && book.books?.id ? book.books.id : book.id;
-
-        if (!bookId) {
-            console.error("Не удалось определить ID книги", book);
-            return;
-        }
-
-        // Определяем актуальные данные книги
-        const bookData = book.books || book;
-
-        console.log("Книга:", book);
-        console.log("ID книги:", bookId);
-        console.log("Данные книги:", bookData);
-
-        const isInCart = cartData.some((item) => item.books.id === bookId);
-
         try {
-            if (isInCart) {
-                const cartItem = cartData.find(
-                    (item) => item.books.id === bookId
-                );
-                if (cartItem?.id) await deleteCartItem(cartItem.id).unwrap();
+            const requestBody = {
+                books_id: book.id,
+                books: {
+                    book_name: book.book_name,
+                    price: book.price,
+                },
+                quantity: 1,
+            };
+
+            // Check if book is already in cart
+            const existingCartItem = cartData.find(
+                (item) => item.books.id === book.id
+            );
+
+            if (existingCartItem) {
+                await deleteCartItem(existingCartItem.id).unwrap();
+                alert("Книга удалена из корзины");
             } else {
-                const requestBody = {
-                    books: {
-                        book_name: bookData.book_name || book.book_name,
-                        price: bookData.price || book.price,
-                    },
-                    quantity: 1,
-                    books_id: bookId, // Ключ books_id, если API ожидает books_id
-                };
-
-                console.log("Тело запроса:", requestBody);
-
-                // await addToCartMutation(requestBody).unwrap();
-                // setShowModal(true);
-                // setTimeout(() => setShowModal(false), 2000);
+                await addToCartMutation(requestBody).unwrap();
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
             }
-        } catch (error) {
-            console.error("Ошибка изменения корзины:", error);
-            if (error instanceof Error) {
-                console.error("Детали ошибки:", JSON.stringify(error, null, 2));
+
+            refetchCart();
+        } catch (error: unknown) {
+            console.error("Ошибка работы с корзиной:", error);
+
+            const typedError = error as ErrorWithStatus;
+
+            if (typedError.status === 404) {
+                alert(
+                    `Не удалось найти элемент корзины: ${
+                        typedError.data?.detail || "Неизвестная ошибка"
+                    }`
+                );
+            } else if (typedError instanceof Error) {
+                alert(typedError.message);
+            } else {
+                alert("Произошла неизвестная ошибка при работе с корзиной.");
             }
         }
     };
 
+    const handleAddDiscountBookToCart = async (book: BookType) => {
+        if (!userId) {
+            alert(
+                "Пожалуйста, авторизуйтесь, чтобы добавлять книги в корзину."
+            );
+            return;
+        }
+
+        try {
+            const originalDiscountBook = discountBooks.find(
+                (item) => item.id === book.id
+            );
+
+            if (!originalDiscountBook) {
+                throw new Error(
+                    "Не удалось найти информацию о книге со скидкой"
+                );
+            }
+
+            const requestBody = {
+                books_id: originalDiscountBook.books.id,
+                books: {
+                    book_name: originalDiscountBook.books.book_name,
+                    price: originalDiscountBook.books.price,
+                },
+                quantity: 1,
+            };
+
+            const existingCartItem = cartData.find(
+                (item) => item.books.id === originalDiscountBook.books.id
+            );
+
+            if (existingCartItem) {
+                await deleteCartItem(existingCartItem.id).unwrap();
+                alert("Книга удалена из корзины");
+            } else {
+                await addToCartMutation(requestBody).unwrap();
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+
+            refetchCart();
+        } catch (error: unknown) {
+            console.error("Ошибка работы с корзиной:", error);
+
+            const typedError = error as ErrorWithStatus;
+
+            if (typedError.status === 404) {
+                alert(
+                    `Не удалось найти элемент корзины: ${
+                        typedError.data?.detail || "Неизвестная ошибка"
+                    }`
+                );
+            } else if (typedError instanceof Error) {
+                alert(typedError.message);
+            } else {
+                alert("Произошла неизвестная ошибка при работе с корзиной.");
+            }
+        }
+    };
     useEffect(() => {
         return () => {
             document.body.style.overflow = "auto";
@@ -647,9 +664,13 @@ const MainCatalog: React.FC = () => {
                                                     >
                                                         <button
                                                             onClick={() =>
-                                                                handleToggleCart(
-                                                                    item
-                                                                )
+                                                                isDiscountChecked
+                                                                    ? handleAddDiscountBookToCart(
+                                                                          item
+                                                                      )
+                                                                    : handleAddRegularBookToCart(
+                                                                          item
+                                                                      )
                                                             }
                                                             className={
                                                                 scss.button
