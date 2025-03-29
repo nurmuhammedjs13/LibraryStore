@@ -3,8 +3,8 @@ namespace Discount {
         {
             id: number;
             description?: string;
-
             books: {
+                id: number;
                 book_images: Array<{
                     book_images: string;
                 }>;
@@ -16,7 +16,7 @@ namespace Discount {
                 janre: Array<{
                     janre_name: string;
                 }>;
-                description?: string;
+                description: string;
                 ratings: Array<{
                     id: number;
                     user_rating: {

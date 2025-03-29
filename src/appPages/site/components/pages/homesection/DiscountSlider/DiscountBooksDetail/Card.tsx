@@ -13,8 +13,6 @@ import star2 from "@/assets/Icons/star2.png";
 import star3 from "@/assets/Icons/star3.png";
 import star4 from "@/assets/Icons/star4.png";
 import star5 from "@/assets/Icons/star5.png";
-import like from "@/assets/Icons/like.png";
-import likeActive from "@/assets/Icons/likeActive.png";
 import back from "@/assets/Icons/Back.png";
 import DetailCards from "./CardDetailSection/DetailCards/DetailCards";
 import { useGetMeQuery } from "@/redux/api/auth";
@@ -26,32 +24,25 @@ import {
 
 const STAR_RATINGS = [star0, star1, star2, star3, star4, star5];
 
+interface ErrorWithStatus {
+    status?: number;
+    data?: {
+        detail?: string;
+    };
+}
+
 const CardDetail = () => {
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
-    const [likedItems, setLikedItems] = useState<number[]>([]);
     const { id } = useParams();
     const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
     const userId = meData?.id || null;
-    const { data: cartData = [] } = useGetCartItemsQuery();
-    const [isInCart, setIsInCart] = useState(false);
+    const { data: cartData = [], refetch: refetchCart } =
+        useGetCartItemsQuery();
     const [addToCartMutation] = useAddToCartMutation();
     const [deleteCartItem] = useDeleteCartMutation();
 
     const { data, isLoading, isError } = useGetDiscountQuery();
-
-    const handleAddToCart = () => {
-        setShowModal(true);
-        setTimeout(() => setShowModal(false), 2000);
-    };
-
-    const toggleLike = (bookId: number) => {
-        setLikedItems((prev) =>
-            prev.includes(bookId)
-                ? prev.filter((item) => item !== bookId)
-                : [...prev, bookId]
-        );
-    };
 
     if (isLoading) {
         return (
@@ -70,38 +61,53 @@ const CardDetail = () => {
         }
 
         try {
-            const isBookInCart = cartData.some(
-                (item) => item.books_id === data?.[0].id
+            const currentBook = data?.find((item) => item.id.toString() === id);
+
+            if (!currentBook) {
+                throw new Error("Книга не найдена");
+            }
+
+            const existingCartItem = cartData.find(
+                (item) => item.books.id === currentBook.id
             );
 
-            if (isBookInCart) {
-                const cartItem = cartData.find(
-                    (item) => item.books_id === data?.[0].id
-                );
-                if (cartItem) {
-                    await deleteCartItem(cartItem.books_id).unwrap();
-                    setIsInCart(false);
-                }
+            if (existingCartItem) {
+                await deleteCartItem(existingCartItem.id).unwrap();
+                alert("Книга удалена из корзины");
             } else {
                 const requestBody = {
+                    books_id: currentBook.books.id,
                     books: {
-                        book_name: data?.[0].books.book_name,
-                        price: data?.[0].books.price,
+                        book_name: currentBook.books.book_name,
+                        price: currentBook.books.price,
                     },
-                    quantity: 0,
-                    books_id: data?.[0].id,
+                    quantity: 1,
                 };
+
                 await addToCartMutation(requestBody).unwrap();
-                setIsInCart(true);
                 setShowModal(true);
                 setTimeout(() => setShowModal(false), 2000);
             }
-        } catch (error) {
-            console.error("Ошибка изменения корзины:", error);
-            alert("Произошла ошибка при работе с корзиной.");
+
+            refetchCart();
+        } catch (error: unknown) {
+            console.error("Ошибка работы с корзиной:", error);
+
+            const typedError = error as ErrorWithStatus;
+
+            if (typedError.status === 404) {
+                alert(
+                    `Не удалось найти элемент корзины: ${
+                        typedError.data?.detail || "Неизвестная ошибка"
+                    }`
+                );
+            } else if (typedError instanceof Error) {
+                alert(typedError.message);
+            } else {
+                alert("Произошла неизвестная ошибка при работе с корзиной.");
+            }
         }
     };
-
     if (isError) {
         return (
             <div className={scss.loaderBlock}>
@@ -116,7 +122,6 @@ const CardDetail = () => {
 
     const book = data.find((data) => data.id.toString() === id);
 
-    console.log(JSON.stringify(book, null, 2));
     if (!book) {
         return <div>Книга не найдена.</div>;
     }
@@ -215,25 +220,6 @@ const CardDetail = () => {
                                                     </p>
                                                 </div>
                                             )}
-                                            {/* <button
-                                                className={scss.buttonLike}
-                                                onClick={() =>
-                                                    toggleLike(book.id)
-                                                }
-                                            >
-                                                <Image
-                                                    width={24}
-                                                    height={24}
-                                                    src={
-                                                        likedItems.includes(
-                                                            book.id
-                                                        )
-                                                            ? likeActive
-                                                            : like
-                                                    }
-                                                    alt="Toggle favorite"
-                                                />
-                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
