@@ -1,5 +1,4 @@
 namespace Discount {
-    // Single discount item type that both responses will use
     type DiscountItem = {
         id: number;
         description?: string;
@@ -35,12 +34,10 @@ namespace Discount {
         discount_book: number;
     };
 
-    // For the list endpoint (/aksia) - keeping as array
     type GetDiscountResponse = DiscountItem[];
 
     type GetDiscountRequest = void;
 
-    // For the detail endpoint (/aksia/:id) - single object
     type GetDiscountDetailResponse = DiscountItem;
 
     type GetDiscountDetailRequest = number;

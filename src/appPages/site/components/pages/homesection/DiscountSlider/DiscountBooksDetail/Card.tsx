@@ -175,18 +175,7 @@ const CardDetail = () => {
                                             )
                                         )}
                                     </div>
-                                    <Image
-                                        width={150}
-                                        height={30}
-                                        src={
-                                            STAR_RATINGS[
-                                                Math.floor(
-                                                    book.books.average_rating
-                                                )
-                                            ] || star0
-                                        }
-                                        alt={`Rating: ${book.books.average_rating} stars`}
-                                    />
+
                                     <button className={scss.bookPriceBlock}>
                                         <Image
                                             className={scss.priceIcon}
