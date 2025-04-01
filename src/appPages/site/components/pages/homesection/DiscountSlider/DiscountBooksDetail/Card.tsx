@@ -4,7 +4,10 @@ import scss from "./Card.module.scss";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useGetDiscountQuery } from "@/redux/api/discountSlider";
+import {
+    useGetDiscountDetailQuery,
+    useGetDiscountQuery,
+} from "@/redux/api/discountSlider";
 import star0 from "@/assets/Icons/star0.png";
 import priceIcon from "@/assets/Icons/HomePrice.png";
 import defaultBook from "@/assets/Icons/defaultBook.webp";
@@ -42,7 +45,11 @@ const CardDetail = () => {
     const [addToCartMutation] = useAddToCartMutation();
     const [deleteCartItem] = useDeleteCartMutation();
 
-    const { data, isLoading, isError } = useGetDiscountQuery();
+    const {
+        data: book,
+        isLoading,
+        isError,
+    } = useGetDiscountDetailQuery(Number(id));
 
     if (isLoading) {
         return (
@@ -61,14 +68,12 @@ const CardDetail = () => {
         }
 
         try {
-            const currentBook = data?.find((item) => item.id.toString() === id);
-
-            if (!currentBook) {
+            if (!book) {
                 throw new Error("Книга не найдена");
             }
 
             const existingCartItem = cartData.find(
-                (item) => item.books.id === currentBook.id
+                (item) => item.books.id === book.books.id
             );
 
             if (existingCartItem) {
@@ -76,10 +81,10 @@ const CardDetail = () => {
                 alert("Книга удалена из корзины");
             } else {
                 const requestBody = {
-                    books_id: currentBook.books.id,
+                    books_id: book.books.id,
                     books: {
-                        book_name: currentBook.books.book_name,
-                        price: currentBook.books.price,
+                        book_name: book.books.book_name,
+                        price: book.books.price,
                     },
                     quantity: 1,
                 };
@@ -116,15 +121,11 @@ const CardDetail = () => {
         );
     }
 
-    if (!data || !data[0]?.books) {
+    if (!book) {
         return <div>Данные не найдены.</div>;
     }
 
-    const book = data.find((data) => data.id.toString() === id);
-
-    if (!book) {
-        return <div>Книга не найдена.</div>;
-    }
+    console.log(book);
 
     return (
         <>
