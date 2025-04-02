@@ -1102,7 +1102,7 @@
 }
 @media screen and (max-width: 730px) {
     .HomeCards {
-        padding: 0 0 50px 0;
+        padding: 30px 0 50px 0;
         .content {
             display: flex;
             flex-direction: column;
@@ -1385,8 +1385,9 @@
         animation: fadeInOut 2s forwards;
     }
     .HomeCards {
+        padding: 20px 0 40px 0;
         .content {
-            gap: 50px;
+            gap: 20px;
             padding: 0 0 30px 0;
             .buttonToCatalog {
                 font-size: 18px;
@@ -1452,7 +1453,7 @@
 @media screen and (max-width: 420px) {
     .HomeCards {
         .content {
-            gap: 50px;
+            gap: 20px;
             padding: 0 0 30px 0;
             .buttonToCatalog {
                 font-size: 18px;
