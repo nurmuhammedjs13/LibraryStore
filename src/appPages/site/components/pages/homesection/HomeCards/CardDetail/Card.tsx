@@ -174,8 +174,8 @@ const CardDetail = () => {
                                     }
                                     alt={`Book cover for ${data.book_name}`}
                                     className={scss.cardImg}
-                                    width={1000}
-                                    height={1200}
+                                    width={240}
+                                    height={300}
                                     priority
                                 />
                                 <div className={scss.cardInfo}>
