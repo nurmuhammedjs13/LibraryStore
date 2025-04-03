@@ -48,7 +48,6 @@ const CardDetail = () => {
 
     const [showModal, setShowModal] = useState(false);
     const { data: cartData = [] } = useGetCartItemsQuery();
-    const [isInCart, setIsInCart] = useState(false);
     const { data, isLoading, isError } = useGetBooksDetailQuery(bookId ?? -1);
 
     const { data: meData, isLoading: isMeLoading } = useGetMeQuery();
@@ -61,12 +60,6 @@ const CardDetail = () => {
 
     const [addFavorite] = useAddKatFavoriteItemMutation();
     const [removeFavorite] = useRemoveKatFavoriteItemMutation();
-
-    useEffect(() => {
-        if (cartData && data) {
-            setIsInCart(cartData.some((item) => item.books.id === data.id));
-        }
-    }, [cartData, data]);
 
     const toggleLike = async (bookId: number) => {
         if (!userId) {
@@ -117,7 +110,6 @@ const CardDetail = () => {
                 );
                 if (cartItem) {
                     await deleteCartItem(cartItem.books.id).unwrap();
-                    setIsInCart(false);
                 }
             } else {
                 const requestBody = {
@@ -129,7 +121,6 @@ const CardDetail = () => {
                     books_id: data?.id,
                 };
                 await addToCartMutation(requestBody).unwrap();
-                setIsInCart(true);
                 setShowModal(true);
                 setTimeout(() => setShowModal(false), 2000);
             }
@@ -228,9 +219,7 @@ const CardDetail = () => {
                                                 className={scss.cardButton}
                                                 aria-label="Add to cart"
                                             >
-                                                {isInCart
-                                                    ? "Убрать из корзины"
-                                                    : "В корзину"}
+                                                В корзину
                                             </button>
                                             {showModal && (
                                                 <div className={scss.modal}>
