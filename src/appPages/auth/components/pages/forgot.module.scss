@@ -9,6 +9,12 @@
   align-items: center;
   justify-content: center;
   margin: 100px auto;
+  @media (max-width: 600px) {
+    max-width: 400px;
+  }
+  @media (max-width: 400px) {
+    max-width: 300px;
+  }
   .content {
     padding: 20px;
     display: flex;
