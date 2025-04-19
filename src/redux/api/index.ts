@@ -6,7 +6,9 @@ import {
 import Cookies from "js-cookie";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_OKUKG_API || 'https://www.apibackendokukg.space'}/`,
+    baseUrl: process.env.NEXT_PUBLIC_OKUKG_API ? 
+    process.env.NEXT_PUBLIC_OKUKG_API + '/' : 
+    'https://www.apibackendokukg.space/',
     prepareHeaders: (headers) => {
         const token = Cookies.get("token");
 
