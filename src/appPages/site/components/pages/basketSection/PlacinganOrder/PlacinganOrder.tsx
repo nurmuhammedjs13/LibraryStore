@@ -17,6 +17,7 @@ import {
     useGetCartItemsQuery,
     useDeleteCartMutation,
     useUpdateQuantityMutation,
+    useAddToCartMutation,
 } from "@/redux/api/addToCart";
 import { usePostRegDeliveryMutation } from "@/redux/api/regDelivery";
 import { usePostRegPickUpMutation } from "@/redux/api/regPickup";
@@ -53,6 +54,12 @@ const PlacinganOrder = () => {
     const [deleteCartItem] = useDeleteCartMutation();
     const [postRegDelivery] = usePostRegDeliveryMutation();
     const { data: meData } = useGetMeQuery();
+    const [itemOrder, setItemOrder] = useState<number[]>([]);
+    const [localCartItems, setLocalCartItems] = useState<CartItem[]>([]);
+    const [isLocalStateInitialized, setIsLocalStateInitialized] =
+        useState(false);
+    const [addToCart] = useAddToCartMutation();
+
     const [postRegPickUp] = usePostRegPickUpMutation();
     const [updateQuantity] = useUpdateQuantityMutation();
     const { data: deliveryList, error: deliveryError } =
@@ -141,6 +148,11 @@ const PlacinganOrder = () => {
         }
     };
 
+    //////// +/-
+
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
+
+    // Обновленная функция handleQuantityChange с правильной типизацией
     const handleQuantityChange = async (
         id: number,
         currentQuantity: number,
@@ -149,13 +161,71 @@ const PlacinganOrder = () => {
         const newQuantity = increment
             ? currentQuantity + 1
             : Math.max(1, currentQuantity - 1);
+
+        // Ищем товар в списке
+        const itemIndex = uniqueCartItems.findIndex((item) => item.id === id);
+        if (itemIndex === -1) {
+            console.error("Товар не найден");
+            return;
+        }
+
+        // Сохраняем ID книги для последующего использования
+        const bookId = uniqueCartItems[itemIndex].books.id;
+
+        // Сохраняем порядок элементов, если он еще не сохранен
+        if (!itemOrder.includes(bookId)) {
+            // Создаем новый массив порядка, включающий все текущие ID книг в порядке их отображения
+            const newOrder = uniqueCartItems.map((item) => item.books.id);
+            setItemOrder(newOrder);
+        }
+
+        // Запоминаем позицию прокрутки с правильной типизацией
+        const itemElement = document.querySelector(
+            `[data-book-id="${bookId}"]`
+        );
+        const scrollContainer =
+            (itemElement?.closest(
+                ".cart-items-container"
+            ) as HTMLElement | null) || window;
+
+        const scrollPosition =
+            scrollContainer === window
+                ? window.scrollY
+                : (scrollContainer as HTMLElement).scrollTop;
+
         try {
-            await updateQuantity({ id, quantity: newQuantity }).unwrap();
+            const itemToUpdate = { ...uniqueCartItems[itemIndex] };
+
+            setIsUpdating(true);
+
+            await deleteCartItem(id).unwrap();
+
+            await addToCart({
+                books: {
+                    book_name: itemToUpdate.books.book_name,
+                    author: itemToUpdate.books.author,
+                    price: itemToUpdate.books.price,
+                },
+                quantity: newQuantity,
+                books_id: itemToUpdate.books.id,
+            }).unwrap();
+
+            setTimeout(() => {
+                if (scrollContainer === window) {
+                    window.scrollTo({ top: scrollPosition });
+                } else {
+                    (scrollContainer as HTMLElement).scrollTop = scrollPosition;
+                }
+                setIsUpdating(false);
+            }, 200);
         } catch (error) {
-            console.error("Error updating quantity:", error);
+            console.error("Ошибка при обновлении количества:", error);
             setValidationError("Ошибка при обновлении количества");
+            setIsUpdating(false);
         }
     };
+
+    //////// +/-
 
     const calculateTotalQuantity = () => {
         return uniqueCartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -523,6 +593,25 @@ ${
             setIsSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        if (uniqueCartItems.length > 0 && !isLocalStateInitialized) {
+            setLocalCartItems(uniqueCartItems);
+            setIsLocalStateInitialized(true);
+        }
+    }, [uniqueCartItems, isLocalStateInitialized]);
+
+    // Отображайте элементы с учетом сохраненного порядка
+    const sortedCartItems = useMemo(() => {
+        if (itemOrder.length === 0) return uniqueCartItems;
+
+        const itemsMap = new Map(
+            uniqueCartItems.map((item) => [item.books.id, item])
+        );
+        return itemOrder
+            .map((id) => itemsMap.get(id))
+            .filter(Boolean) as CartItem[];
+    }, [uniqueCartItems, itemOrder]);
     const handleInputChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -575,7 +664,11 @@ ${
                 <div className={styles.block}>
                     <div className={styles.landmark}>
                         {uniqueCartItems.map((item) => (
-                            <div className={styles.cardBlock} key={item.id}>
+                            <div
+                                className={styles.cardBlock}
+                                key={`book-${item.books.id}`}
+                                data-book-id={item.books.id}
+                            >
                                 <div className={styles.ImgBlock}>
                                     <div className={styles.img}>
                                         <Image
