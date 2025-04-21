@@ -459,7 +459,7 @@ ${
 
                     try {
                         const rawResponse = await fetch(
-                            "http://13.61.153.85/create_pickup/",
+                            "https://www.apibackendokukg.space/create_pickup/",
                             {
                                 method: "POST",
                                 headers: {
