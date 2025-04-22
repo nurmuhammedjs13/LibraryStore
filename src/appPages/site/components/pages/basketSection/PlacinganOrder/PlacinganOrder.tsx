@@ -5,6 +5,7 @@ import React, {
     ChangeEvent,
     FormEvent,
     useEffect,
+    useCallback,
 } from "react";
 import Image from "next/image";
 import DeleteIcon from "@/assets/Icons/DeleteIcon";
@@ -148,12 +149,63 @@ const PlacinganOrder = () => {
         }
     };
 
-    //////// +/-
-
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    // Обновленная функция handleQuantityChange с правильной типизацией
-    const handleQuantityChange = async (
+    // Функция для дебаунсинга
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    const debounce = (fn: Function, delay: number) => {
+        let timer: NodeJS.Timeout;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (...args: any[]) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    };
+
+    const updateCartItem = async (
+        id: number,
+        bookId: number,
+        newQuantity: number
+    ) => {
+        try {
+            setIsUpdating(true);
+
+            await deleteCartItem(id).unwrap();
+            const newItem = await addToCart({
+                books: {
+                    book_name:
+                        uniqueCartItems.find((item) => item.id === id)?.books
+                            .book_name || "",
+                    author:
+                        uniqueCartItems.find((item) => item.id === id)?.books
+                            .author || "",
+                    price:
+                        uniqueCartItems.find((item) => item.id === id)?.books
+                            .price || 0,
+                },
+                quantity: newQuantity,
+                books_id: bookId,
+            }).unwrap();
+
+            setIsUpdating(false);
+        } catch (error) {
+            console.error("Ошибка при обновлении количества:", error);
+            setLocalCartItems(uniqueCartItems);
+            setValidationError("Ошибка при обновлении количества");
+            setIsUpdating(false);
+        }
+    };
+
+    // Дебаунсированная функция для обновления количества
+    const debouncedUpdateQuantity = useCallback(
+        debounce((id: number, bookId: number, newQuantity: number) => {
+            updateCartItem(id, bookId, newQuantity);
+        }, 500),
+        [uniqueCartItems]
+    );
+
+    // Обновленная функция handleQuantityChange с сохранением порядка
+    const handleQuantityChange = (
         id: number,
         currentQuantity: number,
         increment: boolean
@@ -162,67 +214,24 @@ const PlacinganOrder = () => {
             ? currentQuantity + 1
             : Math.max(1, currentQuantity - 1);
 
-        // Ищем товар в списке
-        const itemIndex = uniqueCartItems.findIndex((item) => item.id === id);
-        if (itemIndex === -1) {
-            console.error("Товар не найден");
-            return;
+        // Находим элемент для обновления
+        const itemToUpdate = uniqueCartItems.find((item) => item.id === id);
+        if (!itemToUpdate) return;
+
+        // Сохраняем порядок айтемов при изменении
+        if (itemOrder.length === 0 && uniqueCartItems.length > 0) {
+            // Если порядок еще не установлен, создаем его из текущего порядка айтемов
+            setItemOrder(uniqueCartItems.map((item) => item.books.id));
         }
 
-        // Сохраняем ID книги для последующего использования
-        const bookId = uniqueCartItems[itemIndex].books.id;
-
-        // Сохраняем порядок элементов, если он еще не сохранен
-        if (!itemOrder.includes(bookId)) {
-            // Создаем новый массив порядка, включающий все текущие ID книг в порядке их отображения
-            const newOrder = uniqueCartItems.map((item) => item.books.id);
-            setItemOrder(newOrder);
-        }
-
-        // Запоминаем позицию прокрутки с правильной типизацией
-        const itemElement = document.querySelector(
-            `[data-book-id="${bookId}"]`
+        // Обновляем локальное состояние для немедленного отображения
+        const updatedItems = uniqueCartItems.map((item) =>
+            item.id === id ? { ...item, quantity: newQuantity } : item
         );
-        const scrollContainer =
-            (itemElement?.closest(
-                ".cart-items-container"
-            ) as HTMLElement | null) || window;
+        setLocalCartItems(updatedItems);
 
-        const scrollPosition =
-            scrollContainer === window
-                ? window.scrollY
-                : (scrollContainer as HTMLElement).scrollTop;
-
-        try {
-            const itemToUpdate = { ...uniqueCartItems[itemIndex] };
-
-            setIsUpdating(true);
-
-            await deleteCartItem(id).unwrap();
-
-            await addToCart({
-                books: {
-                    book_name: itemToUpdate.books.book_name,
-                    author: itemToUpdate.books.author,
-                    price: itemToUpdate.books.price,
-                },
-                quantity: newQuantity,
-                books_id: itemToUpdate.books.id,
-            }).unwrap();
-
-            setTimeout(() => {
-                if (scrollContainer === window) {
-                    window.scrollTo({ top: scrollPosition });
-                } else {
-                    (scrollContainer as HTMLElement).scrollTop = scrollPosition;
-                }
-                setIsUpdating(false);
-            }, 200);
-        } catch (error) {
-            console.error("Ошибка при обновлении количества:", error);
-            setValidationError("Ошибка при обновлении количества");
-            setIsUpdating(false);
-        }
+        // Вызываем дебаунсированную функцию обновления
+        debouncedUpdateQuantity(id, itemToUpdate.books.id, newQuantity);
     };
 
     //////// +/-
@@ -316,21 +325,21 @@ const PlacinganOrder = () => {
 🛍 *НОВЫЙ ЗАКАЗ*
 
 👤 *Информация о клиенте*
-• Имя: ${sanitizeText(orderData.client_first_name)}
-• Фамилия: ${sanitizeText(orderData.client_last_name)}
-• Email: ${sanitizeText(orderData.client_email)}
-• Телефон: ${sanitizeText(orderData.client_phone_number)}
+- Имя: ${sanitizeText(orderData.client_first_name)}
+- Фамилия: ${sanitizeText(orderData.client_last_name)}
+- Email: ${sanitizeText(orderData.client_email)}
+- Телефон: ${sanitizeText(orderData.client_phone_number)}
 
 📦 *Детали заказа*
-• Тип доставки: ${orderData.delivery}
+- Тип доставки: ${orderData.delivery}
 ${
     orderData.client_address
         ? `• Адрес: ${sanitizeText(orderData.client_address)}\n`
         : ""
 }
-• Время заказа: ${formatDate(orderData.created_at)}
-• Количество товаров: ${orderData.total_items}
-• Общая сумма: ${orderData.total_price} сом
+- Время заказа: ${formatDate(orderData.created_at)}
+- Количество товаров: ${orderData.total_items}
+- Общая сумма: ${orderData.total_price} сом
 
 💭 *Комментарий*: ${
                 orderData.text
@@ -597,21 +606,12 @@ ${
     useEffect(() => {
         if (uniqueCartItems.length > 0 && !isLocalStateInitialized) {
             setLocalCartItems(uniqueCartItems);
+            // При первой инициализации сохраняем порядок книг
+            setItemOrder(uniqueCartItems.map((item) => item.books.id));
             setIsLocalStateInitialized(true);
         }
     }, [uniqueCartItems, isLocalStateInitialized]);
 
-    // Отображайте элементы с учетом сохраненного порядка
-    const sortedCartItems = useMemo(() => {
-        if (itemOrder.length === 0) return uniqueCartItems;
-
-        const itemsMap = new Map(
-            uniqueCartItems.map((item) => [item.books.id, item])
-        );
-        return itemOrder
-            .map((id) => itemsMap.get(id))
-            .filter(Boolean) as CartItem[];
-    }, [uniqueCartItems, itemOrder]);
     const handleInputChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -650,6 +650,31 @@ ${
 
         setValidationError("");
     };
+
+    // Улучшенное управление сортировкой для сохранения порядка
+    const sortedCartItems = useMemo(() => {
+        if (itemOrder.length === 0) return uniqueCartItems;
+
+        // Создаем карту для быстрого доступа к айтемам по их книжному ID
+        const itemsMap = new Map(
+            uniqueCartItems.map((item) => [item.books.id, item])
+        );
+
+        // Сортируем согласно сохраненному порядку
+        const ordered = itemOrder
+            .map((id) => itemsMap.get(id))
+            .filter(Boolean) as CartItem[];
+
+        // Добавляем элементы, которые могли не попасть в itemOrder (например, только что добавленные)
+        uniqueCartItems.forEach((item) => {
+            if (!itemOrder.includes(item.books.id)) {
+                ordered.push(item);
+            }
+        });
+
+        return ordered;
+    }, [uniqueCartItems, itemOrder]);
+
     if (isLoading) {
         return (
             <div className={styles.loaderBlock}>
@@ -663,7 +688,7 @@ ${
             <div className="container">
                 <div className={styles.block}>
                     <div className={styles.landmark}>
-                        {uniqueCartItems.map((item) => (
+                        {sortedCartItems.map((item) => (
                             <div
                                 className={styles.cardBlock}
                                 key={`book-${item.books.id}`}
