@@ -308,7 +308,6 @@ input:checked + .slider:before {
                 column-gap: 10px;
                 row-gap: 60px;
                 padding: 10px 0 200px 0;
-                overflow-y: auto;
 
                 .card {
                     display: flex;
@@ -845,8 +844,6 @@ input:checked + .slider:before {
                     grid-template-columns: 1fr 1fr;
                     column-gap: 10px;
                     row-gap: 60px;
-
-                    overflow-y: auto;
 
                     .card {
                         display: flex;
@@ -1730,7 +1727,6 @@ input:checked + .slider:before {
                     column-gap: 30px;
                     row-gap: 40px;
                     padding: 10px 20px 30px 20px;
-                    overflow-y: auto;
 
                     .card {
                         display: flex;
@@ -2040,7 +2036,6 @@ input:checked + .slider:before {
                     column-gap: 30px;
                     row-gap: 40px;
                     padding: 10px 20px 30px 20px;
-                    overflow-y: auto;
 
                     .card {
                         padding: 30px 0 0 0;
@@ -2502,7 +2497,6 @@ input:checked + .slider:before {
                     grid-template-columns: 1fr;
                     row-gap: 40px;
                     padding: 10px 25px 30px 25px;
-                    overflow-y: auto;
 
                     .card {
                         padding: 30px 0 0 0;
@@ -2621,7 +2615,6 @@ input:checked + .slider:before {
                     grid-template-columns: 1fr;
                     row-gap: 40px;
                     padding: 10px 25px 30px 25px;
-                    overflow-y: auto;
 
                     .card {
                         padding: 30px 0 0 0;
