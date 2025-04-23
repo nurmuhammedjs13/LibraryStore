@@ -311,9 +311,6 @@ const PlacinganOrder = () => {
         total_items: number;
         receipt?: File;
     }) => {
-        const TOKEN = process.env.NEXT_PUBLIC_OKUKG_TELEGRAM_BOT;
-        const CHAT_ID = process.env.NEXT_PUBLIC_OKUKG_CHAT_ID;
-
         if (!TOKEN || !CHAT_ID) {
             console.error("Telegram credentials not configured");
             return;
