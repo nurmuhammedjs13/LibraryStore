@@ -258,12 +258,6 @@ const MainCatalog: React.FC = () => {
     const handleFilterClick = () => {
         const newFilterState = !isFilterActive;
         setIsFilterActive(newFilterState);
-
-        if (newFilterState) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
     };
     const handleAddRegularBookToCart = async (book: BookType) => {
         if (!userId) {
@@ -377,11 +371,7 @@ const MainCatalog: React.FC = () => {
             }
         }
     };
-    useEffect(() => {
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
+
     const visibleBooks = filteredBooks.slice(0, visibleItems);
     const hasMoreBooks = visibleItems < filteredBooks.length;
 
