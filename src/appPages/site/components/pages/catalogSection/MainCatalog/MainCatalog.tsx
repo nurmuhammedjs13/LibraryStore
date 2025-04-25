@@ -100,7 +100,7 @@ const ITEMS_PER_PAGE = 24;
 const MainCatalog: React.FC = () => {
     const [isClient, setIsClient] = useState<boolean>(false);
     const [isFilterActive, setIsFilterActive] = useState(false);
-    const [isGenresOpen, setIsGenresOpen] = useState(false);
+    const [isGenresOpen, setIsGenresOpen] = useState(true);
 
     const router = useRouter();
     const [addToCartMutation] = useAddToCartMutation();
