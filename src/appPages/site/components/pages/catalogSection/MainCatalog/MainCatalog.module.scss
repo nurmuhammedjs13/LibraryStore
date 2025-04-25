@@ -1603,6 +1603,7 @@ input:checked + .slider:before {
                         overflow-y: auto;
                         margin-top: 5px;
 
+                        padding: 0 0 5px 0;
                         &.open {
                             display: none;
                         }
