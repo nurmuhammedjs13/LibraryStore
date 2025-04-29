@@ -100,6 +100,7 @@ const ITEMS_PER_PAGE = 24;
 const MainCatalog: React.FC = () => {
     const [isClient, setIsClient] = useState<boolean>(false);
     const [isFilterActive, setIsFilterActive] = useState(false);
+    const [isGenresOpen, setIsGenresOpen] = useState(true);
 
     const router = useRouter();
     const [addToCartMutation] = useAddToCartMutation();
@@ -254,6 +255,10 @@ const MainCatalog: React.FC = () => {
             matchesGenre && matchesMinPrice && matchesMaxPrice && matchesRating
         );
     });
+
+    const toggleGenreList = () => {
+        setIsGenresOpen(!isGenresOpen);
+    };
 
     const handleFilterClick = () => {
         const newFilterState = !isFilterActive;
@@ -418,8 +423,19 @@ const MainCatalog: React.FC = () => {
                         }`}
                     >
                         <div className={scss.genresBlock}>
-                            <h1 className={scss.genreTitle}>Жанры</h1>
-                            <div className={scss.genres}>
+                            <h1
+                                className={`${scss.genreTitle} ${
+                                    isGenresOpen ? scss.open : ""
+                                }`}
+                                onClick={toggleGenreList}
+                            >
+                                Жанры
+                            </h1>
+                            <div
+                                className={`${scss.genres} ${
+                                    isGenresOpen ? scss.open : ""
+                                }`}
+                            >
                                 {genres?.map((genre) => (
                                     <h1
                                         key={genre.janre_name}
@@ -428,9 +444,10 @@ const MainCatalog: React.FC = () => {
                                                 ? scss.selectedGenre
                                                 : ""
                                         }`}
-                                        onClick={() =>
-                                            handleGenreClick(genre.janre_name)
-                                        }
+                                        onClick={() => {
+                                            handleGenreClick(genre.janre_name);
+                                            setIsGenresOpen(false); // Закрываем список после выбора
+                                        }}
                                     >
                                         {genre.janre_name}
                                     </h1>
