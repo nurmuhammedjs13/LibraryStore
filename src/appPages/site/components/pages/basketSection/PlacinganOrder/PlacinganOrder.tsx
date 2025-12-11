@@ -12,6 +12,7 @@ import DeleteIcon from "@/assets/Icons/DeleteIcon";
 import Minus from "@/assets/Icons/Minus";
 import Plus from "@/assets/Icons/Plus";
 import Price from "@/assets/Icons/Price";
+import defaultBook from "@/assets/Icons/defaultBook.webp";
 import ImgStop from "@/assets/Icons/imgStop";
 import styles from "./PlacinganOrder.module.scss";
 import {
@@ -698,8 +699,8 @@ ${
                                     <div className={styles.img}>
                                         <Image
                                             src={
-                                                item.books.book_images[0]
-                                                    .book_images
+                                                item.books?.book_images?.[0]
+                                                    ?.book_images || defaultBook
                                             }
                                             alt={item.books.book_name}
                                             width={100}
