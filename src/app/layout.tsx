@@ -7,7 +7,7 @@ const nunito = Nunito({ subsets: ["latin", "cyrillic"] });
 export const metadata: Metadata = {
     title: "Oku.kg ",
     description: `Китеп дүкөнү| книги|books|Бишкек📚с 2019г|\n
-    Пополни свою книжную полку новыми книгами`,
+        Пополни свою книжную полку новыми книгами`,
 };
 
 export default function RootLayout({
@@ -17,7 +17,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            
             <body className={`${nunito.className} `}>
                 <LayoutClient>{children}</LayoutClient>
             </body>

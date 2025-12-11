@@ -1,9 +1,14 @@
-import type { NextConfig } from "next";
+// next.config.js
 
-const nextConfig: NextConfig = {
+module.exports = {
     images: {
-        domains: ["www.apibackendokukg.space"],
+        remotePatterns: [
+            {
+                protocol: "http",
+                hostname: "13.60.43.72",
+                port: "",
+                pathname: "/media/**",
+            },
+        ],
     },
 };
-
-export default nextConfig;
